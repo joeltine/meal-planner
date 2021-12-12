@@ -12,6 +12,76 @@
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h1 class="h2">Add Recipes</h1>
   </div>
+
+  <form>
+    <div class="form-row">
+      <h3>Basic Info</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="inputRecipeName">Name</label>
+        <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe"
+               required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="inputDescription">Description</label>
+        <textarea class="form-control" id="inputDescription" placeholder="Description of recipe"
+                  rows="6"
+                  required></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <h3>Ingredients</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-1">
+        <label for="inputQuantity">Quantity</label>
+        <input type="text" class="form-control" id="inputQuantity"
+               required>
+      </div>
+
+      <div class="form-group col-md-2">
+        <label for="inputUnit">Unit</label>
+        <select id="inputUnit" class="form-control">
+          <option selected>choose...</option>
+          <option>grams</option>
+          <option>pounds</option>
+          <option>teaspoons</option>
+        </select>
+      </div>
+
+      <div class="form-group col">
+        <label for="inputIngredient">Ingredient</label>
+        <input type="text" class="form-control" id="inputIngredient" placeholder="Ingredient..."
+               required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <button type="button" class="btn btn-link">
+          <span data-feather="plus"></span>
+          Add new ingredient
+        </button>
+      </div>
+    </div>
+    <div class="form-row">
+      <h3>Instructions</h3>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="inputInstructions">Instructions</label>
+        <textarea class="form-control" id="inputInstructions"
+                  placeholder="Step by step instructions of recipe"
+                  rows="6"
+                  required></textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
 </main>
 
 </body>
