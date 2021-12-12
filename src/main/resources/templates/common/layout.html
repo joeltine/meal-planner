@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Meal Planner</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/third-party/bootstrap.4.0.min.css">
+  <!-- Core site CSS -->
+  <link rel="stylesheet" href="css/common/main.css">
+</head>
+<body>
+
+<!-- Main Navigation -->
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Meal Planner</a>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" href="/planner">
+              <span data-feather="clipboard"></span>
+              Planner
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/addrecipes">
+              <span data-feather="database"></span>
+              Add Recipes
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Content Section -->
+    <section layout:fragment="content">
+      <p>This is filled by the content template.</p>
+    </section>
+
+  </div>
+</div>
+<!-- Core JS Libs -->
+<script src="js/third-party/jquery-3.6.0.min.js"></script>
+<script src="js/third-party/popper.2.11.0.min.js"></script>
+<script src="js/third-party/bootstrap.4.0.min.js"></script>
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+<script>
+  feather.replace()
+</script>
+
+<!-- Optional Section -->
+<th:block layout:fragment="optional"/>
+
+</body>
+</html>
