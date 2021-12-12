@@ -10,17 +10,17 @@
 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4" layout:fragment="content">
   <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2">Add Recipes</h1>
+    <h1 class="h2">Add New Recipes</h1>
   </div>
 
-  <form>
+  <form id="recipeForm" class="needs-validation" novalidate>
     <div class="form-row">
       <h3>Basic Info</h3>
     </div>
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputRecipeName">Name</label>
-        <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe" 1>
+        <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe">
       </div>
     </div>
     <div class="form-row">
@@ -33,7 +33,7 @@
     <div class="form-row">
       <h3>Ingredients</h3>
     </div>
-    <div class="form-row">
+    <div class="form-row" id="ingredientInputRow">
       <div class="form-group col-md-1">
         <label for="inputQuantity">Quantity</label>
         <input type="text" class="form-control" id="inputQuantity">
@@ -54,9 +54,9 @@
         <input type="text" class="form-control" id="inputIngredient" placeholder="Ingredient...">
       </div>
     </div>
-    <div class="form-row">
+    <div class="form-row" id="addNewIngredientRow">
       <div class="form-group">
-        <button type="button" class="btn btn-link">
+        <button type="button" class="btn btn-link" id="addIngredient">
           <span data-feather="plus"></span>
           Add new ingredient
         </button>
@@ -74,13 +74,13 @@
       </div>
     </div>
     <div class="form-row">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary" id="submit">Submit</button>
     </div>
   </form>
 </main>
 
 <th:block layout:fragment="optional">
-  <script src="js/addrecipes/addrecipes.js"></script>
+  <script src="/js/addrecipes/addrecipes.js"></script>
 </th:block>
 
 </body>
