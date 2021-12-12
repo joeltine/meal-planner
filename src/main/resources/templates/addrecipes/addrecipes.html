@@ -20,16 +20,14 @@
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputRecipeName">Name</label>
-        <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe"
-               required>
+        <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe" 1>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputDescription">Description</label>
         <textarea class="form-control" id="inputDescription" placeholder="Description of recipe"
-                  rows="6"
-                  required></textarea>
+                  rows="6"></textarea>
       </div>
     </div>
     <div class="form-row">
@@ -38,8 +36,7 @@
     <div class="form-row">
       <div class="form-group col-md-1">
         <label for="inputQuantity">Quantity</label>
-        <input type="text" class="form-control" id="inputQuantity"
-               required>
+        <input type="text" class="form-control" id="inputQuantity">
       </div>
 
       <div class="form-group col-md-2">
@@ -54,8 +51,7 @@
 
       <div class="form-group col">
         <label for="inputIngredient">Ingredient</label>
-        <input type="text" class="form-control" id="inputIngredient" placeholder="Ingredient..."
-               required>
+        <input type="text" class="form-control" id="inputIngredient" placeholder="Ingredient...">
       </div>
     </div>
     <div class="form-row">
@@ -74,8 +70,7 @@
         <label for="inputInstructions">Instructions</label>
         <textarea class="form-control" id="inputInstructions"
                   placeholder="Step by step instructions of recipe"
-                  rows="6"
-                  required></textarea>
+                  rows="6"></textarea>
       </div>
     </div>
     <div class="form-row">
@@ -83,6 +78,10 @@
     </div>
   </form>
 </main>
+
+<th:block layout:fragment="optional">
+  <script src="js/addrecipes/addrecipes.js"></script>
+</th:block>
 
 </body>
 </html>
