@@ -1,7 +1,7 @@
 class AddRecipesController {
   constructor() {
     this.recipeForm = $('#recipeForm');
-    this.ingredientInputRow = $('#ingredientInputRow');
+    this.ingredientRowClone = $('#ingredientInputRow').clone();
     this.bindFormControls();
   }
 
@@ -13,15 +13,80 @@ class AddRecipesController {
         this.handleAddIngredient.bind(this));
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    
-    console.log(this.recipeForm.serializeArray());
+  handleAddIngredient() {
+    this.ingredientRowClone.clone().insertBefore('#addNewIngredientRow');
   }
 
-  handleAddIngredient() {
-    this.ingredientInputRow.clone().insertBefore('#addNewIngredientRow');
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = this.scrapeAndValidateForm();
+
+    if (this.recipeForm.get(0).checkValidity()) {
+      this.sendRecipeToServer(formData);
+    }
+
+    this.recipeForm.removeClass('needs-validation').addClass('was-validated');
+  }
+
+  scrapeAndValidateForm() {
+    const formData = {};
+    const name = this.recipeForm.find('#inputRecipeName').val();
+    const description = this.recipeForm.find('#inputDescription').val();
+    const instructions = this.recipeForm.find('#inputInstructions').val();
+
+    formData.name = name;
+    formData.description = description;
+    formData.instructions = instructions;
+
+    formData.ingredients = [];
+
+    this.recipeForm.find('.ingredientInputRow').each(function () {
+      const row = $(this);
+      const quantityInput = row.find('#inputQuantity');
+      const quantity = quantityInput.val();
+      const unit = row.find('#inputUnit').val();
+      const ingredient = row.find('#inputIngredient').val();
+
+      if (quantity <= 0) {
+        quantityInput.setCustomValidity('Quantity must be > 0');
+      }
+
+      formData.ingredients.push({
+        quantity: quantity,
+        unit: unit,
+        ingredient: ingredient
+      })
+    });
+
+    return formData;
+  }
+
+  sendRecipeToServer(data) {
+    const headers = {};
+    headers[CSRF_HEADER_NAME] = CSRF_TOKEN;
+
+    const inputs = this.recipeForm.find(':input');
+    inputs.prop('disabled', true);
+
+    $.ajax("/addrecipes", {
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      method: 'PUT',
+      headers: headers,
+      processData: false
+    })
+    .done(() => {
+      console.log("success", arguments);
+    })
+    .fail(() => {
+      console.log("error", arguments);
+    })
+    .always(() => {
+      inputs.prop('disabled', false);
+    });
   }
 }
 
-const addRecipesController = new AddRecipesController();
+const
+    addRecipesController = new AddRecipesController();

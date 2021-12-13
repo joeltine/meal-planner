@@ -46,6 +46,14 @@
 
   </div>
 </div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  const CSRF_TOKEN = /*[[${_csrf.token}]]*/ 'test';
+  const CSRF_HEADER_NAME = /*[[${_csrf.headerName}]]*/ 'test';
+  /*]]>*/
+</script>
+
 <!-- Core JS Libs -->
 <script src="/js/third-party/jquery-3.6.0.min.js"></script>
 <script src="/js/third-party/popper.2.11.0.min.js"></script>
