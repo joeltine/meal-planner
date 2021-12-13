@@ -88,5 +88,4 @@ class AddRecipesController {
   }
 }
 
-const
-    addRecipesController = new AddRecipesController();
+const addRecipesController = new AddRecipesController();
