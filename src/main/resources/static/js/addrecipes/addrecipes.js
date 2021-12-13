@@ -50,6 +50,8 @@ class AddRecipesController {
 
       if (quantity <= 0) {
         quantityInput.get(0).setCustomValidity('Quantity must be > 0');
+      } else {
+        quantityInput.get(0).setCustomValidity('');
       }
 
       formData.ingredients.push({
@@ -76,15 +78,17 @@ class AddRecipesController {
       headers: headers,
       processData: false
     })
-    .done((data, textStatus) => {
-      console.log("success", data, textStatus);
-    })
-    .fail((jqXHR, textStatus, errorThrown) => {
-      console.log("error", textStatus, errorThrown);
-    })
-    .always(() => {
-      inputs.prop('disabled', false);
-    });
+        .done((data, textStatus) => {
+          console.log("success", data, textStatus);
+        })
+        .fail((jqXHR, textStatus, errorThrown) => {
+          console.log("error", textStatus, errorThrown);
+        })
+        .always(() => {
+          inputs.prop('disabled', false);
+          this.recipeForm.removeClass('was-validated').addClass(
+              'needs-validation');
+        });
   }
 }
 

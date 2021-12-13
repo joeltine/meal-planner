@@ -4,6 +4,10 @@
       layout:decorate="~{common/layout}">
 <head>
   <title>Add New Recipes</title>
+  
+  <th:block layout:fragment="stylesheets">
+    <link rel="stylesheet" href="/css/addrecipes/addrecipes.css">
+  </th:block>
 </head>
 <body>
 
@@ -17,6 +21,7 @@
     <div class="form-row">
       <h3>Basic Info</h3>
     </div>
+
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputRecipeName">Name</label>
@@ -24,6 +29,7 @@
                maxLength="255" required>
       </div>
     </div>
+
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputDescription">Description</label>
@@ -31,15 +37,16 @@
                   maxLength="65535" rows="6"></textarea>
       </div>
     </div>
+
     <div class="form-row">
       <h3>Ingredients</h3>
     </div>
+
     <div class="form-row ingredientInputRow" id="ingredientInputRow">
       <div class="form-group col-md-1">
         <label for="inputQuantity">Quantity</label>
         <input type="number" class="form-control" id="inputQuantity" required>
       </div>
-
       <div class="form-group col-md-2">
         <label for="inputUnit">Unit</label>
         <select id="inputUnit" class="form-control" required>
@@ -49,13 +56,13 @@
           <option>teaspoons</option>
         </select>
       </div>
-
       <div class="form-group col">
         <label for="inputIngredient">Ingredient</label>
         <input type="text" class="form-control" id="inputIngredient" placeholder="Ingredient..."
                required>
       </div>
     </div>
+
     <div class="form-row" id="addNewIngredientRow">
       <div class="form-group">
         <button type="button" class="btn btn-link" id="addIngredient">
@@ -64,9 +71,11 @@
         </button>
       </div>
     </div>
+
     <div class="form-row">
       <h3>Instructions</h3>
     </div>
+
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputInstructions">Instructions</label>
@@ -75,13 +84,21 @@
                   maxLength="65535" rows="6" required></textarea>
       </div>
     </div>
+
     <div class="form-row">
       <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+    </div>
+
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="successAlert">
+      <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
   </form>
 </main>
 
-<th:block layout:fragment="optional">
+<th:block layout:fragment="scripts">
   <script src="/js/addrecipes/addrecipes.js"></script>
 </th:block>
 
