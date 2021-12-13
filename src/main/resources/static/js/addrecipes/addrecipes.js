@@ -76,11 +76,11 @@ class AddRecipesController {
       headers: headers,
       processData: false
     })
-    .done(() => {
-      console.log("success", arguments);
+    .done((data, textStatus) => {
+      console.log("success", data, textStatus);
     })
-    .fail(() => {
-      console.log("error", arguments);
+    .fail((jqXHR, textStatus, errorThrown) => {
+      console.log("error", textStatus, errorThrown);
     })
     .always(() => {
       inputs.prop('disabled', false);
