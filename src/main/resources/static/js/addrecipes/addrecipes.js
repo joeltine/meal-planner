@@ -49,7 +49,7 @@ class AddRecipesController {
       const ingredient = row.find('#inputIngredient').val();
 
       if (quantity <= 0) {
-        quantityInput.setCustomValidity('Quantity must be > 0');
+        quantityInput.get(0).setCustomValidity('Quantity must be > 0');
       }
 
       formData.ingredients.push({
