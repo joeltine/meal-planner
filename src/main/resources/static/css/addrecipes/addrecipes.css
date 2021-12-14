@@ -3,32 +3,6 @@
   margin-top: 15px;
 }
 
-.ui-autocomplete {
-  position: absolute;
-}
-
-.ui-widget-content, .ui-widget.ui-widget-content {
-  border: none;
-}
-
 .list-group-item {
   padding: 0.4rem 0.8rem;
 }
-
-.autocompleteOut {
-  display: block;
-  position: relative;
-}
-
-/*
-.ui-autocomplete-loading {
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  vertical-align: text-bottom;
-  border: .25em solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  -webkit-animation: spinner-border .75s linear infinite;
-  animation: spinner-border .75s linear infinite;
-}*/
