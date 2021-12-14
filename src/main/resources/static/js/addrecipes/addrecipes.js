@@ -2,6 +2,14 @@ class AddRecipesController {
   constructor() {
     this.recipeForm = $('#recipeForm');
     this.ingredientRowClone = $('#ingredientInputRow').clone();
+    this.successAlert = $(`
+      <div class="alert alert-success alert-dismissible fade show" role="alert"
+           id="successAlert">
+        <strong>Success!</strong> A new recipe has been added.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);
     this.bindFormControls();
   }
 
@@ -11,10 +19,22 @@ class AddRecipesController {
 
     this.recipeForm.on('click', '#addIngredient',
         this.handleAddIngredient.bind(this));
+
+    this.createAutocomplete(this.recipeForm.find('#inputIngredient'));
+  }
+
+  createAutocomplete(element) {
+    element.autoComplete({
+      resolverSettings: {
+        url: '/ingredients'
+      }
+    });
   }
 
   handleAddIngredient() {
-    this.ingredientRowClone.clone().insertBefore('#addNewIngredientRow');
+    const newInput = this.ingredientRowClone.clone();
+    newInput.insertBefore('#addNewIngredientRow');
+    this.createAutocomplete(newInput.find('#inputIngredient'));
   }
 
   handleSubmit(event) {
@@ -86,10 +106,32 @@ class AddRecipesController {
         })
         .always(() => {
           inputs.prop('disabled', false);
-          this.recipeForm.removeClass('was-validated').addClass(
-              'needs-validation');
+          this.resetForm();
+          this.showSuccessAlert();
         });
+  }
+
+  resetForm() {
+    this.recipeForm.removeClass('was-validated').addClass(
+        'needs-validation');
+    this.recipeForm.find(':input')
+        .not(':button, :submit')
+        .val('');
+    this.recipeForm.find('.ingredientInputRow').remove();
+    const newRow = this.ingredientRowClone.clone();
+    newRow.insertBefore('#addNewIngredientRow');
+    this.createAutocomplete(newRow.find('#inputIngredient'));
+  }
+
+  showSuccessAlert() {
+    const newAlert = this.successAlert.clone();
+    newAlert.appendTo(this.recipeForm);
+
+    setTimeout(() => {
+      newAlert.alert('close');
+    }, 4000)
   }
 }
 
-const addRecipesController = new AddRecipesController();
+const
+    addRecipesController = new AddRecipesController();
