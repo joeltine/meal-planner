@@ -1,6 +1,5 @@
 package family.themartinez.mealplanner.ingredients;
 
-import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,10 +19,9 @@ public class IngredientsController {
   @GetMapping("/ingredients")
   public List<Map<String, Object>> getIngredients(@RequestParam(name = "q") String query) {
     String sql =
-        String.format("SELECT id, name FROM ingredients WHERE name LIKE '%%%s%%' LIMIT 30", query);
-    List<Map<String, Object>> results = this.jdbcTemplate.queryForList(sql);
-    ImmutableList.Builder newResults = ImmutableList.builder();
-
-    return newResults.build();
+        String.format(
+            "SELECT id AS value, name AS text FROM ingredients WHERE name LIKE '%%%s%%' LIMIT 10",
+            query);
+    return this.jdbcTemplate.queryForList(sql);
   }
 }
