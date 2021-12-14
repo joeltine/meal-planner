@@ -18,10 +18,8 @@ public class IngredientsController {
 
   @GetMapping("/ingredients")
   public List<Map<String, Object>> getIngredients(@RequestParam(name = "q") String query) {
-    String sql =
-        String.format(
-            "SELECT id AS value, name AS text FROM ingredients WHERE name LIKE '%%%s%%' LIMIT 10",
-            query);
-    return this.jdbcTemplate.queryForList(sql);
+    return this.jdbcTemplate.queryForList(
+        "SELECT id AS value, name AS text FROM ingredients WHERE name LIKE ? LIMIT 10",
+        new String[] {String.format("%%%s%%", query)});
   }
 }

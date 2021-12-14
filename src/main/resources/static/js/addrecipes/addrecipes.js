@@ -126,12 +126,10 @@ class AddRecipesController {
   showSuccessAlert() {
     const newAlert = this.successAlert.clone();
     newAlert.appendTo(this.recipeForm);
-
     setTimeout(() => {
       newAlert.alert('close');
     }, 4000)
   }
 }
 
-const
-    addRecipesController = new AddRecipesController();
+const addRecipesController = new AddRecipesController();
