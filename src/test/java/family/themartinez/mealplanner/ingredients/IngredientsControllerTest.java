@@ -6,24 +6,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureJdbc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-// @WebMvcTest(IngredientsController.class)
-@JdbcTest
-@Sql({"schema.sql", "test-data.sql"})
+@WebMvcTest(IngredientsController.class)
+@Sql({"/test-schema.sql", "/test-data.sql"})
+@ActiveProfiles("test")
+@AutoConfigureJdbc
 public class IngredientsControllerTest {
   @Autowired private MockMvc mockMvc;
-
-  @Autowired private JdbcTemplate jdbcTemplate;
 
   @Test
   public void getIngredientsShouldReturnResults() throws Exception {
     this.mockMvc
-        .perform(get("/ingredients?pot"))
+        .perform(get("/ingredients").param("q", "pot"))
         .andExpect(status().isOk())
-        .andExpect(content().json("[]"));
+        .andExpect(content().json("{}"));
   }
 }
