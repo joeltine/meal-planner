@@ -31,4 +31,9 @@ public class IngredientsControllerTest {
                         + "\"value\":\"5412\"},{\"text\":\"Potato, french fries, NFS\","
                         + "\"value\":\"5447\"}]"));
   }
+
+  @Test
+  public void getIngredientsMissingQueryThrowsError() throws Exception {
+    this.mockMvc.perform(get("/ingredients")).andExpect(status().is4xxClientError());
+  }
 }
