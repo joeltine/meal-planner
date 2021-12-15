@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.ingredients;
+package family.themartinez.mealplanner.controllers.ingredients;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

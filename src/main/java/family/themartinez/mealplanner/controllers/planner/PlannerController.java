@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.planner;
+package family.themartinez.mealplanner.controllers.planner;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

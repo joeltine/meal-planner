@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.addrecipes;
+package family.themartinez.mealplanner.controllers.addrecipes;
 
 import com.google.common.collect.ImmutableList;
 import java.util.List;
