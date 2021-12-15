@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.main;
+package family.themartinez.mealplanner;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

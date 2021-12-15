@@ -1,9 +1,7 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
 import com.google.common.collect.ImmutableList;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.jdbc.core.JdbcTemplate;
+import family.themartinez.mealplanner.data.units.UnitRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +12,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AddRecipesController {
   private static final String PATH = "/addrecipes";
 
-  private final JdbcTemplate jdbcTemplate;
+  private final UnitRepository unitRepository;
+  private final ImmutableList<String> unitsList;
 
-  private ImmutableList unitsList;
-
-  public AddRecipesController(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
+  public AddRecipesController(UnitRepository unitRepository) {
+    this.unitRepository = unitRepository;
     this.unitsList = getUnitsList();
   }
 
@@ -29,16 +26,12 @@ public class AddRecipesController {
     return "addrecipes/addrecipes";
   }
 
-  private ImmutableList getUnitsList() {
-    return this.jdbcTemplate.queryForList("SELECT name FROM units ORDER BY name ASC").stream()
-        .map(m -> m.get("NAME"))
-        .collect(ImmutableList.toImmutableList());
+  private ImmutableList<String> getUnitsList() {
+    return ImmutableList.copyOf(unitRepository.findDistinctName());
   }
 
   @PutMapping(path = PATH, produces = "application/json")
-  public @ResponseBody List<String> putRecipe() {
-    return this.jdbcTemplate.queryForList("SELECT * FROM recipes").stream()
-        .map(m -> m.values().toString())
-        .collect(Collectors.toList());
+  public @ResponseBody String putRecipe() {
+    return "Success";
   }
 }

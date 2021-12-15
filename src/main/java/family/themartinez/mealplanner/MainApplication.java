@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.main;
+package family.themartinez.mealplanner;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.boot.SpringApplication;
