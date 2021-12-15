@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql({"/test-schema.sql", "/test-data.sql"})
+@Sql({"/test-data.sql"})
 @ActiveProfiles("test")
 public class IngredientsControllerTest {
   @Autowired private MockMvc mockMvc;
@@ -24,6 +24,11 @@ public class IngredientsControllerTest {
     this.mockMvc
         .perform(get("/ingredients").param("q", "pot"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{}"));
+        .andExpect(
+            content()
+                .json(
+                    "[{\"text\":\"Potato chips, sour cream and onion flavored\","
+                        + "\"value\":\"5412\"},{\"text\":\"Potato, french fries, NFS\","
+                        + "\"value\":\"5447\"}]"));
   }
 }
