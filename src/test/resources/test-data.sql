@@ -42,7 +42,7 @@ VALUES (3633, '2021-12-11 18:56:32', 'Blintz, cheese-filled', 'blintzes, NS as t
         'Pancakes, waffles, French toast');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (3835, '2021-12-11 18:57:14', 'Cheese flavored corn snacks, reduced fat',
-        'all flavors; baked; low fat corn cheese puffs, curls, or twists; reduced fat; light; Cheetos Oven Baked; Cheetos Puff Reduced Fat; Pirate\'s Booty; Smartfood; puffed corn',
+        'all flavors; baked; low fat corn cheese puffs, curls, or twists; reduced fat; light; Cheetos Oven Baked; Cheetos Puff Reduced Fat; Pirate''s Booty; Smartfood; puffed corn',
         'Tortilla, corn, other chips');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (2356, '2021-12-11 18:51:59', 'Chicken fillet sandwich, from school cafeteria',
@@ -100,7 +100,7 @@ INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`
 VALUES (2702, '2021-12-11 18:53:11', 'Egg, Benedict', '', 'Eggs and omelets');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (184, '2021-12-11 18:44:22', 'Milk shake, bottled, flavors other than chocolate',
-        'canned; reconstituted dry mix; Hershey\'s; Chug', 'Milk shakes and other dairy drinks');
+        'canned; reconstituted dry mix; Hershey''s; Chug', 'Milk shakes and other dairy drinks');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (1675, '2021-12-11 18:49:35', 'Beef with gravy', 'country style', 'Meat mixed dishes');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
@@ -121,7 +121,7 @@ VALUES (5271, '2021-12-11 19:02:35', 'Fruit bar, with added vitamin C, baby food
         'Baby food: snacks and sweets');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (3158, '2021-12-11 18:54:53', 'Bread, white, special formula, added fiber, toasted',
-        'Iron Kids Bread, Kids\' Choice Bread; pre-sliced or not', 'Yeast breads');
+        'Iron Kids Bread, Kids'' Choice Bread; pre-sliced or not', 'Yeast breads');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (2449, '2021-12-11 18:52:18',
         'Frankfurter or hot dog sandwich, beef and pork, plain, on wheat bread', '',
@@ -144,7 +144,7 @@ VALUES (5447, '2021-12-11 19:03:11', 'Potato, french fries, NFS', '',
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (349, '2021-12-11 18:44:59',
         'Infant formula, powder, made with water, NFS (Store Brand Soy)',
-        'Parents\' Choice; Ultra Bright Beginnings', 'Formula, prepared from powder');
+        'Parents'' Choice; Ultra Bright Beginnings', 'Formula, prepared from powder');
 INSERT INTO `ingredients` (`id`, `created_at`, `name`, `description`, `category`)
 VALUES (3295, '2021-12-11 18:55:21', 'Bread, oat bran, toasted', 'pre-sliced or not',
         'Yeast breads');
