@@ -1,35 +1,81 @@
 package family.themartinez.mealplanner.controllers.ingredients;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import family.themartinez.mealplanner.data.ingredients.Ingredient;
+import family.themartinez.mealplanner.data.ingredients.IngredientRepository;
+import java.time.Instant;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql({"/test-data.sql"})
 @ActiveProfiles("test")
 public class IngredientsControllerTest {
   @Autowired private MockMvc mockMvc;
+
+  @Autowired private IngredientRepository ingredientRepository;
+
+  @BeforeEach
+  public void setupTest() {
+    Ingredient potato = new Ingredient();
+    potato.setName("Potato, raw");
+    potato.setCategory("Vegetable, potato");
+    potato.setDescription("It's a potato.");
+    potato.setCreatedAt(Instant.now());
+    ingredientRepository.save(potato);
+
+    Ingredient chicken = new Ingredient();
+    chicken.setName("Chicken, raw");
+    chicken.setCategory("Raw chicken");
+    chicken.setDescription("Bawk Bawk");
+    chicken.setCreatedAt(Instant.now());
+    ingredientRepository.save(chicken);
+
+    Ingredient tomato = new Ingredient();
+    tomato.setName("Sliced tomatoes");
+    tomato.setCategory("Vegetable");
+    tomato.setDescription("Vine ripened");
+    tomato.setCreatedAt(Instant.now());
+    ingredientRepository.save(tomato);
+
+    Ingredient chips = new Ingredient();
+    chips.setName("Sour cream and onion potato chips");
+    chips.setCategory("Deep friend snack");
+    chips.setDescription("Lays");
+    chips.setCreatedAt(Instant.now());
+    ingredientRepository.save(chips);
+  }
+
+  @AfterEach
+  public void teardownTest() {
+    ingredientRepository.deleteAll();
+  }
 
   @Test
   public void getIngredientsShouldReturnResults() throws Exception {
     this.mockMvc
         .perform(get("/ingredients").param("q", "pot"))
         .andExpect(status().isOk())
-        .andExpect(
-            content()
-                .json(
-                    "[{\"text\":\"Potato chips, sour cream and onion flavored\","
-                        + "\"value\":\"5412\"},{\"text\":\"Potato, french fries, NFS\","
-                        + "\"value\":\"5447\"}]"));
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$", hasSize(2)))
+        .andExpect(jsonPath("$[0].text", equalTo("Potato, raw")))
+        .andExpect(jsonPath("$[0].value", matchesPattern("\\d+")))
+        .andExpect(jsonPath("$[1].text", equalTo("Sour cream and onion potato chips")))
+        .andExpect(jsonPath("$[1].value", matchesPattern("\\d+")));
   }
 
   @Test
