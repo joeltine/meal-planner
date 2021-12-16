@@ -1,6 +1,7 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -62,6 +63,11 @@ class AddRecipesControllerTest {
         .andExpect(
             model()
                 .attribute(
-                    "units", contains("grams", "liters", "pounds", "tablespoons", "teaspoons")));
+                    "units", contains("grams", "liters", "pounds", "tablespoons", "teaspoons")))
+        .andExpect(content().string(containsString("<option>grams</option>")))
+        .andExpect(content().string(containsString("<option>liters</option>")))
+        .andExpect(content().string(containsString("<option>pounds</option>")))
+        .andExpect(content().string(containsString("<option>tablespoons</option>")))
+        .andExpect(content().string(containsString("<option>teaspoons</option>")));
   }
 }
