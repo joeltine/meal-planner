@@ -1,8 +1,10 @@
 package family.themartinez.mealplanner.controllers.ingredients;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.matchesPattern;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -76,6 +78,35 @@ public class IngredientsControllerTest {
         .andExpect(jsonPath("$[0].value", matchesPattern("\\d+")))
         .andExpect(jsonPath("$[1].text", equalTo("Sour cream and onion potato chips")))
         .andExpect(jsonPath("$[1].value", matchesPattern("\\d+")));
+  }
+
+  @Test
+  public void getIngredientsNoMatchesReturnsEmptyArray() throws Exception {
+    this.mockMvc
+        .perform(get("/ingredients").param("q", "zooba"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(content().json("[]"));
+  }
+
+  @Test
+  public void getIngredientsOnlyReturnsTop10Results() throws Exception {
+    for (int i = 0; i < 15; i++) {
+      Ingredient newCandy = new Ingredient();
+      newCandy.setName(String.format("Candy%s", i));
+      newCandy.setCategory("Sweet treat");
+      newCandy.setDescription("Another candy");
+      newCandy.setCreatedAt(Instant.now());
+      ingredientRepository.save(newCandy);
+    }
+    assertTrue(ingredientRepository.count() > 10);
+    this.mockMvc
+        .perform(get("/ingredients").param("q", "candy"))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$", hasSize(10)))
+        .andExpect(jsonPath("$..text", everyItem(matchesPattern("Candy\\d"))))
+        .andExpect(jsonPath("$..value", everyItem(matchesPattern("\\d+"))));
   }
 
   @Test
