@@ -32,7 +32,7 @@ public class IngredientsControllerTest {
   @Autowired private IngredientRepository ingredientRepository;
 
   @BeforeEach
-  public void setupTest() {
+  public void setUp() {
     Ingredient potato = new Ingredient();
     potato.setName("Potato, raw");
     potato.setCategory("Vegetable, potato");
@@ -63,7 +63,7 @@ public class IngredientsControllerTest {
   }
 
   @AfterEach
-  public void teardownTest() {
+  public void tearDown() {
     ingredientRepository.deleteAll();
   }
 
