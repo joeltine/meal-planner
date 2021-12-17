@@ -73,3 +73,4 @@ replay_pid*
 
 # NodeJS
 node_modules/
+node/
