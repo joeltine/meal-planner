@@ -1,10 +1,8 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import family.themartinez.mealplanner.data.units.Unit;
@@ -56,18 +54,15 @@ class AddRecipesControllerTest {
 
   @Test
   public void pageRendersUnitsSelectList() throws Exception {
+    // TODO: Update this so option assertions don't rely on specific values/ids.
     this.mockMvc
         .perform(get("/addrecipes"))
         .andExpect(status().isOk())
         .andExpect(content().contentType("text/html;charset=UTF-8"))
-        .andExpect(
-            model()
-                .attribute(
-                    "units", contains("grams", "liters", "pounds", "tablespoons", "teaspoons")))
-        .andExpect(content().string(containsString("<option>grams</option>")))
-        .andExpect(content().string(containsString("<option>liters</option>")))
-        .andExpect(content().string(containsString("<option>pounds</option>")))
-        .andExpect(content().string(containsString("<option>tablespoons</option>")))
-        .andExpect(content().string(containsString("<option>teaspoons</option>")));
+        .andExpect(content().string(containsString("<option value=\"1\">grams</option>")))
+        .andExpect(content().string(containsString("<option value=\"5\">liters</option>")))
+        .andExpect(content().string(containsString("<option value=\"2\">pounds</option>")))
+        .andExpect(content().string(containsString("<option value=\"4\">tablespoons</option>")))
+        .andExpect(content().string(containsString("<option value=\"3\">teaspoons</option>")));
   }
 }

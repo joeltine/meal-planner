@@ -49,7 +49,7 @@
         <label for="inputUnit">Unit</label>
         <select id="inputUnit" class="form-control" required>
           <option selected></option>
-          <option th:each="unit : ${units}" th:text="${unit}"></option>
+          <option th:each="unit : ${units}" th:text="${unit.name}" th:value="${unit.id}"></option>
         </select>
       </div>
       <div class="form-group col">
@@ -57,6 +57,7 @@
         <select class="form-control" id="inputIngredient"
                 placeholder="Type to search ingredients..."
                 autocomplete="off"
+                name="inputIngredient"
                 required>
         </select>
       </div>

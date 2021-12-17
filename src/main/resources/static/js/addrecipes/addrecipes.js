@@ -20,6 +20,9 @@ class AddRecipesController {
     this.recipeForm.on('click', '#addIngredient',
         this.handleAddIngredient.bind(this));
 
+    this.recipeForm.on('blur', '#inputQuantity',
+        this.scrapeAndValidateForm.bind(this));
+
     this.createAutocomplete(this.recipeForm.find('#inputIngredient'));
   }
 
@@ -66,7 +69,7 @@ class AddRecipesController {
       const quantityInput = row.find('#inputQuantity');
       const quantity = quantityInput.val();
       const unit = row.find('#inputUnit').val();
-      const ingredient = row.find('#inputIngredient').val();
+      const ingredient = row.find('input[name="inputIngredient"]').val();
 
       if (quantity <= 0) {
         quantityInput.get(0).setCustomValidity('Quantity must be > 0');
