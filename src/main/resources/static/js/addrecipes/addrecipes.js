@@ -1,3 +1,6 @@
+import 'bootstrap-autocomplete';
+import {CommonController} from '../common/common';
+
 class AddRecipesController {
   constructor() {
     this.recipeForm = $('#recipeForm');
@@ -11,6 +14,10 @@ class AddRecipesController {
         </button>
       </div>`);
     this.bindFormControls();
+  }
+
+  init() {
+    new CommonController();
   }
 
   bindFormControls() {
@@ -135,4 +142,4 @@ class AddRecipesController {
   }
 }
 
-new AddRecipesController();
+(new AddRecipesController()).init();

@@ -142,6 +142,7 @@
         <version>1.9.1</version>
         <executions>
           <execution>
+            <id>install node and npm</id>
             <goals>
               <goal>install-node-and-npm</goal>
             </goals>

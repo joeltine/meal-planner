@@ -1,6 +1,9 @@
 # Google App Engine generated folder
 appengine-generated/
 
+# Ignore source maps
+*.map
+
 # Intellij
 .idea/
 
@@ -74,3 +77,6 @@ replay_pid*
 # NodeJS
 node_modules/
 node/
+
+# Vim
+*.swp

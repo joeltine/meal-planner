@@ -1,4 +1,4 @@
-class CommonController {
+export class CommonController {
   constructor() {
     this.setCurrentNavItem();
   }
@@ -8,5 +8,3 @@ class CommonController {
     $(`a.nav-link[href="${pathName}"]`).addClass('active');
   }
 }
-
-const common = new CommonController();
