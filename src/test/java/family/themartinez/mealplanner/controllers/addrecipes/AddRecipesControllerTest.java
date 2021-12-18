@@ -149,7 +149,6 @@ class AddRecipesControllerTest {
 
   @Test
   public void pageRendersUnitsSelectList() throws Exception {
-    // TODO: Update this so option assertions don't rely on specific values/ids.
     MvcResult result =
         this.mockMvc
             .perform(get("/addrecipes"))
