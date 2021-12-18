@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "ingredients")
@@ -18,7 +19,8 @@ public class Ingredient {
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "created_at", nullable = false)
+  @CreatedDate
+  @Column(name = "created_at")
   private Instant createdAt;
 
   @Column(name = "name", nullable = false)

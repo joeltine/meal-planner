@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "ingredient_lists")
@@ -22,7 +23,8 @@ public class IngredientList {
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @Column(name = "created_at", nullable = false)
+  @CreatedDate
+  @Column(name = "created_at")
   private Instant createdAt;
 
   @ManyToOne(optional = false)
