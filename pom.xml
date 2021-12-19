@@ -104,7 +104,6 @@
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <!-- jsoup HTML parser library @ https://jsoup.org/ -->
       <groupId>org.jsoup</groupId>
       <artifactId>jsoup</artifactId>
       <version>1.14.3</version>
@@ -152,6 +151,16 @@
             <goals>
               <goal>webpack</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>npm test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <arguments>test</arguments>
+            </configuration>
           </execution>
         </executions>
         <configuration>
