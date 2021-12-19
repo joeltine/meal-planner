@@ -20,6 +20,12 @@ Running tests:
 mvn clean test
 ```
 
+Configure git hooks:
+
+```
+git config core.hooksPath git-hooks/
+```
+
 To deploy to GCP:
 
 ```
