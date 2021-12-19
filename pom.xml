@@ -117,25 +117,6 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.rudikershaw.gitbuildhook</groupId>
-        <artifactId>git-build-hook-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <gitConfig>
-            <!-- The location of the directory you are using to store the Git hooks in your project. -->
-            <core.hooksPath>git-hooks/</core.hooksPath>
-          </gitConfig>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <!-- Sets git config specified under configuration > gitConfig. -->
-              <goal>configure</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
         <version>1.9.1</version>
