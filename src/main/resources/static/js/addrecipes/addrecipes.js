@@ -1,7 +1,7 @@
 import 'bootstrap-autocomplete';
 import {CommonController} from '../common/common';
 
-class AddRecipesController {
+export class AddRecipesController {
   constructor() {
     this.recipeForm = $('#recipeForm');
     this.ingredientRowClone = $('#ingredientInputRow').clone();

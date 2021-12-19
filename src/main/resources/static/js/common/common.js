@@ -4,7 +4,11 @@ export class CommonController {
   }
 
   setCurrentNavItem() {
-    const pathName = window.location.pathname;
+    const pathName = this.getCurrentPathname();
     $(`a.nav-link[href="${pathName}"]`).addClass('active');
+  }
+
+  getCurrentPathname() {
+    return window.location.pathname;
   }
 }

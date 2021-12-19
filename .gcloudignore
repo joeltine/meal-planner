@@ -88,3 +88,10 @@ replay_pid*
 
 # NodeJS
 node_modules/
+node/
+
+# Ignore source maps
+*.map
+
+# Vim
+*.swp
