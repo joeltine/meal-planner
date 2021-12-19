@@ -13,6 +13,14 @@ export class AddRecipesController {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>`);
+    this.failureAlert = $(`
+      <div class="alert alert-danger alert-dismissible fade show" role="alert"
+           id="failureAlert">
+        <strong>Failure!</strong> Something went wrong: <span id="failureText"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>`);
     this.bindFormControls();
   }
 
@@ -109,15 +117,16 @@ export class AddRecipesController {
       processData: false
     })
         .done((data, textStatus) => {
-          console.log("success", data, textStatus);
+          this.showSuccessAlert();
         })
         .fail((jqXHR, textStatus, errorThrown) => {
-          console.log("error", textStatus, errorThrown);
+          const response = JSON.parse(jqXHR.responseText);
+          this.showFailureAlert(
+              `${textStatus}: ${response.path} ${response.error}, ${response.message}`);
         })
         .always(() => {
           inputs.prop('disabled', false);
           this.resetForm();
-          this.showSuccessAlert();
         });
   }
 
@@ -131,6 +140,15 @@ export class AddRecipesController {
     const newRow = this.ingredientRowClone.clone();
     newRow.insertBefore('#addNewIngredientRow');
     this.createAutocomplete(newRow.find('#inputIngredient'));
+  }
+
+  showFailureAlert(errorMsg) {
+    const newAlert = this.failureAlert.clone();
+    newAlert.find('#failureText').text(errorMsg);
+    newAlert.appendTo(this.recipeForm);
+    setTimeout(() => {
+      newAlert.alert('close');
+    }, 4000)
   }
 
   showSuccessAlert() {
