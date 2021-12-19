@@ -1,1 +1,77 @@
-<div id="OHNO"></div>
+<form id="recipeForm" class="needs-validation" novalidate>
+  <div class="form-row">
+    <h3>Basic Info</h3>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputRecipeName">Name</label>
+      <input type="text" class="form-control" id="inputRecipeName" placeholder="Name of recipe"
+             maxLength="255" required>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputDescription">Description</label>
+      <textarea class="form-control" id="inputDescription" placeholder="Description of recipe"
+                maxLength="65535" rows="6"></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <h3>Ingredients</h3>
+  </div>
+
+  <div class="form-row ingredientInputRow" id="ingredientInputRow">
+    <div class="form-group col-md-1">
+      <label for="inputQuantity">Quantity</label>
+      <input type="number" class="form-control" id="inputQuantity" step="0.01" required>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputUnit">Unit</label>
+      <select id="inputUnit" class="form-control" required>
+        <option selected></option>
+        <option value="1">grams</option>
+        <option value="2">liters</option>
+        <option value="3">teaspoons</option>
+        <option value="4">pounds</option>
+      </select>
+    </div>
+    <div class="form-group col">
+      <label for="inputIngredient">Ingredient</label>
+      <select class="form-control" id="inputIngredient"
+              placeholder="Type to search ingredients..."
+              autocomplete="off"
+              name="inputIngredient"
+              required>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row" id="addNewIngredientRow">
+    <div class="form-group">
+      <button type="button" class="btn btn-link" id="addIngredient">
+        <span data-feather="plus"></span>
+        Add new ingredient
+      </button>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <h3>Instructions</h3>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="inputInstructions">Instructions</label>
+      <textarea class="form-control" id="inputInstructions"
+                placeholder="Step by step instructions of recipe"
+                maxLength="65535" rows="6" required></textarea>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+  </div>
+</form>
