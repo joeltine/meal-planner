@@ -9,6 +9,7 @@ describe('AddRecipesController test suite', function () {
   let inputInstructions;
   let ingredientRow;
   let submitButton;
+  let addIngredientButton;
 
   beforeAll(function () {
     window.CSRF_HEADER_NAME = 'csrf-header-name';
@@ -24,6 +25,7 @@ describe('AddRecipesController test suite', function () {
     inputInstructions = $('#inputInstructions');
     ingredientRow = $('#ingredientInputRow');
     submitButton = $('#submit');
+    addIngredientButton = $('#addIngredient');
     controller = new AddRecipesController();
     jasmine.Ajax.install();
   });
@@ -34,14 +36,25 @@ describe('AddRecipesController test suite', function () {
     jasmine.Ajax.uninstall();
   });
 
-  it('submitting empty form is invalid', function () {
+  it('submitting empty form does nothing', function () {
     submitButton.click();
-    // TODO: Expect was-validated class and all fields are bad validity.
     let request = jasmine.Ajax.requests;
     expect(request.count()).toBe(0);
   });
 
-  it('ingredient quantity must be > 0', function () {
+  it('recipe name is required to submit', function () {
+    inputDescription.val('It\'s soup');
+    inputInstructions.val('Put it in a pot');
+    ingredientRow.find('#inputQuantity').val('1.25');
+    ingredientRow.find('#inputUnit').val('1');
+    ingredientRow.find('#inputIngredient').autoComplete('set',
+        {value: "1", text: "Milk"});
+    submitButton.click();
+    let requests = jasmine.Ajax.requests;
+    expect(requests.count()).toBe(0);
+  });
+
+  it('ingredient quantity must be > 0 to submit', function () {
     inputRecipeName.val('Chicken soup');
     inputDescription.val('It\'s soup');
     inputInstructions.val('Put it in a pot');
@@ -53,11 +66,51 @@ describe('AddRecipesController test suite', function () {
     let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(0);
 
-    ingredientRow.find('#inputQuantity').val('1.75');
+    ingredientRow.find('#inputQuantity').val('0');
     submitButton.click();
+    expect(requests.count()).toBe(0);
+  });
+
+  it('recipe description is optional to submit', function () {
+    inputRecipeName.val('Chicken soup');
+    inputInstructions.val('Put it in a pot');
+    ingredientRow.find('#inputQuantity').val('1');
+    ingredientRow.find('#inputUnit').val('1');
+    ingredientRow.find('#inputIngredient').autoComplete('set',
+        {value: "1", text: "Milk"});
+    submitButton.click();
+    let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(1);
-    let request = requests.mostRecent();
-    expect(request.url).toBe('/addrecipes');
-    expect(request.method).toBe('PUT');
+  });
+
+  it('ingredient unit is required to submit', function () {
+    inputRecipeName.val('Chicken soup');
+    inputInstructions.val('Put it in a pot');
+    ingredientRow.find('#inputQuantity').val('1');
+    ingredientRow.find('#inputIngredient').autoComplete('set',
+        {value: "1", text: "Milk"});
+    submitButton.click();
+    let requests = jasmine.Ajax.requests;
+    expect(requests.count()).toBe(0);
+  });
+
+  it('ingredient name is required to submit', function () {
+    inputRecipeName.val('Chicken soup');
+    inputInstructions.val('Put it in a pot');
+    ingredientRow.find('#inputQuantity').val('1');
+    ingredientRow.find('#inputUnit').val('1');
+    submitButton.click();
+    let requests = jasmine.Ajax.requests;
+    expect(requests.count()).toBe(0);
+  });
+
+  it('add ingredient button adds new ingredient input row', function () {
+    expect($('.ingredientInputRow').length).toBe(1);
+    let addIngredientButton = $('#addIngredient');
+    addIngredientButton.click();
+    expect($('.ingredientInputRow').length).toBe(2);
+    addIngredientButton.click();
+    addIngredientButton.click();
+    expect($('.ingredientInputRow').length).toBe(4);
   });
 });
