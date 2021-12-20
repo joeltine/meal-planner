@@ -20,7 +20,7 @@ public class Recipe {
   private Integer id;
 
   @CreatedDate
-  @Column(name = "created_at")
+  @Column(name = "created_at", insertable = false, updatable = false)
   private Instant createdAt;
 
   @Column(name = "name", nullable = false)

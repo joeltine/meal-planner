@@ -34,26 +34,18 @@ public class IngredientsControllerTest {
   public void setUp() {
     Ingredient potato = new Ingredient();
     potato.setName("Potato, raw");
-    potato.setCategory("Vegetable, potato");
-    potato.setDescription("It's a potato.");
     ingredientRepository.save(potato);
 
     Ingredient chicken = new Ingredient();
     chicken.setName("Chicken, raw");
-    chicken.setCategory("Raw chicken");
-    chicken.setDescription("Bawk Bawk");
     ingredientRepository.save(chicken);
 
     Ingredient tomato = new Ingredient();
     tomato.setName("Sliced tomatoes");
-    tomato.setCategory("Vegetable");
-    tomato.setDescription("Vine ripened");
     ingredientRepository.save(tomato);
 
     Ingredient chips = new Ingredient();
     chips.setName("Sour cream and onion potato chips");
-    chips.setCategory("Deep friend snack");
-    chips.setDescription("Lays");
     ingredientRepository.save(chips);
   }
 
@@ -89,8 +81,6 @@ public class IngredientsControllerTest {
     for (int i = 0; i < 15; i++) {
       Ingredient newCandy = new Ingredient();
       newCandy.setName(String.format("Candy%s", i));
-      newCandy.setCategory("Sweet treat");
-      newCandy.setDescription("Another candy");
       ingredientRepository.save(newCandy);
     }
     assertTrue(ingredientRepository.count() > 10);

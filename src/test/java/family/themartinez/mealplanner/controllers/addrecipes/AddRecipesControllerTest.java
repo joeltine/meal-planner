@@ -59,16 +59,10 @@ class AddRecipesControllerTest {
   private void populateIngredientRepository() {
     Ingredient milk = new Ingredient();
     milk.setName("Whole milk");
-    milk.setDescription("Whole milk");
-    milk.setCategory("Dairy, milk");
     Ingredient chicken = new Ingredient();
     chicken.setName("Chicken breast, raw");
-    chicken.setDescription("Raw chicken breast");
-    chicken.setCategory("Meat, chicken");
     Ingredient water = new Ingredient();
     water.setName("Water");
-    water.setDescription("Just water");
-    water.setCategory("Liquid, water");
     ingredientRepository.saveAll(List.of(milk, chicken, water));
   }
 

@@ -24,7 +24,7 @@ public class IngredientList {
   private Integer id;
 
   @CreatedDate
-  @Column(name = "created_at")
+  @Column(name = "created_at", insertable = false, updatable = false)
   private Instant createdAt;
 
   @ManyToOne(optional = false)
