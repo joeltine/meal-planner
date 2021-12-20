@@ -24,4 +24,12 @@ describe('CommonController test suite', function () {
     new CommonController();
     expect($('a.nav-link.active').length).toBe(0);
   });
+
+  it('maps root pathname to /planner', function () {
+    spyOn(CommonController.prototype, 'getCurrentPathname')
+        .and.returnValue('/');
+    new CommonController();
+    expect($('a.nav-link.active').length).toBe(1);
+    expect($('a.nav-link[href="/planner"]').hasClass('active')).toBeTrue();
+  });
 });

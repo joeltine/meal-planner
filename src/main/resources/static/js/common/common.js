@@ -4,7 +4,10 @@ export class CommonController {
   }
 
   setCurrentNavItem() {
-    const pathName = this.getCurrentPathname();
+    let pathName = this.getCurrentPathname();
+    if (pathName == '/') {
+      pathName = '/planner';
+    }
     $(`a.nav-link[href="${pathName}"]`).addClass('active');
   }
 

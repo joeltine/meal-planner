@@ -4,6 +4,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const config = {
   entry: {
     addrecipes: './src/main/resources/static/js/addrecipes/addrecipes.js',
+    planner: './src/main/resources/static/js/planner/planner.js',
     'third-party': './src/main/resources/static/js/third-party/third-party.js',
   },
 

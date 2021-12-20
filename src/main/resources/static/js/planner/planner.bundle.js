@@ -1,0 +1,1 @@
+(()=>{"use strict";class t{constructor(){this.setCurrentNavItem()}setCurrentNavItem(){let t=this.getCurrentPathname();"/"==t&&(t="/planner"),$(`a.nav-link[href="${t}"]`).addClass("active")}getCurrentPathname(){return window.location.pathname}}(new class{init(){new t}}).init()})();
