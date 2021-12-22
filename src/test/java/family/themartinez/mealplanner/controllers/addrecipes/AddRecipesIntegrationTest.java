@@ -76,6 +76,7 @@ public class AddRecipesIntegrationTest {
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("successAlert")));
 
     // Attempt DB cleanup
+    // TODO: move to afterEach
     ImmutableList<Recipe> recipes =
         ImmutableList.copyOf(recipeRepository.findByName("Chicken chili casserole"));
     for (Recipe recipe : recipes) {
