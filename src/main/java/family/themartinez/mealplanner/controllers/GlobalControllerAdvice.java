@@ -13,7 +13,7 @@ public class GlobalControllerAdvice {
 
   @ModelAttribute("dbName")
   public String dbName() {
-    return environment.getProperty("spring.cloud.gcp.sql.database-name");
+    return environment.getProperty("spring.datasource.url");
   }
 
   @ModelAttribute("activeProfile")
