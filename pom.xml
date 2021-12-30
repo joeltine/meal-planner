@@ -6,8 +6,8 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.5.7</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <version>2.6.2</version>
+    <relativePath/>
   </parent>
 
   <groupId>family.themartinez.mealplanner</groupId>
@@ -19,6 +19,7 @@
     <java.version>11</java.version>
     <selenium.version>3.141.59</selenium.version>
     <testcontainers.version>1.16.2</testcontainers.version>
+    <log4j2.version>2.17.1</log4j2.version>
   </properties>
 
   <dependencies>
@@ -167,6 +168,25 @@
         <configuration>
           <nodeVersion>v17.2.0</nodeVersion>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>wagon-maven-plugin</artifactId>
+        <version>2.0.2</version>
+        <executions>
+          <execution>
+            <id>upload-jar</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromFile>target/${project.build.finalName}.jar</fromFile>
+              <toFile>meal-planner.jar</toFile>
+              <url>scp://192.168.1.211/opt/meal-planner</url>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
