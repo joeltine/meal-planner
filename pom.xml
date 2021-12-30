@@ -184,6 +184,10 @@
               <fromFile>target/${project.build.finalName}.jar</fromFile>
               <toFile>meal-planner.jar</toFile>
               <url>scp://192.168.1.211/opt/meal-planner</url>
+              <commands>
+                <command>sudo /usr/bin/systemctl restart meal-planner.service</command>
+              </commands>
+              <displayCommandOutputs>true</displayCommandOutputs>
             </configuration>
           </execution>
         </executions>
