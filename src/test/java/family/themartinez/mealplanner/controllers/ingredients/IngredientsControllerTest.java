@@ -78,18 +78,18 @@ public class IngredientsControllerTest {
 
   @Test
   public void getIngredientsOnlyReturnsTop10Results() throws Exception {
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 25; i++) {
       Ingredient newCandy = new Ingredient();
       newCandy.setName(String.format("Candy%s", i));
       ingredientRepository.save(newCandy);
     }
-    assertTrue(ingredientRepository.count() > 10);
+    assertTrue(ingredientRepository.count() > 20);
     this.mockMvc
         .perform(get("/ingredients").param("q", "candy"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(10)))
-        .andExpect(jsonPath("$..text", everyItem(matchesPattern("Candy\\d"))))
+        .andExpect(jsonPath("$", hasSize(20)))
+        .andExpect(jsonPath("$..text", everyItem(matchesPattern("Candy\\d+"))))
         .andExpect(jsonPath("$..value", everyItem(matchesPattern("\\d+"))));
   }
 
