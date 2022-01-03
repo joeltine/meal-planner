@@ -237,7 +237,7 @@ describe('AddRecipesController test suite', function () {
     expect($('#failureAlert').is(':visible')).toBeTrue();
     expect($('#failureText').text()).toEqual(
         'error: /addrecipes bad stuff, err message');
-    jasmine.clock().tick(5000);
+    jasmine.clock().tick(10001);
     expect($('#failureAlert').is(':visible')).toBeFalse();
   });
 });

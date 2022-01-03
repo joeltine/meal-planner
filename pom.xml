@@ -12,7 +12,7 @@
 
   <groupId>family.themartinez.mealplanner</groupId>
   <artifactId>main</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>main</name>
   <description>Meal Planner Application</description>
   <properties>
