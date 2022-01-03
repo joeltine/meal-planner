@@ -2,11 +2,10 @@ package family.themartinez.mealplanner.controllers.addrecipes;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.google.common.collect.ImmutableList;
 import family.themartinez.mealplanner.data.ingredientlists.IngredientListRepository;
-import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -52,6 +51,11 @@ public class AddRecipesIntegrationTest {
     driver.quit();
   }
 
+  @AfterEach
+  void afterEach() {
+    recipeRepository.deleteAll();
+  }
+
   @Test
   void canSubmitFilledOutForm() {
     driver = chrome.getWebDriver();
@@ -74,13 +78,5 @@ public class AddRecipesIntegrationTest {
     driver.findElement(By.id("inputInstructions")).sendKeys("Do all the things");
     driver.findElement(By.id("submit")).click();
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("successAlert")));
-
-    // Attempt DB cleanup
-    // TODO: move to afterEach
-    ImmutableList<Recipe> recipes =
-        ImmutableList.copyOf(recipeRepository.findByName("Chicken chili casserole"));
-    for (Recipe recipe : recipes) {
-      recipeRepository.delete(recipe);
-    }
   }
 }
