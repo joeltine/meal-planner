@@ -8,15 +8,19 @@ import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
+import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -29,6 +33,11 @@ public class AddRecipesController {
   @Autowired private IngredientRepository ingredientRepository;
 
   private ImmutableList<Unit> unitsList;
+  private final ExternalRecipeScraper scraper;
+
+  AddRecipesController() throws IOException {
+    this.scraper = new ExternalRecipeScraper();
+  }
 
   @GetMapping(PATH)
   public String planner(Model model) {
@@ -63,5 +72,16 @@ public class AddRecipesController {
       this.unitsList = ImmutableList.copyOf(unitRepository.findAllByOrderByNameAsc());
     }
     return this.unitsList;
+  }
+
+  @GetMapping(path = "/scrapeRecipe")
+  public @ResponseBody String putRecipe(@RequestParam String url) throws Exception {
+    Pair<Integer, String> output = this.scraper.scrapeRecipe(url);
+    Integer exitCode = output.getFirst();
+    if (exitCode != 0) {
+      throw new RuntimeException(output.getSecond());
+    } else {
+      return output.getSecond();
+    }
   }
 }

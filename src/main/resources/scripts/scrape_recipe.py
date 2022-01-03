@@ -14,31 +14,26 @@ args = parser.parse_args()
 recipeUrl = args.recipeUrl
 
 try:
-    scraper = scrape_me(recipeUrl, wild_mode=True)
+  scraper = scrape_me(recipeUrl, wild_mode=True)
 except Exception as err:
-    print(err.message)
-    exit(1)
+  print(err)
+  exit(1)
 
 outJson = {}
+fields = ['title', 'total_time', 'cook_time', 'prep_time', 'ingredients',
+          'instructions', 'canonical_url', 'category']
+
+for f in fields:
+  try:
+    outJson[f] = getattr(scraper, f)()
+  except Exception:
+    outJson[f] = ''
 
 try:
-    outJson['title'] = scraper.title()
-    outJson['total_time'] = scraper.total_time()
-    outJson['cook_time'] = scraper.cook_time()
-    outJson['prep_time'] = scraper.prep_time()
-    outJson['ingredients'] = scraper.ingredients()
-    outJson['instructions'] = scraper.instructions()
-    outJson['canonical_url'] = scraper.canonical_url()
-    outJson['category'] = scraper.category()
+  recipeJson = json.dumps(outJson)
 except Exception as err:
-    print(err.message)
-    exit(1)
-
-try:
-    recipeJson = json.dumps(outJson)
-except Exception as err:
-    print(err.message)
-    exit(1)
+  print(err)
+  exit(1)
 
 print(recipeJson)
 exit(0)
