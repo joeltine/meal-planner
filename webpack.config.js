@@ -10,7 +10,7 @@ const config = {
 
   output: {
     filename: '[name]/[name].bundle.js',
-    path: path.resolve(__dirname, 'src/main/resources/static/js/'),
+    path: path.resolve(__dirname, 'target/classes/static/js/'),
   },
 
   optimization: {

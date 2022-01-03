@@ -118,7 +118,8 @@
     "url": "git+https://github.com/joeltine/meal-planner.git"
   },
   "scripts": {
-    "test": "karma start karma.conf.js --single-run"
+    "test": "karma start karma.conf.js --single-run",
+    "watch": "webpack --watch --mode=development"
   },
   "keywords": [],
   "author": "",
