@@ -42,6 +42,17 @@ public class IngredientList {
   @Column(name = "quantity", nullable = false)
   private Double quantity;
 
+  @Column(name = "ingredient_display_name")
+  private String ingredientDisplayName;
+
+  public String getIngredientDisplayName() {
+    return ingredientDisplayName;
+  }
+
+  public void setIngredientDisplayName(String ingredientDisplayName) {
+    this.ingredientDisplayName = ingredientDisplayName;
+  }
+
   public Double getQuantity() {
     return quantity;
   }

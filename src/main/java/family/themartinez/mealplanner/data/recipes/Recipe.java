@@ -37,6 +37,42 @@ public class Recipe {
   @Column(name = "external_link", length = 2048)
   private String externalLink;
 
+  @Column(name = "prep_time_min", nullable = false)
+  private Integer prepTimeMin;
+
+  @Column(name = "cook_time_min", nullable = false)
+  private Integer cookTimeMin;
+
+  // TODO: Convert these to List<String> automatically.
+  // TODO: This JSON column stuff likely isn't working, test and fix.
+  // https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate
+  @Column(name = "categories", nullable = false, columnDefinition = "json")
+  private String categories;
+
+  public String getCategories() {
+    return categories;
+  }
+
+  public void setCategories(String categories) {
+    this.categories = categories;
+  }
+
+  public Integer getCookTimeMin() {
+    return cookTimeMin;
+  }
+
+  public void setCookTimeMin(Integer cookTimeMin) {
+    this.cookTimeMin = cookTimeMin;
+  }
+
+  public Integer getPrepTimeMin() {
+    return prepTimeMin;
+  }
+
+  public void setPrepTimeMin(Integer prepTimeMin) {
+    this.prepTimeMin = prepTimeMin;
+  }
+
   public String getExternalLink() {
     return externalLink;
   }
