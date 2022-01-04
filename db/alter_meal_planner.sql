@@ -1,0 +1,3 @@
+-- Table modifications to be run after meal_planner_db_create.sql.
+-- Every new schema modification should be added to this file.
+-- File can be cleared out once alterations have been propagated to prod table.

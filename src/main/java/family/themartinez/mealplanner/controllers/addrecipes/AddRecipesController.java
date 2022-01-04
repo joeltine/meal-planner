@@ -81,6 +81,21 @@ public class AddRecipesController {
     if (exitCode != 0) {
       throw new RuntimeException(output.getSecond());
     } else {
+      /**
+       * Natural language query examples:
+       *
+       * <p>SELECT * FROM ingredients WHERE MATCH (name) AGAINST ('shredded sharp Cheddar cheese' IN
+       * NATURAL LANGUAGE MODE);
+       *
+       * <p>SELECT * FROM ingredients WHERE MATCH (name) AGAINST ('butter, or as needed' WITH QUERY
+       * EXPANSION);
+       *
+       * <p>SELECT name, MATCH (name) AGAINST ('butter' IN NATURAL LANGUAGE MODE) AS score FROM
+       * ingredients WHERE MATCH (name) AGAINST ('butter' IN NATURAL LANGUAGE MODE);
+       *
+       * <p>SELECT name, MATCH (name) AGAINST ('butter, or as needed' IN BOOLEAN MODE) AS score FROM
+       * ingredients ORDER BY score DESC;
+       */
       return output.getSecond();
     }
   }
