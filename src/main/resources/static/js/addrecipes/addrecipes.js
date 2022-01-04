@@ -97,8 +97,6 @@ export class AddRecipesController {
            *    this for several reasons (ie combinatorial explosion, doesnt scale).
            * 3) Do nothing, and rely on human to add "minced" to the instructions manually.
            */
-          // TODO: Figure out how to deal with unit types that are whole parts of the thing, eg
-          //       "2 cloves garlic", "5 whole bananas". Maybe just add a generic "unit" type?
           this.importRecipeModal.modal('hide');
         })
         .fail(() => {

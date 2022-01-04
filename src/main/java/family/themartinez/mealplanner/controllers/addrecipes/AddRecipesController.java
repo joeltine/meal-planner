@@ -40,7 +40,7 @@ public class AddRecipesController {
   }
 
   @GetMapping(PATH)
-  public String planner(Model model) {
+  public String addRecipePage(Model model) {
     model.addAttribute("units", getUnitsList());
     return "addrecipes/addrecipes";
   }
@@ -75,7 +75,7 @@ public class AddRecipesController {
   }
 
   @GetMapping(path = "/scrapeRecipe")
-  public @ResponseBody String putRecipe(@RequestParam String url) throws Exception {
+  public @ResponseBody String scrapeRecipe(@RequestParam String url) throws Exception {
     Pair<Integer, String> output = this.scraper.scrapeRecipe(url);
     Integer exitCode = output.getFirst();
     if (exitCode != 0) {
