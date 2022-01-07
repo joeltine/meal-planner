@@ -52,6 +52,9 @@ public class AddRecipesController {
     recipe.setName((String) body.get("name"));
     recipe.setDescription((String) body.get("description"));
     recipe.setInstructions((String) body.get("instructions"));
+    recipe.setCookTimeMin((Integer) body.get("cookTime"));
+    recipe.setPrepTimeMin((Integer) body.get("prepTime"));
+    recipe.setCategories((String) body.get("categories"));
     recipeRepository.save(recipe);
 
     ImmutableList<Map<String, String>> ingredients =

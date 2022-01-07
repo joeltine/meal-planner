@@ -46,7 +46,7 @@ public class Recipe {
   // TODO: Convert these to List<String> automatically.
   // TODO: This JSON column stuff likely isn't working, test and fix.
   // https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate
-  @Column(name = "categories", nullable = false, columnDefinition = "json")
+  @Column(name = "categories", columnDefinition = "json")
   private String categories;
 
   public String getCategories() {
