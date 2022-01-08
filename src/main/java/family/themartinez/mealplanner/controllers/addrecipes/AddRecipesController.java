@@ -10,8 +10,10 @@ import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
 import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
@@ -52,9 +54,10 @@ public class AddRecipesController {
     recipe.setName((String) body.get("name"));
     recipe.setDescription((String) body.get("description"));
     recipe.setInstructions((String) body.get("instructions"));
-    recipe.setCookTimeMin((Integer) body.get("cookTime"));
-    recipe.setPrepTimeMin((Integer) body.get("prepTime"));
-    recipe.setCategories((String) body.get("categories"));
+    recipe.setCookTimeMin(Integer.valueOf((String) body.get("cookTime")));
+    recipe.setPrepTimeMin(Integer.valueOf((String) body.get("prepTime")));
+    recipe.setCategories(new JSONArray((Collection) body.get("categories")));
+    recipe.setExternalLink((String) body.get("externalLink"));
     recipeRepository.save(recipe);
 
     ImmutableList<Map<String, String>> ingredients =
@@ -66,6 +69,7 @@ public class AddRecipesController {
       list.setUnit(unitRepository.findById(Integer.valueOf(ingredient.get("unit"))).get());
       list.setIngredient(
           ingredientRepository.findById(Integer.valueOf(ingredient.get("ingredient"))).get());
+      list.setIngredientDisplayName(ingredient.get("displayName"));
       ingredientListRepository.save(list);
     }
   }

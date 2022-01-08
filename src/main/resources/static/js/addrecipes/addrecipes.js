@@ -7,6 +7,10 @@ export class AddRecipesController {
     this.inputRecipeName = this.recipeForm.find('#inputRecipeName');
     this.inputDescription = this.recipeForm.find('#inputDescription');
     this.inputInstructions = this.recipeForm.find('#inputInstructions');
+    this.inputPrepTime = this.recipeForm.find('#inputPrepTime');
+    this.inputCookTime = this.recipeForm.find('#inputCookTime');
+    this.inputCategories = this.recipeForm.find('#inputCategories');
+    this.inputExternalLink = this.recipeForm.find('#inputExternalLink');
     this.main = $('#main');
     this.ingredientRowClone = $('#ingredientInputRow').clone();
     this.successAlert = $(`
@@ -135,10 +139,20 @@ export class AddRecipesController {
     const name = this.inputRecipeName.val();
     const description = this.inputDescription.val();
     const instructions = this.inputInstructions.val();
+    const prepTime = this.inputPrepTime.val();
+    const cookTime = this.inputCookTime.val();
+    const categories = this.inputCategories.val();
+    const externalLink = this.inputExternalLink.val();
 
     formData.name = name;
     formData.description = description;
     formData.instructions = instructions;
+    formData.prepTime = prepTime;
+    formData.cookTime = cookTime;
+    const categoryArray = categories.split(",").map(
+        category => category.trim());
+    formData.categories = categoryArray;
+    formData.externalLink = externalLink;
 
     formData.ingredients = [];
 
@@ -148,6 +162,8 @@ export class AddRecipesController {
       const quantity = quantityInput.val();
       const unit = row.find('#inputUnit').val();
       const ingredient = row.find('input[name="inputIngredient"]').val();
+      const displayName = row.find(
+          'input[id="inputIngredientDisplayName"]').val();
 
       if (quantity <= 0) {
         quantityInput.get(0).setCustomValidity('Quantity must be > 0');
@@ -158,7 +174,8 @@ export class AddRecipesController {
       formData.ingredients.push({
         quantity: quantity,
         unit: unit,
-        ingredient: ingredient
+        ingredient: ingredient,
+        displayName: displayName
       })
     });
 

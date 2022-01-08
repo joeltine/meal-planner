@@ -1,5 +1,6 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,6 +24,7 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -81,7 +83,7 @@ class AddRecipesControllerTest {
   }
 
   @Test
-  public void putAddsNewRecipe() throws Exception {
+  public void putAddsNewRecipeAllFieldsPresent() throws Exception {
     ImmutableList<Unit> units = ImmutableList.copyOf(unitRepository.findAll());
     ImmutableList<Ingredient> ingredients = ImmutableList.copyOf(ingredientRepository.findAll());
 
@@ -92,6 +94,78 @@ class AddRecipesControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     "{\"name\": \"Chicken soup\", \"description\": \"Some delicious soup\", "
+                        + "\"prepTime\": \"20\", \"cookTime\": \"30\", "
+                        + "\"externalLink\": \"https://www.example.com/\", "
+                        + "\"categories\": [\"breakfast\", \"mexican\"], "
+                        + "\"instructions\": \"Do some stuff\", \"ingredients\": "
+                        + "[{\"quantity\": \"1\", \"unit\": \""
+                        + units.get(0).getId()
+                        + "\", \"ingredient\": \""
+                        + ingredients.get(0).getId()
+                        + "\"},"
+                        + "{\"quantity\": \"42.5\", \"unit\": \""
+                        + units.get(1).getId()
+                        + "\", \"ingredient\": \""
+                        + ingredients.get(1).getId()
+                        + "\"},"
+                        + "{\"quantity\": \".75\", \"unit\": \""
+                        + units.get(2).getId()
+                        + "\", \"ingredient\": \""
+                        + ingredients.get(2).getId()
+                        + "\", \"displayName\": \"pure water, mixed\"}"
+                        + "]}"))
+        .andExpect(status().isOk());
+
+    ImmutableList<Recipe> recipeList = ImmutableList.copyOf(recipeRepository.findAll());
+    assertEquals(1, recipeList.size());
+
+    Recipe chickenSoup = recipeList.get(0);
+    assertEquals("Chicken soup", chickenSoup.getName());
+    assertEquals("Some delicious soup", chickenSoup.getDescription());
+    assertEquals("Do some stuff", chickenSoup.getInstructions());
+    assertEquals(20, chickenSoup.getPrepTimeMin());
+    assertEquals(30, chickenSoup.getCookTimeMin());
+    assertEquals("https://www.example.com/", chickenSoup.getExternalLink());
+    JSONAssert.assertEquals("[\"breakfast\",\"mexican\"]", chickenSoup.getCategories(), true);
+
+    ImmutableList<IngredientList> ingredientLists =
+        ImmutableList.copyOf(ingredientListRepository.findAll());
+    assertEquals(3, ingredientLists.size());
+    IngredientList list1 = ingredientLists.get(0);
+    assertEquals(chickenSoup.getId(), list1.getRecipe().getId());
+    assertEquals(units.get(0).getId(), list1.getUnit().getId());
+    assertEquals(ingredients.get(0).getId(), list1.getIngredient().getId());
+    assertEquals(1, list1.getQuantity());
+    assertNull(list1.getIngredientDisplayName());
+
+    IngredientList list2 = ingredientLists.get(1);
+    assertEquals(chickenSoup.getId(), list2.getRecipe().getId());
+    assertEquals(units.get(1).getId(), list2.getUnit().getId());
+    assertEquals(ingredients.get(1).getId(), list2.getIngredient().getId());
+    assertEquals(42.5, list2.getQuantity());
+    assertNull(list2.getIngredientDisplayName());
+
+    IngredientList list3 = ingredientLists.get(2);
+    assertEquals(chickenSoup.getId(), list3.getRecipe().getId());
+    assertEquals(units.get(2).getId(), list3.getUnit().getId());
+    assertEquals(ingredients.get(2).getId(), list3.getIngredient().getId());
+    assertEquals(.75, list3.getQuantity());
+    assertEquals("pure water, mixed", list3.getIngredientDisplayName());
+  }
+
+  @Test
+  public void putAddsNewRecipeOnlyRequiredFields() throws Exception {
+    ImmutableList<Unit> units = ImmutableList.copyOf(unitRepository.findAll());
+    ImmutableList<Ingredient> ingredients = ImmutableList.copyOf(ingredientRepository.findAll());
+
+    this.mockMvc
+        .perform(
+            put("/addrecipes")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{\"name\": \"Chicken soup\", "
+                        + "\"prepTime\": \"20\", \"cookTime\": \"30\", "
                         + "\"instructions\": \"Do some stuff\", \"ingredients\": "
                         + "[{\"quantity\": \"1\", \"unit\": \""
                         + units.get(0).getId()
@@ -116,8 +190,12 @@ class AddRecipesControllerTest {
 
     Recipe chickenSoup = recipeList.get(0);
     assertEquals("Chicken soup", chickenSoup.getName());
-    assertEquals("Some delicious soup", chickenSoup.getDescription());
+    assertNull(chickenSoup.getDescription());
     assertEquals("Do some stuff", chickenSoup.getInstructions());
+    assertEquals(20, chickenSoup.getPrepTimeMin());
+    assertEquals(30, chickenSoup.getCookTimeMin());
+    assertNull(chickenSoup.getExternalLink());
+    JSONAssert.assertEquals("[]", chickenSoup.getCategories(), true);
 
     ImmutableList<IngredientList> ingredientLists =
         ImmutableList.copyOf(ingredientListRepository.findAll());
@@ -127,18 +205,21 @@ class AddRecipesControllerTest {
     assertEquals(units.get(0).getId(), list1.getUnit().getId());
     assertEquals(ingredients.get(0).getId(), list1.getIngredient().getId());
     assertEquals(1, list1.getQuantity());
+    assertNull(list1.getIngredientDisplayName());
 
     IngredientList list2 = ingredientLists.get(1);
     assertEquals(chickenSoup.getId(), list2.getRecipe().getId());
     assertEquals(units.get(1).getId(), list2.getUnit().getId());
     assertEquals(ingredients.get(1).getId(), list2.getIngredient().getId());
     assertEquals(42.5, list2.getQuantity());
+    assertNull(list2.getIngredientDisplayName());
 
     IngredientList list3 = ingredientLists.get(2);
     assertEquals(chickenSoup.getId(), list3.getRecipe().getId());
     assertEquals(units.get(2).getId(), list3.getUnit().getId());
     assertEquals(ingredients.get(2).getId(), list3.getIngredient().getId());
     assertEquals(.75, list3.getQuantity());
+    assertNull(list3.getIngredientDisplayName());
   }
 
   @Test

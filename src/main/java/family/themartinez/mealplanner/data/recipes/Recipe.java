@@ -1,13 +1,16 @@
 package family.themartinez.mealplanner.data.recipes;
 
+import family.themartinez.mealplanner.data.converters.JSONArrayConverter;
 import java.time.Instant;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import org.json.JSONArray;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
@@ -43,17 +46,15 @@ public class Recipe {
   @Column(name = "cook_time_min", nullable = false)
   private Integer cookTimeMin;
 
-  // TODO: Convert these to List<String> automatically.
-  // TODO: This JSON column stuff likely isn't working, test and fix.
-  // https://stackoverflow.com/questions/44308167/how-to-map-a-mysql-json-column-to-a-java-entity-property-using-jpa-and-hibernate
-  @Column(name = "categories", columnDefinition = "json")
-  private String categories;
+  @Column(name = "categories")
+  @Convert(converter = JSONArrayConverter.class)
+  private JSONArray categories;
 
-  public String getCategories() {
+  public JSONArray getCategories() {
     return categories;
   }
 
-  public void setCategories(String categories) {
+  public void setCategories(JSONArray categories) {
     this.categories = categories;
   }
 
