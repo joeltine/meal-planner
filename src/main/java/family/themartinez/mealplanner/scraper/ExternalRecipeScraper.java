@@ -15,7 +15,12 @@ public class ExternalRecipeScraper {
   private static String PYTHON = "/usr/bin/python3";
 
   public ExternalRecipeScraper() throws IOException {
-    scrapeRecipeScript = new ClassPathResource("scripts/scrape_recipe.py").getFile();
+    try {
+      // TODO: Figure out why this py script isn't being bundled in the .jar when I deploy.
+      scrapeRecipeScript = new ClassPathResource("scripts/scrape_recipe.py").getFile();
+    } catch (Exception e) {
+      System.out.println(e);
+    }
   }
 
   /**
