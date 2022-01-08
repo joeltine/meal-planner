@@ -194,10 +194,10 @@ export class AddRecipesController {
     })
         .done((data, textStatus) => {
           this.showSuccessAlert();
+          this.resetForm();
         })
         .always(() => {
           inputs.prop('disabled', false);
-          this.resetForm();
         });
   }
 

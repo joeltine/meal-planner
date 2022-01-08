@@ -9,11 +9,11 @@ public class JSONArrayConverter implements AttributeConverter<JSONArray, String>
 
   @Override
   public String convertToDatabaseColumn(JSONArray array) {
-    return array.toString();
+    return array == null ? null : array.toString();
   }
 
   @Override
   public JSONArray convertToEntityAttribute(String data) {
-    return new JSONArray(data);
+    return data == null ? new JSONArray() : new JSONArray(data);
   }
 }

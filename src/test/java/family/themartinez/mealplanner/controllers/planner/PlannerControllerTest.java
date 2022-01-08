@@ -92,6 +92,8 @@ class PlannerControllerTest {
     pbj.setName("Peanut butter and jelly");
     pbj.setDescription("A classic sandwich");
     pbj.setInstructions("Spread on bread and smash together");
+    pbj.setPrepTimeMin(20);
+    pbj.setCookTimeMin(30);
     recipeRepository.saveAll(List.of(pbj));
     IngredientList pbList = new IngredientList();
     pbList.setUnit(grams);
@@ -116,4 +118,6 @@ class PlannerControllerTest {
     this.mockMvc.perform(get("/planner")).andExpect(status().isOk());
     this.mockMvc.perform(get("/")).andExpect(status().isOk());
   }
+
+  // TOOD: Write tests for me when implemented.
 }

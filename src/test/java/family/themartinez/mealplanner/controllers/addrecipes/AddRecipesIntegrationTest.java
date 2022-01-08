@@ -76,6 +76,8 @@ public class AddRecipesIntegrationTest {
     inputIngredient.sendKeys(Keys.ARROW_DOWN);
     inputIngredient.sendKeys(Keys.ENTER);
     driver.findElement(By.id("inputInstructions")).sendKeys("Do all the things");
+    driver.findElement(By.id("inputPrepTime")).sendKeys("30");
+    driver.findElement(By.id("inputCookTime")).sendKeys("25");
     driver.findElement(By.id("submit")).click();
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("successAlert")));
   }
