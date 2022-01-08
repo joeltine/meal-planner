@@ -149,8 +149,8 @@ export class AddRecipesController {
     formData.instructions = instructions;
     formData.prepTime = prepTime;
     formData.cookTime = cookTime;
-    const categoryArray = categories.split(",").map(
-        category => category.trim());
+    const categoryArray = categories ? categories.split(',').map(
+        category => category.trim()) : [];
     formData.categories = categoryArray;
     formData.externalLink = externalLink;
 
