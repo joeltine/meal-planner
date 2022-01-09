@@ -25,13 +25,3 @@ Configure git hooks:
 ```
 git config core.hooksPath git-hooks/
 ```
-
-To deploy to GCP:
-
-```
-gcloud app deploy
-```
-
-## Useful links
-
-* [Raw food (ingredient) dataset](https://www.ars.usda.gov/northeast-area/beltsville-md-bhnrc/beltsville-human-nutrition-research-center/food-surveys-research-group/docs/fndds-download-databases/)

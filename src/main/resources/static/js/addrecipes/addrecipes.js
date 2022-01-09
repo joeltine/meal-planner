@@ -11,6 +11,7 @@ export class AddRecipesController {
     this.inputCookTime = this.recipeForm.find('#inputCookTime');
     this.inputCategories = this.recipeForm.find('#inputCategories');
     this.inputExternalLink = this.recipeForm.find('#inputExternalLink');
+    this.addIngredient = this.recipeForm.find('#addIngredient');
     this.main = $('#main');
     this.ingredientRowClone = $('#ingredientInputRow').clone();
     this.successAlert = $(`
@@ -71,36 +72,44 @@ export class AddRecipesController {
           this.importRecipeButton.text('Import');
         })
         .done((data) => {
-          // {"title": "Spinach and Feta Turkey Burgers", "total_time": 35, "cook_time": 15,
-          // "prep_time": 20, "ingredients": ["2 eggs, beaten", "2 cloves garlic, minced",
-          // "4 ounces feta cheese", "1 (10 ounce) box frozen chopped spinach, thawed and squeezed dry",
-          // "2 pounds ground turkey"], "instructions": "Preheat an outdoor grill for medium-high heat and lightly oil grate.\nWhile the grill is preheating, mix together eggs, garlic, feta cheese, spinach, and turkey in a large bowl until well combined; form into 8 patties.\nCook on preheated grill until no longer pink in the center, 15 to 20 minutes.",
-          // "canonical_url": "https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/",
-          // "category": "Meat and Poultry,Turkey,Ground Turkey Recipes"}
-
           this.resetForm();
 
-          this.inputRecipeName.val(data.title);
-          this.inputInstructions.val(data.instructions);
+          this.inputRecipeName.val(data['title']);
+          this.inputInstructions.val(data['instructions']);
+          this.inputPrepTime.val(data['prep_time']);
+          this.inputCookTime.val(data['cook_time']);
+          this.inputExternalLink.val(data['canonical_url']);
+          this.inputCategories.val(data['category']);
 
-          // TODO: process instructions on server and do ingredient/unit/quantity lookups/conversions
-          // NOTE: on ingredient lookup algorith, first do an exact match search, then split on the comma
-          // and do an exact match, if that doesn't work fall back to natural language mode search.
-          // potentially present user top N results and let them choose if the algo isn't sure of the result.
-          // TODO: add prep/total/cook time, category, canonical url to recipe input form.
-          /**
-           * TODO: dealing with issues where preparation hints are in the ingredient from the site
-           * eg, "2 cloves garlic, minced", and the instructions just say something like
-           * "mix in the garlic". We don't have a "garlic, minced" in the ingredient DB, but we do
-           * have "garlic". So if we assign just "2 cloves garlic" to the recipe, we miss critical
-           * "minced" preparation step. Options:
-           * 1) Add an additional "display name" attribute to the ingredient list, this will be the
-           *    name as it was taken from the recipe site. Still requires mapping to canonical ingredient
-           *    in the DB.
-           * 2) Create a preparation type entry in ingredients for "garlic, minced"... really don't like
-           *    this for several reasons (ie combinatorial explosion, doesnt scale).
-           * 3) Do nothing, and rely on human to add "minced" to the instructions manually.
-           */
+          data['ingredients'].forEach((item, index) => {
+            const parsedInfo = item['ingredientParsed'];
+            const rawOriginalText = item['ingredientRaw'];
+            const row = this.recipeForm.find(
+                '.ingredientInputRow').eq(index);
+            const originalTextRow = row.find('.ingredientOriginalTextRow');
+            originalTextRow.removeClass('d-none');
+            originalTextRow.find('.ingredientOriginalText').text(
+                `(Original: ${rawOriginalText})`);
+            row.find('#inputQuantity').val(
+                parsedInfo['quantity']);
+            row.find('#inputUnit').val(parsedInfo['unitDbLookup']);
+            if (parsedInfo['ingredientDbLookup']
+                && parsedInfo['ingredientDbLookup']['id'] != -1) {
+              row.find(
+                  'input[id="inputIngredient"]').autoComplete('set',
+                  {
+                    value: parsedInfo['ingredientDbLookup']['id'],
+                    text: parsedInfo['ingredientDbLookup']['name']
+                  });
+            }
+            row.find('input[id="inputIngredientDisplayName"]').val(
+                parsedInfo['product'] + (parsedInfo['preparationNotes']
+                    ? `, ${parsedInfo['preparationNotes']}` : ''));
+            if (index < data.ingredients.length - 1) {
+              this.addIngredient.click();
+            }
+          });
+          this.importUrlInput.val('');
           this.importRecipeModal.modal('hide');
         })
         .fail(() => {
@@ -150,7 +159,7 @@ export class AddRecipesController {
     formData.prepTime = prepTime;
     formData.cookTime = cookTime;
     const categoryArray = categories ? categories.split(',').map(
-        category => category.trim()) : [];
+        category => category.trim().toLowerCase()) : [];
     formData.categories = categoryArray;
     formData.externalLink = externalLink;
 
@@ -208,6 +217,7 @@ export class AddRecipesController {
         .not(':button, :submit')
         .val('');
     this.recipeForm.find('.ingredientInputRow').remove();
+    this.recipeForm.find('.ingredientOriginalTextRow').addClass('d-none');
     const newRow = this.ingredientRowClone.clone();
     newRow.insertBefore('#addNewIngredientRow');
     this.createAutocomplete(newRow.find('#inputIngredient'));
@@ -217,9 +227,6 @@ export class AddRecipesController {
     const newAlert = this.failureAlert.clone();
     newAlert.find('#failureText').text(errorMsg);
     newAlert.appendTo(this.recipeForm);
-    setTimeout(() => {
-      newAlert.alert('close');
-    }, 10000)
   }
 
   showSuccessAlert() {

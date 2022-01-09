@@ -1,11 +1,14 @@
 package family.themartinez.mealplanner.data.ingredients;
 
+import family.themartinez.mealplanner.data.converters.JSONArrayConverter;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.json.JSONArray;
 
 @Entity
 @Table(name = "ingredients")
@@ -22,13 +25,13 @@ public class Ingredient {
   @Column(name = "api_id")
   private Integer apiId;
 
-  // TODO: Convert these to List<String> automatically.
-  // TODO: This JSON column stuff likely isn't working, test and fix.
-  @Column(name = "aisle", columnDefinition = "json")
-  private String aisle;
+  @Column(name = "aisle")
+  @Convert(converter = JSONArrayConverter.class)
+  private JSONArray aisle;
 
-  @Column(name = "categories", columnDefinition = "json")
-  private String categories;
+  @Column(name = "categories")
+  @Convert(converter = JSONArrayConverter.class)
+  private JSONArray categories;
 
   @Column(name = "image")
   private String image;
@@ -41,19 +44,19 @@ public class Ingredient {
     this.image = image;
   }
 
-  public String getCategories() {
+  public JSONArray getCategories() {
     return categories;
   }
 
-  public void setCategories(String categories) {
+  public void setCategories(JSONArray categories) {
     this.categories = categories;
   }
 
-  public String getAisle() {
+  public JSONArray getAisle() {
     return aisle;
   }
 
-  public void setAisle(String aisle) {
+  public void setAisle(JSONArray aisle) {
     this.aisle = aisle;
   }
 

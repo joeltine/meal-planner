@@ -1,0 +1,4 @@
+setuptools~=47.1.0
+certifi>=2021.10.8
+recipe-scrapers~=13.10.1
+
