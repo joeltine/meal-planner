@@ -83,6 +83,7 @@ export class AddRecipesController {
           this.inputExternalLink.val(data['canonical_url']);
           this.inputCategories.val(data['category']);
 
+          // TODO: Cleanup this super messy logic. Break into functions etc.
           data['ingredients'].forEach((item, index) => {
             const parsedInfo = item['ingredientParsed'];
             const rawOriginalText = item['ingredientRaw'];
@@ -94,7 +95,9 @@ export class AddRecipesController {
                 `(Original: ${rawOriginalText})`);
             row.find('#inputQuantity').val(
                 parsedInfo['quantity']);
-            row.find('#inputUnit').val(parsedInfo['unitDbLookup']);
+            if (parsedInfo['unitDbLookup']) {
+              row.find('#inputUnit').val(parsedInfo['unitDbLookup']);
+            }
             if (parsedInfo['ingredientDbLookup']
                 && parsedInfo['ingredientDbLookup']['id'] != -1) {
               row.find(
@@ -104,8 +107,14 @@ export class AddRecipesController {
                     text: parsedInfo['ingredientDbLookup']['name']
                   });
             }
+            let displayProduct = '';
+            if (parsedInfo['product']) {
+              displayProduct = parsedInfo['product'];
+            } else if (parsedInfo['ingredientDbLookup']) {
+              displayProduct = parsedInfo['ingredientDbLookup']['name'];
+            }
             row.find('input[id="inputIngredientDisplayName"]').val(
-                parsedInfo['product'] + (parsedInfo['preparationNotes']
+                displayProduct + (parsedInfo['preparationNotes']
                     ? `, ${parsedInfo['preparationNotes']}` : ''));
             if (index < data.ingredients.length - 1) {
               this.addIngredient.click();

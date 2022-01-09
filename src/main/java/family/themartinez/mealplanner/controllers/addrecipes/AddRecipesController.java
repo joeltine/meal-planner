@@ -124,12 +124,16 @@ public class AddRecipesController {
         }
         ingredientParsed.put("unitDbLookup", unitId);
 
-        String product = ingredientParsed.getString("product");
+        // If "product" is null, just try lookups with the raw input name.
+        String ingredientLookupName =
+            ingredientParsed.isNull("product")
+                ? ingredientInfo.getString("ingredientRaw")
+                : ingredientParsed.getString("product");
         Integer ingredientId = -1;
         String ingredientName = "";
 
-        logger.info("Trying to find exact db match for ingredient {}.", product);
-        List<Ingredient> exactMatch = ingredientRepository.findByName(product);
+        logger.info("Trying to find exact db match for ingredient {}.", ingredientLookupName);
+        List<Ingredient> exactMatch = ingredientRepository.findByName(ingredientLookupName);
         // First attempt to find an exact ingredient match by name.
         if (exactMatch.size() > 0) {
           ingredientId = exactMatch.get(0).getId();
@@ -141,9 +145,10 @@ public class AddRecipesController {
           // TODO: Add feature where if we have multiple results w/ the same match score, we return
           // all results and let the client choose one.
           logger.info(
-              "Unable to find exact match, attempting natural language lookup for: {}.", product);
+              "Unable to find exact match, attempting natural language lookup for: {}.",
+              ingredientLookupName);
           List<Ingredient> naturalLanguageMatches =
-              ingredientRepository.findTop5ByNameUsingNaturalLanguage(product);
+              ingredientRepository.findTop5ByNameUsingNaturalLanguage(ingredientLookupName);
           if (naturalLanguageMatches.size() > 0) {
             ingredientId = naturalLanguageMatches.get(0).getId();
             ingredientName = naturalLanguageMatches.get(0).getName();
