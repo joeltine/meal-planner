@@ -54,6 +54,8 @@ export class AddRecipesController {
 
     this.main.on('click', '#importRecipe', this.importRecipe.bind(this));
 
+    this.main.on('click', '#resetForm', this.resetForm.bind(this));
+
     this.createAutocomplete(this.recipeForm.find('#inputIngredient'));
   }
 

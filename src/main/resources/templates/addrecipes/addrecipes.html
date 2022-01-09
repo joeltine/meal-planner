@@ -12,9 +12,12 @@
 <main id="main" role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4"
       layout:fragment="content">
   <div
-      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-    <h1 class="h2">Add New Recipes</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal"
+      class="d-flex flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2 mr-auto">Add New Recipes</h1>
+    <button type="button" class="btn btn-danger" id="resetForm">
+      Reset Form
+    </button>
+    <button type="button" class="btn btn-primary ml-3" data-toggle="modal"
             data-target="#importRecipeModal">
       Import Recipe From URL
     </button>
