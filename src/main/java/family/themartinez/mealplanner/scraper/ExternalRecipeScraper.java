@@ -25,7 +25,7 @@ public class ExternalRecipeScraper {
 
   /**
    * Tries to scrape external recipe URL and returns Pair representing exit code and output of
-   * command. If exit code != 0, output string will be the error message. If exit code == 0, the
+   * command. If exit code !=2 0, output string will be the error message. If exit code == 0, the
    * output is a JSON string representing the recipe data.
    */
   public Pair<Integer, String> scrapeRecipe(String recipeUrl)

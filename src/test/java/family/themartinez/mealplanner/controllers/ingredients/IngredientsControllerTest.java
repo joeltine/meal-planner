@@ -77,7 +77,7 @@ public class IngredientsControllerTest {
   }
 
   @Test
-  public void getIngredientsOnlyReturnsTop10Results() throws Exception {
+  public void getIngredientsOnlyReturnsTopResults() throws Exception {
     for (int i = 0; i < 25; i++) {
       Ingredient newCandy = new Ingredient();
       newCandy.setName(String.format("Candy%s", i));

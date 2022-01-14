@@ -16,7 +16,7 @@ public class IngredientsController {
   @Autowired private IngredientRepository ingredientRepository;
 
   @GetMapping("/ingredients")
-  public List<Map<String, String>> getIngredients(@RequestParam(name = "q") String query) {
+  public List<Map<String, String>> queryIngredients(@RequestParam(name = "q") String query) {
     return ingredientRepository.findTopByNameAutocompleteAlgorithm(query).stream()
         .map(
             e -> {
