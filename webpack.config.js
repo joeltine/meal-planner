@@ -27,7 +27,7 @@ const config = {
 
 module.exports = (env, argv) => {
   if (argv.mode === 'development') {
-    config.devtool = 'eval-source-map';
+    config.devtool = 'cheap-module-source-map';
   }
 
   if (argv.mode === 'production') {
