@@ -5,7 +5,7 @@ const config = {
   entry: {
     addrecipes: './src/main/resources/static/js/addrecipes/addrecipes.js',
     ingredienteditor: './src/main/resources/static/js/ingredienteditor/ingredienteditor.js',
-    uniteditor: './src/main/resources/static/js/uniteditor/uniteditor.js',
+    uniteditor: './src/main/resources/static/js/uniteditor/uniteditor.jsx',
     recipeeditor: './src/main/resources/static/js/recipeeditor/recipeeditor.js',
     planner: './src/main/resources/static/js/planner/planner.js',
     'third-party': './src/main/resources/static/js/third-party/third-party.js',
@@ -15,22 +15,50 @@ const config = {
     filename: '[name]/[name].bundle.js',
     path: path.resolve(__dirname, 'target/classes/static/js/'),
   },
-
+  module: {
+    rules: [
+      {
+        test: /\.?jsx$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-react'],
+            cacheDirectory: true
+          }
+        }
+      },
+    ]
+  },
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin({
-      extractComments: false,
+      extractComments: true,
       parallel: true,
+      terserOptions: {
+        module: true,
+        compress: {
+          ecma: 6,
+          booleans_as_integers: true,
+          drop_console: true,
+          unsafe_methods: true
+        },
+        mangle: {
+          module: true
+        }
+      }
     })],
   },
 };
 
 module.exports = (env, argv) => {
-  if (argv.mode === 'development') {
-    config.devtool = 'cheap-module-source-map';
+  config.mode = argv.mode || 'production';
+
+  if (config.mode === 'development') {
+    config.devtool = 'eval-source-map';
   }
 
-  if (argv.mode === 'production') {
+  if (config.mode === 'production') {
     config.devtool = 'source-map';
   }
 

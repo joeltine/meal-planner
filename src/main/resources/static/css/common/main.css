@@ -2,16 +2,27 @@ body {
   font-size: .875rem;
 }
 
+/*
+ * Icons
+ */
 .feather {
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
 }
 
+
+svg.feather {
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /*
  * Sidebar
  */
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -38,10 +49,10 @@ body {
 
 .sidebar .nav-link .feather {
   margin-right: 4px;
-  color: #999;
 }
 
-.sidebar .nav-link.active {
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
   color: #007bff;
 }
 
@@ -58,7 +69,6 @@ body {
 /*
  * Navbar
  */
-
 .navbar-brand {
   padding-top: .75rem;
   padding-bottom: .75rem;
@@ -87,7 +97,6 @@ body {
 /*
  * Utilities
  */
-
 .border-top {
   border-top: 1px solid #e5e5e5;
 }

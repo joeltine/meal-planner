@@ -1,0 +1,8 @@
+.datatable thead th svg {
+  float: right;
+  height: 1.5em;
+}
+
+.datable thead th {
+  cursor: pointer;
+}
