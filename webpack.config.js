@@ -11,10 +11,17 @@ const config = {
     'third-party': './src/main/resources/static/js/third-party/third-party.js',
   },
 
+  resolve: {
+    // Which extensions Webpack will resolve. "..." means to include the
+    // defaults (e.g., "js", etc.) in addition to the extra entries.
+    extensions: ['.jsx', '...'],
+  },
+
   output: {
     filename: '[name]/[name].bundle.js',
     path: path.resolve(__dirname, 'target/classes/static/js/'),
   },
+
   module: {
     rules: [
       {
