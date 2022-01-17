@@ -1,5 +1,7 @@
 package family.themartinez.mealplanner.controllers.ingredients;
 
+import com.google.common.collect.ImmutableList;
+import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.ingredients.IngredientRepository;
 import java.util.HashMap;
 import java.util.List;
@@ -26,5 +28,12 @@ public class IngredientsController {
               return map;
             })
         .collect(Collectors.toList());
+  }
+
+  // TODO: Merge this with /ingredients, if they don't specify "?q=", just return all.
+  @GetMapping("/ingredientsAll")
+  public ImmutableList<Ingredient> getAllIngredients() {
+    // TODO: Fix returning JSONArray fields. It currently returns {"empty":false}.
+    return ImmutableList.copyOf(ingredientRepository.findAll());
   }
 }
