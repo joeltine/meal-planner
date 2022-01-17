@@ -12,16 +12,41 @@ export class DataTable extends React.Component {
     super(props);
     this.fullData = [];
     this.state = {tableData: [], totalItems: 0, currentPage: 1};
-    this.onPreviousClick = this.onPreviousClick.bind(this);
-    this.onNextClick = this.onNextClick.bind(this);
+    this.navigateToPreviousPage = this.navigateToPreviousPage.bind(this);
+    this.navigateToNextPage = this.navigateToNextPage.bind(this);
     this.navigateToPage = this.navigateToPage.bind(this);
+    this.sortColumn = this.sortColumn.bind(this);
   }
 
-  onPreviousClick() {
+  sortColumn(colName, colIndex) {
+    console.log(colName, colIndex);
+    const sortOrder = 'DESC';
+
+    // TODO: How to deal w/ sort order state? Need to know of col is already
+    //       sorted.
+
+    this.fullData.sort((a, b) => {
+      const aVal = a[colName];
+      const bVal = b[colName];
+
+      if (!isNaN(aVal)) {
+        // Numeric sorting.
+        return sortOrder == 'ASC' ? aVal - bVal : bVal - aVal;
+      }
+
+      // String based sorting.
+      return sortOrder == 'ASC' ?
+          aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+
+    this.navigateToPage(this.state.currentPage);
+  }
+
+  navigateToPreviousPage() {
     this.navigateToPage(this.state.currentPage - 1)
   }
 
-  onNextClick() {
+  navigateToNextPage() {
     this.navigateToPage(this.state.currentPage + 1)
   }
 
@@ -40,7 +65,7 @@ export class DataTable extends React.Component {
   fetchInitialData() {
     this.doAjax(this.props.dataSource).done((response) => {
       // TODO: Caching the full dataset might be slow for very large tables.
-      //       Consider doing the paging on the server via db queries.
+      //       Consider adding ability to do paging on the server.
       this.fullData = response;
       const dataSlice = this.getDataSlice(this.state.currentPage);
 
@@ -71,7 +96,7 @@ export class DataTable extends React.Component {
     return $.ajax(endpoint, options)
         .fail((jqXHR, textStatus, errorThrown) => {
           const response = JSON.parse(jqXHR.responseText);
-          // TODO: Replace me w/ proper error handling.
+          // TODO: Replace me w/ proper error handling. E.g., a toast.
           console.error(response);
         });
   }
@@ -92,7 +117,8 @@ export class DataTable extends React.Component {
           </div>
           <div className="row">
             <div className="col">
-              <Table data={this.state.tableData}/>
+              <Table data={this.state.tableData}
+                     onColumnHeaderClick={this.sortColumn}/>
             </div>
           </div>
           <div className="row">
@@ -100,8 +126,8 @@ export class DataTable extends React.Component {
               <Pagination totalItems={this.state.totalItems}
                           itemsPerPage={MAX_ROWS_PER_PAGE}
                           activePage={this.state.currentPage}
-                          onPreviousClick={this.onPreviousClick}
-                          onNextClick={this.onNextClick}
+                          onPreviousClick={this.navigateToPreviousPage}
+                          onNextClick={this.navigateToNextPage}
                           onPageNavigate={this.navigateToPage}/>
             </div>
           </div>

@@ -3,6 +3,12 @@ import React from 'react';
 export class Table extends React.Component {
   constructor(props) {
     super(props);
+
+    this.onColumnHeaderClick = this.onColumnHeaderClick.bind(this);
+  }
+
+  onColumnHeaderClick(e, colName, colIndex) {
+    this.props.onColumnHeaderClick(colName, colIndex);
   }
 
   getColumnHeaderIndicator(data) {
@@ -17,9 +23,11 @@ export class Table extends React.Component {
     const columnHeaders = [];
     const columnIndicator = this.getColumnHeaderIndicator(data);
 
-    Object.keys(columnIndicator).forEach((colName) => {
+    Object.keys(columnIndicator).forEach((colName, index) => {
       columnHeaders.push(
-          <th scope="col" key={colName}>
+          <th scope="col" key={colName} onClick={(e) => {
+            this.onColumnHeaderClick(e, colName, index);
+          }}>
             {colName}
             <svg className="feather"
                  viewBox="0 0 24 24">

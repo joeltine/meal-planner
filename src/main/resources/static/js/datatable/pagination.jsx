@@ -1,5 +1,7 @@
 import React from 'react';
 
+// Max number of boxes shown in pagination widget. This number includes "..."
+// separators as well.
 const MAX_PAGES = 9;
 
 export class Pagination extends React.Component {
@@ -12,7 +14,7 @@ export class Pagination extends React.Component {
   }
 
   handlePageNavigationClick(page) {
-    if (page != this.props.activePage) {
+    if (page !== this.props.activePage) {
       this.props.onPageNavigate(page);
     }
   }
@@ -54,23 +56,33 @@ export class Pagination extends React.Component {
     const activePage = this.props.activePage;
 
     if (totalPages <= MAX_PAGES) {
+      // If we're below MAX_PAGES, just render all the pages.
       for (let i = 1; i <= totalPages; i++) {
         pages.push(this.getPageListItem(i));
       }
     } else {
       if (activePage < MAX_PAGES - 2) {
+        // If we're in the first set of pages before MAX_PAGES, render up until
+        // a reasonable point, then "...", and then the last page.
+        // E.g., 1, 2, 3, 4, 5, 6, 7, ... 250
         for (let i = 1; i < MAX_PAGES - 1; i++) {
           pages.push(this.getPageListItem(i));
         }
         pages.push(this.getSpacerListItem(totalPages - 1));
         pages.push(this.getPageListItem(totalPages));
       } else if (activePage > (totalPages - (MAX_PAGES - 3))) {
+        // If we're within the ending section of pages, render the first page,
+        // then "...", and then the last set of pages.
+        // E.g., 1, ..., 56, 57, 58, 59, 60, 61, 62
         pages.push(this.getPageListItem(1));
         pages.push(this.getSpacerListItem(2));
         for (let i = totalPages - (MAX_PAGES - 3); i <= totalPages; i++) {
           pages.push(this.getPageListItem(i));
         }
       } else {
+        // If we're somewhere in the middle of pagination, render the first 2
+        // pages, "...", the middle section +/- 1, "...", then the last 2 pages.
+        // E.g., 1, 2, ..., 56, 57, 58, ..., 102, 103
         pages.push(this.getPageListItem(1));
         pages.push(this.getPageListItem(2));
         pages.push(this.getSpacerListItem(3));
@@ -99,9 +111,6 @@ export class Pagination extends React.Component {
 
     // TODO: Add support for filtered entries message:
     //       (filtered from 57 total entries).
-
-    // TODO: Handle case where we have a large number of pages. Should only
-    //       render at most N pages at a time.
 
     return (
         <div className="container">
