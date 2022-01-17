@@ -1,4 +1,5 @@
 import React from 'react';
+import {SORT_TYPES} from "./sorttypes";
 
 export class Table extends React.Component {
   constructor(props) {
@@ -7,8 +8,8 @@ export class Table extends React.Component {
     this.onColumnHeaderClick = this.onColumnHeaderClick.bind(this);
   }
 
-  onColumnHeaderClick(e, colName, colIndex) {
-    this.props.onColumnHeaderClick(colName, colIndex);
+  onColumnHeaderClick(colName) {
+    this.props.onColumnHeaderClick(colName);
   }
 
   getColumnHeaderIndicator(data) {
@@ -22,16 +23,23 @@ export class Table extends React.Component {
   getColumnHeaders(data) {
     const columnHeaders = [];
     const columnIndicator = this.getColumnHeaderIndicator(data);
+    const sortCol = this.props.sortCol;
 
     Object.keys(columnIndicator).forEach((colName, index) => {
+      let sortSvg = 'icon-chevron-up-down';
+      if (sortCol['colName'] && sortCol['colName'] === colName) {
+        sortSvg = sortCol['sort'] === SORT_TYPES.ascending ? 'icon-chevron-up'
+            : 'icon-chevron-down';
+      }
+
       columnHeaders.push(
           <th scope="col" key={colName} onClick={(e) => {
-            this.onColumnHeaderClick(e, colName, index);
+            this.onColumnHeaderClick(colName);
           }}>
             {colName}
             <svg className="feather"
                  viewBox="0 0 24 24">
-              <use href="#icon-chevron-up-down"/>
+              <use href={`#${sortSvg}`}/>
             </svg>
           </th>
       );

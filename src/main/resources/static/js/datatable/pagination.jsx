@@ -101,9 +101,12 @@ export class Pagination extends React.Component {
   render() {
     const totalPages = Math.ceil(
         this.props.totalItems / this.props.itemsPerPage);
-    const showingStartRange = ((this.props.activePage - 1)
-        * this.props.itemsPerPage) + 1;
-    const showingEndRange = showingStartRange + (this.props.itemsPerPage - 1);
+    const showingStartRange = this.props.totalItems === 0 ? 0
+        : ((this.props.activePage - 1) * this.props.itemsPerPage) + 1;
+    let showingEndRange = showingStartRange + (this.props.itemsPerPage - 1);
+    if (showingEndRange >= this.props.totalItems) {
+      showingEndRange = this.props.totalItems;
+    }
     const prevActiveState = this.props.activePage === 1 ? 'disabled' : '';
     const nextActiveState =
         this.props.activePage === totalPages ? 'disabled' : '';
@@ -113,7 +116,7 @@ export class Pagination extends React.Component {
     //       (filtered from 57 total entries).
 
     return (
-        <div className="container">
+        <div className="container-fluid">
           <div className="row">
             <div className="col pl-0">
               Showing {showingStartRange} to {showingEndRange} of {this.props.totalItems} entries

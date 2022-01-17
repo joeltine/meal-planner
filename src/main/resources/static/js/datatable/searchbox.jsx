@@ -5,7 +5,10 @@ export class SearchBox extends React.Component {
     return (
         <div className="input-group">
           <input type="text" className="form-control"
-                 placeholder="Search..."/>
+                 placeholder="Search..."
+                 onChange={(e) => {
+                   this.props.onSearchChange(e.target.value)
+                 }}/>
           <div className="input-group-append">
             <button className="btn btn-primary" type="button" id="search">
               Search

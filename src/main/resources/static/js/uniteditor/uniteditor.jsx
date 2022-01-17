@@ -9,7 +9,7 @@ class UnitEditor extends React.Component {
     super(props);
     new CommonController();
   }
-
+  
   render() {
     return (
         <DataTable dataSource="/units"/>
