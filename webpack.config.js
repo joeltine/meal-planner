@@ -46,7 +46,6 @@ const config = {
         module: true,
         compress: {
           ecma: 6,
-          booleans_as_integers: true,
           drop_console: true,
           unsafe_methods: true
         },
