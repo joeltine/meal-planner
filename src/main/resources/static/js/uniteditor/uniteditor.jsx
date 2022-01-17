@@ -12,7 +12,7 @@ class UnitEditor extends React.Component {
 
   render() {
     return (
-        <DataTable/>
+        <DataTable dataSource="/units"/>
     );
   }
 }

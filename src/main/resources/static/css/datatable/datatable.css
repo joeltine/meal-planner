@@ -6,3 +6,11 @@
 .datatable thead th {
   cursor: pointer;
 }
+
+.pagination {
+  cursor: pointer;
+}
+
+.pagination li.disabled {
+  cursor: auto;
+}
