@@ -25,3 +25,9 @@ Configure git hooks:
 ```
 git config core.hooksPath git-hooks/
 ```
+
+Deploying:
+
+```
+mvn package wagon:upload-single@upload-jar wagon:sshexec@upload-jar
+```
