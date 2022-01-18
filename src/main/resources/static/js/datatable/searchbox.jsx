@@ -9,11 +9,6 @@ export class SearchBox extends React.Component {
                  onChange={(e) => {
                    this.props.onSearchChange(e.target.value)
                  }}/>
-          <div className="input-group-append">
-            <button className="btn btn-primary" type="button" id="search">
-              Search
-            </button>
-          </div>
         </div>
     );
   }

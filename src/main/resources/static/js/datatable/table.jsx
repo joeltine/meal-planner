@@ -4,7 +4,8 @@ import {SORT_TYPES} from "./sorttypes";
 export class Table extends React.Component {
   constructor(props) {
     super(props);
-
+    this.selectedRows = [];
+    this.tableRef = React.createRef();
     this.onColumnHeaderClick = this.onColumnHeaderClick.bind(this);
   }
 
@@ -59,6 +60,33 @@ export class Table extends React.Component {
     return columnFooters;
   }
 
+  componentDidUpdate() {
+    this.selectedRows = [];
+    Array.from(
+        this.tableRef.current.querySelectorAll('tr.table-active')).forEach(
+        (row) => {
+          row.classList.remove('table-active');
+        });
+  }
+
+  getSelectedRows() {
+    return this.selectedRows;
+  }
+
+  onRowClick(e, rowData) {
+    const rowEl = e.currentTarget;
+    if (!rowEl.classList.contains('table-active')) {
+      rowEl.classList.add('table-active');
+      this.selectedRows.push(rowData);
+    } else {
+      const index = this.selectedRows.indexOf(rowData);
+      if (index > -1) {
+        this.selectedRows.splice(index, 1);
+      }
+      rowEl.classList.remove('table-active');
+    }
+  }
+
   getTableRows(data) {
     let rows = [];
     if (!data.length) {
@@ -75,7 +103,9 @@ export class Table extends React.Component {
         }
         cols.push(<td key={colIndex}>{colVal}</td>);
       });
-      rows.push(<tr key={rowKey}>{cols}</tr>);
+      rows.push(<tr onClick={(e) => {
+        this.onRowClick(e, row);
+      }} key={rowKey}>{cols}</tr>);
     });
 
     return rows;
@@ -88,7 +118,8 @@ export class Table extends React.Component {
     const rows = this.getTableRows(data);
 
     return (
-        <table className="table table-bordered table-hover datatable">
+        <table className="table table-bordered table-hover datatable"
+               ref={this.tableRef}>
           <thead className="thead-dark">
           <tr>{columnHeaders}</tr>
           </thead>

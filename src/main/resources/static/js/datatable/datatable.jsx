@@ -11,6 +11,7 @@ const MAX_ROWS_PER_PAGE = 10;
 export class DataTable extends React.Component {
   constructor(props) {
     super(props);
+    this.tableComponentRef = React.createRef();
     this.fullData = [];
     this.preFilteredData = [];
     this.state = {
@@ -28,6 +29,7 @@ export class DataTable extends React.Component {
     this.navigateToNextPage = this.navigateToNextPage.bind(this);
     this.navigateToPage = this.navigateToPage.bind(this);
     this.toggleColumnSort = this.toggleColumnSort.bind(this);
+    this.deleteSelectedRows = this.deleteSelectedRows.bind(this);
     this.searchTableDebounced = this.debounce(this.searchTable.bind(this));
   }
 
@@ -96,6 +98,9 @@ export class DataTable extends React.Component {
             if (this.arrayContainsSubstring(Object.values(value), query)) {
               return true;
             }
+            if (this.arrayContainsSubstring(Object.keys(value), query)) {
+              return true;
+            }
           }
         }
         return false;
@@ -156,17 +161,19 @@ export class DataTable extends React.Component {
     const sortCol = this.state.sortCol;
     let sortOrder = SORT_TYPES.descending;
 
-    if (sortCol['colName'] === colName) {
-      // If we're sorting the currently sorted column, reverse the sort.
-      sortOrder = sortCol['sort'] === SORT_TYPES.ascending
-          ? SORT_TYPES.descending : SORT_TYPES.ascending;
+    if (sortCol['colName'] === colName &&
+        sortCol['sort'] === SORT_TYPES.descending) {
+      // If we're already sorting the given column, ensure we're toggling
+      // the sort.
+      sortOrder = SORT_TYPES.ascending;
     }
 
     this.sortDataOnColumn(this.fullData, colName, sortOrder);
 
     if (this.preFilteredData.length) {
       // Unfortunately, if the table is filtered, we also need to ensure the
-      // cached pre-filtered data is sorted the same way.
+      // cached pre-filtered data is sorted. This ensures that future filters
+      // or resetting the filter maintains the same sorting.
       this.sortDataOnColumn(this.preFilteredData, colName, sortOrder);
     }
 
@@ -190,6 +197,31 @@ export class DataTable extends React.Component {
     });
   }
 
+  deleteSelectedRows() {
+    const rowsToDelete = this.tableComponentRef.current.getSelectedRows();
+    if (rowsToDelete.length) {
+      this.doAjax(this.props.dataSource, {
+        method: 'DELETE',
+        data: JSON.stringify(rowsToDelete),
+        contentType: 'application/json',
+        processData: false
+      })
+          .done(() => {
+            rowsToDelete.forEach((row) => {
+              const index = this.fullData.indexOf(row);
+              if (index > -1) {
+                this.fullData.splice(index, 1);
+              } else {
+                // TODO: Replace w/ proper error handling.
+                console.error(
+                    'Attempted to delete row not found in table data.');
+              }
+            });
+            this.navigateToPage(this.state.currentPage);
+          });
+    }
+  }
+
   componentDidMount() {
     this.fetchInitialData();
   }
@@ -202,6 +234,7 @@ export class DataTable extends React.Component {
       const dataSlice = this.getDataSlice(this.state.currentPage);
       this.setState({
         tableData: dataSlice,
+        currentPage: 1,
         totalItems: this.fullData.length
       });
     });
@@ -243,14 +276,16 @@ export class DataTable extends React.Component {
               <AddButton/>
             </div>
             <div className="col-auto">
-              <DeleteButton/>
+              <DeleteButton onDeleteClick={this.deleteSelectedRows}/>
             </div>
           </div>
           <div className="row">
             <div className="col">
-              <Table data={this.state.tableData}
+              <Table ref={this.tableComponentRef}
+                     data={this.state.tableData}
                      sortCol={this.state.sortCol}
-                     onColumnHeaderClick={this.toggleColumnSort}/>
+                     onColumnHeaderClick={this.toggleColumnSort}
+                     onRowClick={this.s}/>
             </div>
           </div>
           <div className="row">
