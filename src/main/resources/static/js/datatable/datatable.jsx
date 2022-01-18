@@ -19,7 +19,7 @@ export class DataTable extends React.Component {
       tableData: [],
       // Total data items we're managing (including non visible).
       totalItems: 0,
-      // Current navigation page within data.
+      // Current, visible, navigation page within data.
       currentPage: 1,
       // Which column is sorted and how, e.g.,
       // {'colName': 'id', 'sort': 'DESC'}.
@@ -30,6 +30,8 @@ export class DataTable extends React.Component {
     this.navigateToPage = this.navigateToPage.bind(this);
     this.toggleColumnSort = this.toggleColumnSort.bind(this);
     this.deleteSelectedRows = this.deleteSelectedRows.bind(this);
+    this.addNewRow = this.addNewRow.bind(this);
+    this.updateColumnValue = this.updateColumnValue.bind(this);
     this.searchTableDebounced = this.debounce(this.searchTable.bind(this));
   }
 
@@ -49,11 +51,73 @@ export class DataTable extends React.Component {
    */
   arrayContainsSubstring(array, string) {
     for (let i = 0; i < array.length; i++) {
-      if (String(array[i]).includes(query)) {
+      if (String(array[i]).includes(string)) {
         return true;
       }
     }
     return false;
+  }
+
+  addNewRow() {
+    console.log('Implement me: addNewRow');
+  }
+
+  getType(value) {
+    if (Object.prototype.toString.call(value) === '[object String]') {
+      return 'string';
+    } else if (Object.prototype.toString.call(value) === '[object Number]') {
+      return 'number';
+    } else if ($.isArray(value)) {
+      return 'array';
+    } else if ($.isPlainObject(value)) {
+      return 'plainObject';
+    } else {
+      return typeof value;
+    }
+  }
+
+  updateColumnValue(row, key, val) {
+    const index = this.fullData.indexOf(row);
+    if (index === -1) {
+      console.error(`Failed to update row ${row} with key ${key}.`);
+      return;
+    }
+
+    const colType = this.getType(row[key]);
+    let convertedVal = val;
+
+    if (colType === 'number') {
+      convertedVal = Number(val);
+      // TODO: Do error handling when they enter a bad value and this is NaN.
+    } else if (colType === 'array' || colType === 'plainObject') {
+      convertedVal = JSON.parse(val);
+      // TODO: Do error handling where entered val does not parse to original
+      //       JSON type.
+    }
+
+    const originalValue = row[key];
+    // TODO: Is there anyway to not reference id directly? Doing this makes
+    //       the datatable impl dependent on the data structure.
+    const originalId = row.id;
+    row[key] = convertedVal;
+
+    // TODO: Handle cases of editing non-editable cells (e.g., id). They
+    //       should either not be able to edit them in the UI or the update
+    //       attempt should fail w/ an error message.
+
+    this.doAjax(`${this.props.dataSource}/${originalId}`, {
+      method: 'PUT',
+      data: JSON.stringify(row),
+      processData: false,
+      contentType: 'application/json'
+    })
+        .fail(() => {
+          // Reset value back to original on failure.
+          row[key] = originalValue;
+        })
+        .done(() => {
+          this.refreshCurrentPage();
+        });
   }
 
   searchTable(query) {
@@ -81,20 +145,19 @@ export class DataTable extends React.Component {
       // Always do filter on the full dataset.
       this.fullData = this.preFilteredData.filter((row) => {
         for (const value of Object.values(row)) {
-          if (Object.prototype.toString.call(value) == '[object String]') {
+          if (this.getType(value) === 'string') {
             if (value.includes(query)) {
               return true;
             }
-          } else if (
-              Object.prototype.toString.call(value) === '[object Number]') {
+          } else if (this.getType(value) === 'number') {
             if (String(value).includes(query)) {
               return true;
             }
-          } else if ($.isArray(value)) {
+          } else if (this.getType(value) === 'array') {
             if (this.arrayContainsSubstring(value, query)) {
               return true;
             }
-          } else if ($.isPlainObject(value)) {
+          } else if (this.getType(value) === 'plainObject') {
             if (this.arrayContainsSubstring(Object.values(value), query)) {
               return true;
             }
@@ -177,7 +240,7 @@ export class DataTable extends React.Component {
       this.sortDataOnColumn(this.preFilteredData, colName, sortOrder);
     }
 
-    this.navigateToPage(this.state.currentPage);
+    this.refreshCurrentPage();
   }
 
   navigateToPreviousPage() {
@@ -186,6 +249,10 @@ export class DataTable extends React.Component {
 
   navigateToNextPage() {
     this.navigateToPage(this.state.currentPage + 1)
+  }
+
+  refreshCurrentPage() {
+    this.navigateToPage(this.state.currentPage);
   }
 
   navigateToPage(page) {
@@ -214,10 +281,11 @@ export class DataTable extends React.Component {
               } else {
                 // TODO: Replace w/ proper error handling.
                 console.error(
-                    'Attempted to delete row not found in table data.');
+                    'Attempted to delete row not found in table data. This '
+                    + 'shouldn\'t happen unless there\'s a race condition.');
               }
             });
-            this.navigateToPage(this.state.currentPage);
+            this.refreshCurrentPage();
           });
     }
   }
@@ -231,12 +299,7 @@ export class DataTable extends React.Component {
       // TODO: Caching the full dataset might be slow for very large tables.
       //       Consider adding ability to do paging on the server.
       this.fullData = response;
-      const dataSlice = this.getDataSlice(this.state.currentPage);
-      this.setState({
-        tableData: dataSlice,
-        currentPage: 1,
-        totalItems: this.fullData.length
-      });
+      this.navigateToPage(1);
     });
   }
 
@@ -247,6 +310,7 @@ export class DataTable extends React.Component {
   }
 
   doAjax(endpoint, extraOptions) {
+    // TODO: Universally, handle loading interstitial when AJAX is happening.
     const headers = {};
     headers[CSRF_HEADER_NAME] = CSRF_TOKEN;
 
@@ -273,7 +337,7 @@ export class DataTable extends React.Component {
               <SearchBox onSearchChange={this.searchTableDebounced}/>
             </div>
             <div className="col-auto">
-              <AddButton/>
+              <AddButton onAddClick={this.addNewRow}/>
             </div>
             <div className="col-auto">
               <DeleteButton onDeleteClick={this.deleteSelectedRows}/>
@@ -285,7 +349,7 @@ export class DataTable extends React.Component {
                      data={this.state.tableData}
                      sortCol={this.state.sortCol}
                      onColumnHeaderClick={this.toggleColumnSort}
-                     onRowClick={this.s}/>
+                     onColumnValueUpdate={this.updateColumnValue}/>
             </div>
           </div>
           <div className="row">

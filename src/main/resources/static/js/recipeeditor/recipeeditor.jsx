@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {CommonController} from '../common/common';
 import {DataTable} from '../datatable/datatable';
 
-class UnitEditor extends React.Component {
+class RecipeEditor extends React.Component {
   constructor(props) {
     super(props);
     new CommonController();
@@ -12,13 +12,13 @@ class UnitEditor extends React.Component {
 
   render() {
     return (
-        <DataTable dataSource="/units"/>
+        <DataTable dataSource="/recipes"/>
     );
   }
 }
 
 ReactDOM.render(
     <React.StrictMode>
-      <UnitEditor/>
+      <RecipeEditor/>
     </React.StrictMode>,
-    document.getElementById('unitEditor'));
+    document.getElementById('recipeEditor'));

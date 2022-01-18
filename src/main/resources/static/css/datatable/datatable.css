@@ -14,3 +14,7 @@
 .pagination li.disabled {
   cursor: auto;
 }
+
+.editableCell {
+  font-size: inherit;
+}

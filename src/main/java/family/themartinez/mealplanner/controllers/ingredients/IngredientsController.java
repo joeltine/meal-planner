@@ -17,8 +17,9 @@ public class IngredientsController {
 
   @Autowired private IngredientRepository ingredientRepository;
 
-  @GetMapping("/ingredients")
-  public List<Map<String, String>> queryIngredients(@RequestParam(name = "q") String query) {
+  @GetMapping("/ingredientsAc")
+  public List<Map<String, String>> getIngredientsForAutoComplete(
+      @RequestParam(name = "q") String query) {
     return ingredientRepository.findTopByNameAutocompleteAlgorithm(query).stream()
         .map(
             e -> {
@@ -31,7 +32,7 @@ public class IngredientsController {
   }
 
   // TODO: Merge this with /ingredients, if they don't specify "?q=", just return all.
-  @GetMapping("/ingredientsAll")
+  @GetMapping("/ingredients")
   public ImmutableList<Ingredient> getAllIngredients() {
     // TODO: Fix returning JSONArray fields. It currently returns {"empty":false}.
     return ImmutableList.copyOf(ingredientRepository.findAll());

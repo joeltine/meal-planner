@@ -1,5 +1,6 @@
 import React from 'react';
 import {SORT_TYPES} from "./sorttypes";
+import {Td} from "./td";
 
 export class Table extends React.Component {
   constructor(props) {
@@ -74,6 +75,7 @@ export class Table extends React.Component {
   }
 
   onRowClick(e, rowData) {
+    // TODO: Implement shift+click multi-row selection.
     const rowEl = e.currentTarget;
     if (!rowEl.classList.contains('table-active')) {
       rowEl.classList.add('table-active');
@@ -96,12 +98,14 @@ export class Table extends React.Component {
     data.forEach((row, rowIndex) => {
       const cols = [];
       const rowKey = row.id != null ? row.id : rowIndex;
-      Object.values(row).forEach((val, colIndex) => {
+      Object.entries(row).forEach(([key, val], colIndex) => {
         let colVal = val;
         if ($.isArray(val) || $.isPlainObject(val)) {
           colVal = JSON.stringify(colVal);
         }
-        cols.push(<td key={colIndex}>{colVal}</td>);
+        cols.push(<Td key={colIndex} value={colVal} onValueUpdate={(newVal) => {
+          this.props.onColumnValueUpdate(row, key, newVal);
+        }}/>);
       });
       rows.push(<tr onClick={(e) => {
         this.onRowClick(e, row);

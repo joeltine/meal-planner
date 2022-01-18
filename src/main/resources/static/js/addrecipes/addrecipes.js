@@ -131,7 +131,7 @@ export class AddRecipesController {
   createAutocomplete(element) {
     element.autoComplete({
       resolverSettings: {
-        url: '/ingredients'
+        url: '/ingredientsAc'
       }
     });
   }
