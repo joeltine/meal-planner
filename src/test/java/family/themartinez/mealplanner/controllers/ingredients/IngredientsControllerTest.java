@@ -57,7 +57,7 @@ public class IngredientsControllerTest {
   @Test
   public void getIngredientsShouldReturnResults() throws Exception {
     this.mockMvc
-        .perform(get("/ingredients").param("q", "pot"))
+        .perform(get("/ingredientsAc").param("q", "pot"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
@@ -70,7 +70,7 @@ public class IngredientsControllerTest {
   @Test
   public void getIngredientsNoMatchesReturnsEmptyArray() throws Exception {
     this.mockMvc
-        .perform(get("/ingredients").param("q", "zooba"))
+        .perform(get("/ingredientsAc").param("q", "zooba"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(content().json("[]"));
@@ -85,7 +85,7 @@ public class IngredientsControllerTest {
     }
     assertTrue(ingredientRepository.count() > 20);
     this.mockMvc
-        .perform(get("/ingredients").param("q", "candy"))
+        .perform(get("/ingredientsAc").param("q", "candy"))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(20)))
@@ -95,6 +95,6 @@ public class IngredientsControllerTest {
 
   @Test
   public void getIngredientsMissingQueryThrowsError() throws Exception {
-    this.mockMvc.perform(get("/ingredients")).andExpect(status().is4xxClientError());
+    this.mockMvc.perform(get("/ingredientsAc")).andExpect(status().is4xxClientError());
   }
 }

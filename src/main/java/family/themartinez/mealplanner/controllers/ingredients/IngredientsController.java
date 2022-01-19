@@ -31,7 +31,6 @@ public class IngredientsController {
         .collect(Collectors.toList());
   }
 
-  // TODO: Merge this with /ingredients, if they don't specify "?q=", just return all.
   @GetMapping("/ingredients")
   public ImmutableList<Ingredient> getAllIngredients() {
     // TODO: Fix returning JSONArray fields. It currently returns {"empty":false}.
