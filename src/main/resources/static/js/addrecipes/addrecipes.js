@@ -1,5 +1,6 @@
 import 'bootstrap-autocomplete';
 import {CommonController} from '../common/common';
+import {Toast} from "../toasts/toast";
 import {sendAjax} from "../common/ajax";
 
 export class AddRecipesController {
@@ -15,22 +16,6 @@ export class AddRecipesController {
     this.addIngredient = this.recipeForm.find('#addIngredient');
     this.main = $('#main');
     this.ingredientRowClone = $('#ingredientInputRow').clone();
-    this.successAlert = $(`
-      <div class="alert alert-success alert-dismissible fade show" role="alert"
-           id="successAlert">
-        <strong>Success!</strong> A new recipe has been added.
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>`);
-    this.failureAlert = $(`
-      <div class="alert alert-danger alert-dismissible fade show" role="alert"
-           id="failureAlert">
-        <strong>Failure!</strong> Something went wrong: <span id="failureText"></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>`);
     this.spinner = $(
         `<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>`);
     this.importUrlInput = $('#importUrl');
@@ -213,8 +198,8 @@ export class AddRecipesController {
       method: 'PUT',
       processData: false
     })
-        .done((data, textStatus) => {
-          this.showSuccessAlert();
+        .done(() => {
+          this.showSuccessAlert(data);
           this.resetForm();
         })
         .always(() => {
@@ -236,17 +221,13 @@ export class AddRecipesController {
   }
 
   showFailureAlert(errorMsg) {
-    const newAlert = this.failureAlert.clone();
-    newAlert.find('#failureText').text(errorMsg);
-    newAlert.appendTo(this.recipeForm);
+    Toast.showNewErrorToast('Error!', `Something went wrong: ${errorMsg}`,
+        {autohide: false});
   }
 
-  showSuccessAlert() {
-    const newAlert = this.successAlert.clone();
-    newAlert.appendTo(this.recipeForm);
-    setTimeout(() => {
-      newAlert.alert('close');
-    }, 4000)
+  showSuccessAlert(recipe) {
+    Toast.showNewSuccessToast('Recipe added!',
+        `Successfully added ${recipe.name}!`);
   }
 
   sendAjax(endpoint, extraOptions) {

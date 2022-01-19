@@ -104,3 +104,21 @@ svg.feather {
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
+
+/*
+ * Toasts
+ */
+#toastContainer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.toast {
+  max-width: 400px;
+}
+
+.toast-body {
+  max-height: 150px;
+  overflow: auto;
+}

@@ -67,6 +67,12 @@
     <polyline points="6 15 12 21 18 15"></polyline>
     <polyline points="18 9 12 3 6 9"></polyline>
   </symbol>
+
+  <symbol id="alert-circle">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="8" x2="12" y2="12"></line>
+    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+  </symbol>
 </svg>
 
 <!-- Main Navigation -->
@@ -144,6 +150,9 @@
 
   </div>
 </div>
+
+<!-- Container for global toasts -->
+<div id="toastContainer" class="m-2"></div>
 
 <script th:inline="javascript">
   /*<![CDATA[*/

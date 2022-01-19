@@ -3,6 +3,7 @@ import {SearchBox} from './searchbox';
 import {AddButton} from './addbutton';
 import {DeleteButton} from './deletebutton';
 import {Table} from "./table";
+import {Toast} from "../toasts/toast";
 import {Pagination} from "./pagination";
 import {SORT_TYPES} from "./sorttypes";
 import {arrayContainsSubstring, debounce, getType} from "../common/utils";
@@ -44,7 +45,9 @@ export class DataTable extends React.Component {
   updateColumnValue(row, key, val) {
     const index = this.fullData.indexOf(row);
     if (index === -1) {
-      console.error(`Failed to update row ${row} with key ${key}.`);
+      Toast.showNewErrorToast('Failed to update cell!',
+          `In attempting to update row id ${row.id} column ${key}, we `
+          + 'failed to find the row in the known dataset.', {autohide: false});
       return;
     }
 
@@ -53,24 +56,31 @@ export class DataTable extends React.Component {
 
     if (colType === 'number') {
       convertedVal = Number(val);
-      // TODO: Do error handling when they enter a bad value and this is NaN.
+      if (Number.isNaN(convertedVal)) {
+        Toast.showNewErrorToast('Failed to update Cell!',
+            `Attempting to convert "${val}" to number failed. `
+            + 'Is it a valid number?', {autohide: false});
+        return;
+      }
     } else if (colType === 'array' || colType === 'plainObject') {
-      convertedVal = JSON.parse(val);
-      // TODO: Do error handling where entered val does not parse to original
-      //       JSON type.
+      try {
+        convertedVal = JSON.parse(val);
+      } catch (e) {
+        Toast.showNewErrorToast('Failed to update cell!',
+            `Attempting to convert "${val}" failed. `
+            + 'It is likely not valid JSON.', {autohide: false});
+        return;
+      }
     }
 
     const originalValue = row[key];
-    // TODO: Is there anyway to not reference id directly? Doing this makes
-    //       the datatable impl dependent on the data structure.
-    const originalId = row.id;
     row[key] = convertedVal;
 
     // TODO: Handle cases of editing non-editable cells (e.g., id). They
     //       should either not be able to edit them in the UI or the update
     //       attempt should fail w/ an error message.
 
-    this.doAjax(`${this.props.dataSource}/${originalId}`, {
+    this.doAjax(`${this.props.dataSource}/${row.id}`, {
       method: 'PUT',
       data: JSON.stringify(row),
       processData: false,
@@ -82,6 +92,8 @@ export class DataTable extends React.Component {
         })
         .done(() => {
           this.refreshCurrentPage();
+          Toast.showNewSuccessToast('Success updating cell!',
+              `Updating row with id ${row.id} was successful!`);
         });
   }
 
@@ -239,17 +251,33 @@ export class DataTable extends React.Component {
         processData: false
       })
           .done(() => {
+            const successes = [];
+            const failures = [];
             rowsToDelete.forEach((row) => {
               const index = this.fullData.indexOf(row);
               if (index > -1) {
                 this.fullData.splice(index, 1);
+                successes.push(row.id);
               } else {
-                // TODO: Replace w/ proper error handling.
-                console.error(
-                    'Attempted to delete row not found in table data. This '
-                    + 'shouldn\'t happen unless there\'s a race condition.');
+                failures.push(row.id);
               }
             });
+
+            if (successes.length) {
+              Toast.showNewSuccessToast('Delete successful!',
+                  `Successfully deleted row${successes.length > 1 ? 's'
+                      : ''} with id${successes.length > 1 ? 's'
+                      : ''}: ${successes.join(', ')}.`);
+            }
+
+            if (failures.length) {
+              Toast.showNewErrorToast('Delete failed!',
+                  `Attempting to delete row${failures.length > 1 ? 's'
+                      : ''} (${failures.join(', ')}) not found in table `
+                  + `data. This shouldn\'t happen unless there\'s a race `
+                  + `condition.`, {autohide: false});
+            }
+
             this.refreshCurrentPage();
           });
     }
@@ -261,8 +289,6 @@ export class DataTable extends React.Component {
 
   fetchInitialData() {
     this.doAjax(this.props.dataSource).done((response) => {
-      // TODO: Caching the full dataset might be slow for very large tables.
-      //       Consider adding ability to do paging on the server.
       this.fullData = response;
       this.navigateToPage(1);
     });

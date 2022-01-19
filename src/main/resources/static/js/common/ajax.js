@@ -2,8 +2,10 @@
  * Central AJAX library.
  */
 
+import {Toast} from "../toasts/toast";
+
+// TODO: Write unit tests.
 export function sendAjax(endpoint, extraOptions) {
-// TODO: Universally, handle loading interstitial when AJAX is happening.
   const headers = {};
   headers[CSRF_HEADER_NAME] = CSRF_TOKEN;
 
@@ -17,7 +19,10 @@ export function sendAjax(endpoint, extraOptions) {
   return $.ajax(endpoint, options)
       .fail((jqXHR, textStatus, errorThrown) => {
         const response = JSON.parse(jqXHR.responseText);
-        // TODO: Replace me w/ proper error handling. E.g., a toast.
-        console.error(response);
+        Toast.showNewErrorToast('Failed Network Request!',
+            `Your ${options.method} request to ${endpoint} failed! `
+            + `Response Text: ${response}, Text Status: ${textStatus}, `
+            + `Error Thrown: ${errorThrown}.`,
+            {autohide: false});
       });
 }
