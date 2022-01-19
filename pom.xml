@@ -222,7 +222,8 @@
               <executable>/usr/bin/pip3</executable>
               <arguments>
                 <argument>install</argument>
-                <argument>recipe-scrapers</argument>
+                <argument>-r</argument>
+                <argument>${project.basedir}/requirements.txt</argument>
               </arguments>
             </configuration>
           </execution>
