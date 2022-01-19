@@ -26,8 +26,8 @@ Configure git hooks:
 git config core.hooksPath git-hooks/
 ```
 
-Deploying:
+Deploying from remote machine to Deus:
 
 ```
-mvn package wagon:upload-single@upload-jar wagon:sshexec@upload-jar
+./deploy.sh
 ```
