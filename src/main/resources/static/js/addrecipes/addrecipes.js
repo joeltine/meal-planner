@@ -235,12 +235,7 @@ export class AddRecipesController {
   }
 
   sendAjax(endpoint, extraOptions) {
-    return sendAjax(endpoint, extraOptions)
-        .fail((jqXHR, textStatus, errorThrown) => {
-          const response = JSON.parse(jqXHR.responseText);
-          this.showFailureAlert(
-              `${textStatus}: ${response.path} ${response.error}, ${response.message}`);
-        });
+    return sendAjax(endpoint, extraOptions);
   }
 }
 

@@ -368,7 +368,6 @@ describe('AddRecipesController test suite', function () {
     expect(ingredientRow.eq(0).find('#inputIngredient').val()).toBe('Milk');
     expect($('.ingredientInputRow').length).toBe(1);
     expect($('.toast-error').is(':visible')).toBeTrue();
-    expect($('.toast-error').text()).toContain(
-        'error: /addrecipes bad stuff, err message');
+    expect($('.toast-error').text()).toContain('bad stuff');
   });
 });
