@@ -135,6 +135,10 @@ export class AddRecipesController {
 
     if (this.recipeForm.get(0).checkValidity()) {
       this.sendRecipeToServer(formData);
+    } else {
+      Toast.showNewErrorToast('Recipe submit failed!',
+          'One of your recipe inputs was invalid. Check the form for '
+          + 'a field highlighted in red.', {delay: 5000});
     }
 
     this.recipeForm.removeClass('needs-validation').addClass('was-validated');
