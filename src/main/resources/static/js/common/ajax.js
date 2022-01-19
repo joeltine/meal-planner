@@ -18,10 +18,10 @@ export function sendAjax(endpoint, extraOptions) {
 
   return $.ajax(endpoint, options)
       .fail((jqXHR, textStatus, errorThrown) => {
-        const response = JSON.parse(jqXHR.responseText);
         Toast.showNewErrorToast('Failed Network Request!',
             `Your ${options.method} request to ${endpoint} failed! `
-            + `Response Text: ${response}, Text Status: ${textStatus}, `
+            + `Response Text: ${jqXHR.responseText}, `
+            + `Text Status: ${textStatus}, `
             + `Error Thrown: ${errorThrown}.`,
             {autohide: false});
       });

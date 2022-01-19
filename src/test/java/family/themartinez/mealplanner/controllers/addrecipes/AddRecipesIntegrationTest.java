@@ -2,8 +2,9 @@ package family.themartinez.mealplanner.controllers.addrecipes;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import family.themartinez.mealplanner.data.ingredientlists.IngredientListRepository;
+import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
+import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +35,6 @@ public class AddRecipesIntegrationTest {
   @LocalServerPort private int port;
 
   @Autowired private RecipeRepository recipeRepository;
-  @Autowired private IngredientListRepository ingredientListRepository;
 
   private static RemoteWebDriver driver;
 
@@ -53,7 +53,8 @@ public class AddRecipesIntegrationTest {
 
   @AfterEach
   void afterEach() {
-    recipeRepository.deleteAll();
+    List<Recipe> recipes = recipeRepository.findByName("Chicken chili casserole");
+    recipeRepository.deleteAll(recipes);
   }
 
   @Test
@@ -79,6 +80,6 @@ public class AddRecipesIntegrationTest {
     driver.findElement(By.id("inputPrepTime")).sendKeys("30");
     driver.findElement(By.id("inputCookTime")).sendKeys("25");
     driver.findElement(By.id("submit")).click();
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("successAlert")));
+    wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("toast-success")));
   }
 }

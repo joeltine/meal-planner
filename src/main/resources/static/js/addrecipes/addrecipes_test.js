@@ -323,9 +323,11 @@ describe('AddRecipesController test suite', function () {
       expect($(this).val()).toBe('');
     });
     expect($('.ingredientInputRow').length).toBe(1);
-    expect($('#successAlert').is(':visible')).toBeTrue();
+    expect($('.toast-success').is(':visible')).toBeTrue(
+        'Success toast visibility expected to be true');
     jasmine.clock().tick(5000);
-    expect($('#successAlert').is(':visible')).toBeFalse();
+    expect($('.toast-success').is(':visible')).toBeFalse(
+        'Success toast visibility expected to be false');
     expect($('.ingredientInputRow').eq(0).find('#inputIngredient').data(
         'autoComplete')).toBeTruthy();
   });
@@ -365,8 +367,8 @@ describe('AddRecipesController test suite', function () {
     expect(ingredientRow.eq(0).find('#inputUnit').val()).toBe('1');
     expect(ingredientRow.eq(0).find('#inputIngredient').val()).toBe('Milk');
     expect($('.ingredientInputRow').length).toBe(1);
-    expect($('#failureAlert').is(':visible')).toBeTrue();
-    expect($('#failureText').text()).toEqual(
+    expect($('.toast-error').is(':visible')).toBeTrue();
+    expect($('.toast-error').text()).toContain(
         'error: /addrecipes bad stuff, err message');
   });
 });

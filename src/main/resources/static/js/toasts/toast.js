@@ -8,18 +8,27 @@ const STATE_CLASS_MAP = {
     header: {
       bgColor: 'bg-danger',
       textColor: 'text-white'
+    },
+    container: {
+      stateClass: 'toast-error'
     }
   },
   INFO: {
     header: {
       bgColor: 'bg-secondary',
       textColor: 'text-white'
+    },
+    container: {
+      stateClass: 'toast-info'
     }
   },
   SUCCESS: {
     header: {
       bgColor: 'bg-success',
       textColor: 'text-white'
+    },
+    container: {
+      stateClass: 'toast-success'
     }
   }
 };
@@ -54,7 +63,7 @@ export class Toast {
     const styles = STATE_CLASS_MAP[this.state];
     const mergedOptions = $.extend(defaultOptions, this.toastOptions);
     const toast = $(`
-    <div class="toast" role="alert">
+    <div class="toast ${styles.container.stateClass}" role="alert">
       <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
         <svg class="feather mr-2" viewBox="0 0 24 24">
           <use href="#alert-circle"/>
