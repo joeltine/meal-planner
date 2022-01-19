@@ -5,7 +5,7 @@ import com.google.common.io.CharStreams;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import org.springframework.core.io.ClassPathResource;
+import java.net.URL;
 import org.springframework.data.util.Pair;
 
 public class ExternalRecipeScraper {
@@ -16,8 +16,12 @@ public class ExternalRecipeScraper {
 
   public ExternalRecipeScraper() throws IOException {
     try {
-      // TODO: Figure out why this py script isn't being bundled in the .jar when I deploy.
-      scrapeRecipeScript = new ClassPathResource("scripts/scrape_recipe.py").getFile();
+      URL scrapeRecipePyUrl = getClass().getClassLoader().getResource("scripts/scrape_recipe.py");
+      if (scrapeRecipePyUrl == null) {
+        throw new IllegalArgumentException("scrape_recipe.py not found!");
+      } else {
+        scrapeRecipeScript = new File(scrapeRecipePyUrl.toURI());
+      }
     } catch (Exception e) {
       System.out.println(e);
     }
