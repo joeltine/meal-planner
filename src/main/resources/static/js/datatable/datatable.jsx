@@ -59,7 +59,7 @@ export class DataTable extends React.Component {
   }
 
   addNewRow() {
-    console.log('Implement me: addNewRow');
+
   }
 
   getType(value) {
@@ -183,21 +183,21 @@ export class DataTable extends React.Component {
       let aVal = a[colName];
       let bVal = b[colName];
 
-      if ($.isArray(aVal)) {
+      if (this.getType(aVal) === 'array') {
         // If it's an array, sort by first element. Note, this might fail
         // if the first item is the same in both arrays. E.g., you could get
         // [0, 100, 5] before [0, 2, 3]. It might make sense to do deeper
         // comparisons if aVal[0] === bVal[0].
         aVal = aVal[0];
         bVal = bVal[0];
-      } else if ($.isPlainObject(aVal)) {
+      } else if (this.getType(aVal) === 'plainObject') {
         // If object, stringify and then sort. It's a bit wonky, but sorting
         // objects is inherently wonky.
         aVal = JSON.stringify(aVal);
         bVal = JSON.stringify(bVal);
       }
 
-      if (Object.prototype.toString.call(aVal) === '[object Number]') {
+      if (this.getType(aVal) === 'number') {
         // Numeric sorting.
         return sortOrder === SORT_TYPES.ascending ? aVal - bVal : bVal - aVal;
       }

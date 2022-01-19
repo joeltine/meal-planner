@@ -113,7 +113,7 @@ export class Pagination extends React.Component {
     const pages = this.generatePages(totalPages);
 
     // TODO: Add support for filtered entries message:
-    //       (filtered from 57 total entries).
+    //       "(filtered from 57 total entries)"
 
     return (
         <div className="container-fluid">
