@@ -1,5 +1,6 @@
 import 'bootstrap-autocomplete';
 import {CommonController} from '../common/common';
+import {sendAjax} from "../common/ajax";
 
 export class AddRecipesController {
   constructor() {
@@ -249,16 +250,7 @@ export class AddRecipesController {
   }
 
   sendAjax(endpoint, extraOptions) {
-    const headers = {};
-    headers[CSRF_HEADER_NAME] = CSRF_TOKEN;
-    const options = {
-      method: 'GET',
-      headers: headers
-    };
-
-    $.extend(options, extraOptions);
-
-    return $.ajax(endpoint, options)
+    return sendAjax(endpoint, extraOptions)
         .fail((jqXHR, textStatus, errorThrown) => {
           const response = JSON.parse(jqXHR.responseText);
           this.showFailureAlert(

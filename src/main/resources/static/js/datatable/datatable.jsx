@@ -5,6 +5,8 @@ import {DeleteButton} from './deletebutton';
 import {Table} from "./table";
 import {Pagination} from "./pagination";
 import {SORT_TYPES} from "./sorttypes";
+import {arrayContainsSubstring, debounce, getType} from "../common/utils";
+import {sendAjax} from "../common/ajax";
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -32,48 +34,11 @@ export class DataTable extends React.Component {
     this.deleteSelectedRows = this.deleteSelectedRows.bind(this);
     this.addNewRow = this.addNewRow.bind(this);
     this.updateColumnValue = this.updateColumnValue.bind(this);
-    this.searchTableDebounced = this.debounce(this.searchTable.bind(this));
-  }
-
-  debounce(func, timeout = 300) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, timeout);
-    };
-  }
-
-  /**
-   * Returns if a given array contains the given substring. Only works for
-   * arrays containing only numbers and/or strings.
-   */
-  arrayContainsSubstring(array, string) {
-    for (let i = 0; i < array.length; i++) {
-      if (String(array[i]).includes(string)) {
-        return true;
-      }
-    }
-    return false;
+    this.searchTableDebounced = debounce(this.searchTable.bind(this));
   }
 
   addNewRow() {
 
-  }
-
-  getType(value) {
-    if (Object.prototype.toString.call(value) === '[object String]') {
-      return 'string';
-    } else if (Object.prototype.toString.call(value) === '[object Number]') {
-      return 'number';
-    } else if ($.isArray(value)) {
-      return 'array';
-    } else if ($.isPlainObject(value)) {
-      return 'plainObject';
-    } else {
-      return typeof value;
-    }
   }
 
   updateColumnValue(row, key, val) {
@@ -83,7 +48,7 @@ export class DataTable extends React.Component {
       return;
     }
 
-    const colType = this.getType(row[key]);
+    const colType = getType(row[key]);
     let convertedVal = val;
 
     if (colType === 'number') {
@@ -145,23 +110,23 @@ export class DataTable extends React.Component {
       // Always do filter on the full dataset.
       this.fullData = this.preFilteredData.filter((row) => {
         for (const value of Object.values(row)) {
-          if (this.getType(value) === 'string') {
+          if (getType(value) === 'string') {
             if (value.includes(query)) {
               return true;
             }
-          } else if (this.getType(value) === 'number') {
+          } else if (getType(value) === 'number') {
             if (String(value).includes(query)) {
               return true;
             }
-          } else if (this.getType(value) === 'array') {
-            if (this.arrayContainsSubstring(value, query)) {
+          } else if (getType(value) === 'array') {
+            if (arrayContainsSubstring(value, query)) {
               return true;
             }
-          } else if (this.getType(value) === 'plainObject') {
-            if (this.arrayContainsSubstring(Object.values(value), query)) {
+          } else if (getType(value) === 'plainObject') {
+            if (arrayContainsSubstring(Object.values(value), query)) {
               return true;
             }
-            if (this.arrayContainsSubstring(Object.keys(value), query)) {
+            if (arrayContainsSubstring(Object.keys(value), query)) {
               return true;
             }
           }
@@ -183,21 +148,21 @@ export class DataTable extends React.Component {
       let aVal = a[colName];
       let bVal = b[colName];
 
-      if (this.getType(aVal) === 'array') {
+      if (getType(aVal) === 'array') {
         // If it's an array, sort by first element. Note, this might fail
         // if the first item is the same in both arrays. E.g., you could get
         // [0, 100, 5] before [0, 2, 3]. It might make sense to do deeper
         // comparisons if aVal[0] === bVal[0].
         aVal = aVal[0];
         bVal = bVal[0];
-      } else if (this.getType(aVal) === 'plainObject') {
+      } else if (getType(aVal) === 'plainObject') {
         // If object, stringify and then sort. It's a bit wonky, but sorting
         // objects is inherently wonky.
         aVal = JSON.stringify(aVal);
         bVal = JSON.stringify(bVal);
       }
 
-      if (this.getType(aVal) === 'number') {
+      if (getType(aVal) === 'number') {
         // Numeric sorting.
         return sortOrder === SORT_TYPES.ascending ? aVal - bVal : bVal - aVal;
       }
@@ -310,23 +275,7 @@ export class DataTable extends React.Component {
   }
 
   doAjax(endpoint, extraOptions) {
-    // TODO: Universally, handle loading interstitial when AJAX is happening.
-    const headers = {};
-    headers[CSRF_HEADER_NAME] = CSRF_TOKEN;
-
-    const options = {
-      method: 'GET',
-      headers: headers
-    };
-
-    $.extend(options, extraOptions);
-
-    return $.ajax(endpoint, options)
-        .fail((jqXHR, textStatus, errorThrown) => {
-          const response = JSON.parse(jqXHR.responseText);
-          // TODO: Replace me w/ proper error handling. E.g., a toast.
-          console.error(response);
-        });
+    return sendAjax(endpoint, extraOptions);
   }
 
   render() {
