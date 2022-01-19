@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ssh -T joel@192.168.1.211 << EOF
+ssh -T mealplanner@192.168.1.211 << EOF
   cd /opt/meal-planner
   git pull
-  ./mvnw clean package -DskipTests && sudo systemctl restart meal-planner.service
+  ./mvnw clean package -DskipTests && sudo /usr/bin/systemctl restart meal-planner.service
 EOF
