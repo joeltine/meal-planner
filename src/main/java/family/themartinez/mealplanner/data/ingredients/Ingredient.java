@@ -1,6 +1,7 @@
 package family.themartinez.mealplanner.data.ingredients;
 
-import family.themartinez.mealplanner.data.converters.JSONArrayConverter;
+import com.google.common.collect.ImmutableList;
+import family.themartinez.mealplanner.data.converters.ImmutableListConverter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -8,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.json.JSONArray;
 
 @Entity
 @Table(name = "ingredients")
@@ -26,12 +26,12 @@ public class Ingredient {
   private Integer apiId;
 
   @Column(name = "aisle")
-  @Convert(converter = JSONArrayConverter.class)
-  private JSONArray aisle;
+  @Convert(converter = ImmutableListConverter.class)
+  private ImmutableList<String> aisle;
 
   @Column(name = "categories")
-  @Convert(converter = JSONArrayConverter.class)
-  private JSONArray categories;
+  @Convert(converter = ImmutableListConverter.class)
+  private ImmutableList<String> categories;
 
   @Column(name = "image")
   private String image;
@@ -44,19 +44,19 @@ public class Ingredient {
     this.image = image;
   }
 
-  public JSONArray getCategories() {
+  public ImmutableList<String> getCategories() {
     return categories;
   }
 
-  public void setCategories(JSONArray categories) {
+  public void setCategories(ImmutableList<String> categories) {
     this.categories = categories;
   }
 
-  public JSONArray getAisle() {
+  public ImmutableList<String> getAisle() {
     return aisle;
   }
 
-  public void setAisle(JSONArray aisle) {
+  public void setAisle(ImmutableList<String> aisle) {
     this.aisle = aisle;
   }
 

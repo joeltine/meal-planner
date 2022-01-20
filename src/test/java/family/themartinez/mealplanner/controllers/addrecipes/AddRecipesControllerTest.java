@@ -24,7 +24,6 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -126,7 +125,7 @@ class AddRecipesControllerTest {
     assertEquals(20, chickenSoup.getPrepTimeMin());
     assertEquals(30, chickenSoup.getCookTimeMin());
     assertEquals("https://www.example.com/", chickenSoup.getExternalLink());
-    JSONAssert.assertEquals("[\"breakfast\",\"mexican\"]", chickenSoup.getCategories(), true);
+    assertEquals(ImmutableList.of("breakfast", "mexican"), chickenSoup.getCategories());
 
     ImmutableList<IngredientList> ingredientLists =
         ImmutableList.copyOf(ingredientListRepository.findAll());
@@ -195,7 +194,7 @@ class AddRecipesControllerTest {
     assertEquals(20, chickenSoup.getPrepTimeMin());
     assertEquals(30, chickenSoup.getCookTimeMin());
     assertNull(chickenSoup.getExternalLink());
-    JSONAssert.assertEquals("[]", chickenSoup.getCategories(), true);
+    assertEquals(ImmutableList.of(), chickenSoup.getCategories());
 
     ImmutableList<IngredientList> ingredientLists =
         ImmutableList.copyOf(ingredientListRepository.findAll());

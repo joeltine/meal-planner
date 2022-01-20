@@ -1,6 +1,7 @@
 package family.themartinez.mealplanner.data.recipes;
 
-import family.themartinez.mealplanner.data.converters.JSONArrayConverter;
+import com.google.common.collect.ImmutableList;
+import family.themartinez.mealplanner.data.converters.ImmutableListConverter;
 import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -10,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import org.json.JSONArray;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
@@ -47,14 +47,14 @@ public class Recipe {
   private Integer cookTimeMin;
 
   @Column(name = "categories")
-  @Convert(converter = JSONArrayConverter.class)
-  private JSONArray categories;
+  @Convert(converter = ImmutableListConverter.class)
+  private ImmutableList<String> categories;
 
-  public JSONArray getCategories() {
+  public ImmutableList<String> getCategories() {
     return categories;
   }
 
-  public void setCategories(JSONArray categories) {
+  public void setCategories(ImmutableList<String> categories) {
     this.categories = categories;
   }
 

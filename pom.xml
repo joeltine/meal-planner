@@ -135,6 +135,11 @@
       <artifactId>json</artifactId>
       <version>20211205</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-guava</artifactId>
+      <version>2.13.1</version>
+    </dependency>
   </dependencies>
 
   <build>

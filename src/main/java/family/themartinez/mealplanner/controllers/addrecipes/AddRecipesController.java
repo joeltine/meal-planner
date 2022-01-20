@@ -64,7 +64,7 @@ public class AddRecipesController {
     recipe.setInstructions((String) body.get("instructions"));
     recipe.setCookTimeMin(Integer.valueOf((String) body.get("cookTime")));
     recipe.setPrepTimeMin(Integer.valueOf((String) body.get("prepTime")));
-    recipe.setCategories(new JSONArray((Collection) body.get("categories")));
+    recipe.setCategories(ImmutableList.copyOf((Collection) body.get("categories")));
     recipe.setExternalLink((String) body.get("externalLink"));
     recipeRepository.save(recipe);
 
