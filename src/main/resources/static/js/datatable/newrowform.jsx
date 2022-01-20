@@ -17,7 +17,11 @@ export class NewRowForm extends React.Component {
     for (let [key, val] of Object.entries(this.values)) {
       const expectedType = this.props.typeInfo[key];
       const convertedVal = tryToConvertStringToType(val, expectedType);
-      if (convertedVal === null) {
+      if (val === null) {
+        const msg = `Field cannot be empty`;
+        this.inputRefs[key].current.setCustomValidity(msg);
+        validityMessages[key] = msg;
+      } else if (convertedVal === null) {
         const msg = `Cannot convert ${val} to ${expectedType}`;
         this.inputRefs[key].current.setCustomValidity(msg);
         validityMessages[key] = msg;
