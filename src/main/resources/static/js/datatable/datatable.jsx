@@ -23,6 +23,11 @@ export class DataTable extends React.Component {
     super(props);
     this.tableComponentRef = React.createRef();
     this.fullData = [];
+    // TODO: Consider new implementation of filtering that doesn't require
+    //       this array. E.g., pass a "filtered" set of rows to the Table
+    //       component and have it conditionally rendered there. Then fullData
+    //       is always the source of truth and we don't have to maintain both
+    //       fullData and preFilteredData arrays during sorting/adding etc.
     this.preFilteredData = [];
     this.currentFilterQuery = '';
     this.state = {
@@ -90,7 +95,7 @@ export class DataTable extends React.Component {
     if (this.currentFilterQuery.length) {
       // And it matches the current filter.
       if (this.rowMatchesQuery(newRow, this.currentFilterQuery)) {
-        // Put it in fullData, so it's visible in current visible data.
+        // Put it in fullData, so it's visible in current visible table data.
         this.fullData.push(newRow);
       }
       // Always add to preFilteredData, so it is in table when filter is
@@ -99,7 +104,7 @@ export class DataTable extends React.Component {
     } else {
       this.fullData.push(newRow);
     }
-    // Always re-sort everything so row is in current place.
+    // Always re-sort everything so row is in correct place.
     this.reSortAllData();
   }
 
@@ -319,10 +324,13 @@ export class DataTable extends React.Component {
           .done(() => {
             const successes = [];
             const failures = [];
+
             rowsToDelete.forEach((row) => {
               const index = this.fullData.indexOf(row);
-              if (index > -1) {
+              const filteredIndex = this.preFilteredData.indexOf(row);
+              if (index > -1 && filteredIndex > -1) {
                 this.fullData.splice(index, 1);
+                this.preFilteredData.splice(filteredIndex, 1);
                 successes.push(row.id);
               } else {
                 failures.push(row.id);
@@ -382,6 +390,21 @@ export class DataTable extends React.Component {
     return this.fullData.slice(start, end);
   }
 
+  maybeRenderNewRowForm() {
+    if (!this.state.addingNewRow) {
+      return;
+    }
+    return (
+        <div className="row pb-3">
+          <div className="col">
+            <NewRowForm typeInfo={this.state.columnTypeInfo}
+                        onSaveClick={this.saveNewRow}
+                        onCancelClick={this.hideNewRowForm}/>
+          </div>
+        </div>
+    );
+  }
+
   doAjax(endpoint, extraOptions) {
     return sendAjax(endpoint, extraOptions);
   }
@@ -400,16 +423,7 @@ export class DataTable extends React.Component {
               <DeleteButton onDeleteClick={this.deleteSelectedRows}/>
             </div>
           </div>
-          {
-              this.state.addingNewRow &&
-              <div className="row pb-3">
-                <div className="col">
-                  <NewRowForm typeInfo={this.state.columnTypeInfo}
-                              onSaveClick={this.saveNewRow}
-                              onCancelClick={this.hideNewRowForm}/>
-                </div>
-              </div>
-          }
+          {this.maybeRenderNewRowForm()}
           <div className="row">
             <div className="col">
               <Table ref={this.tableComponentRef}
