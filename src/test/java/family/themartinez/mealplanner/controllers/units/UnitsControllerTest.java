@@ -146,7 +146,7 @@ class UnitsControllerTest {
     assertEquals(totalRows + 1, unitRepository.count());
     Unit parsedUnit =
         objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
-    Unit newIngredient = unitRepository.findById(parsedUnit.getId()).orElseThrow();
-    assertEquals(parsedUnit.getName(), newIngredient.getName());
+    Unit newUnit = unitRepository.findById(parsedUnit.getId()).orElseThrow();
+    assertEquals(parsedUnit.getName(), newUnit.getName());
   }
 }
