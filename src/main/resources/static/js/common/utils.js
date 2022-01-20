@@ -16,9 +16,24 @@ export function arrayContainsSubstring(array, string) {
 }
 
 /**
+ * Returns if passed object is a valid Date object.
+ */
+export function isValidDate(d) {
+  if (Object.prototype.toString.call(d) === "[object Date]") {
+    if (Number.isNaN(d.getTime())) {
+      return false;
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
+/**
  * Tries to determine type of passed value. Returns simple string indicator of
  * detected type.
- * @returns {"undefined"|"plainObject"|"object"|"boolean"|"number"|"string"|"function"|"symbol"|"bigint"}
+ * @returns {"undefined"|"plainObject"|"object"|"boolean"|"number"|"string"|"function"|"symbol"|"bigint"|"date"}
  */
 export function getType(value) {
   if (Object.prototype.toString.call(value) === '[object String]') {
@@ -29,9 +44,38 @@ export function getType(value) {
     return 'array';
   } else if ($.isPlainObject(value)) {
     return 'plainObject';
+  } else if (Object.prototype.toString.call(value) === "[object Date]") {
+    return 'date';
   } else {
     return typeof value;
   }
+}
+
+/**
+ * Tries to convert string val to the given expectedType. If it is a Date or
+ * just doesn't support the expectedType, it will return the original string.
+ */
+export function tryToConvertStringToType(val, expectedType) {
+  let convertedVal = val;
+  if (expectedType === 'number') {
+    convertedVal = Number(val);
+    if (Number.isNaN(convertedVal)) {
+      return null;
+    }
+  } else if (expectedType === 'array' || expectedType === 'plainObject') {
+    try {
+      convertedVal = JSON.parse(val);
+    } catch (e) {
+      return null;
+    }
+  } else if (expectedType === 'date') {
+    if (!isValidDate(new Date(val))) {
+      return null;
+    }
+    // Note, we purposely keep date as a string in its current form to send
+    // back to server.
+  }
+  return convertedVal;
 }
 
 /**

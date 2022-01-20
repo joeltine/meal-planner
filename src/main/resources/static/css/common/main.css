@@ -116,6 +116,8 @@ svg.feather {
 
 .toast {
   max-width: 400px;
+  /* https://getbootstrap.com/docs/4.6/layout/overview/#z-index */
+  z-index: 1030;
 }
 
 .toast-body {

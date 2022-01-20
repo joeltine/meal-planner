@@ -5,12 +5,15 @@ export class Td extends React.Component {
     super(props);
     this.onDoubleClick = this.onDoubleClick.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
-    this.state = {editable: false};
+    this.state = {inEditMode: false};
   }
 
   onDoubleClick() {
+    if (!this.props.editable) {
+      return;
+    }
     this.setState({
-      editable: true
+      inEditMode: true
     });
   }
 
@@ -19,7 +22,7 @@ export class Td extends React.Component {
       e.preventDefault();
       e.stopPropagation();
       this.setState({
-        editable: false
+        inEditMode: false
       });
 
       if (e.key === 'Enter') {
@@ -29,7 +32,8 @@ export class Td extends React.Component {
   }
 
   render() {
-    if (this.state.editable) {
+    if (this.state.inEditMode) {
+      // TODO: Handle different input types based on the data type.
       return (
           <td>
             <input type="text"

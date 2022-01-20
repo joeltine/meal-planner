@@ -6,8 +6,15 @@ import {Table} from "./table";
 import {Toast} from "../toasts/toast";
 import {Pagination} from "./pagination";
 import {SORT_TYPES} from "./sorttypes";
-import {arrayContainsSubstring, debounce, getType} from "../common/utils";
+import {
+  arrayContainsSubstring,
+  debounce,
+  getType,
+  isValidDate,
+  tryToConvertStringToType
+} from "../common/utils";
 import {sendAjax} from "../common/ajax";
+import {NewRowForm} from "./newrowform";
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -17,6 +24,7 @@ export class DataTable extends React.Component {
     this.tableComponentRef = React.createRef();
     this.fullData = [];
     this.preFilteredData = [];
+    this.currentFilterQuery = '';
     this.state = {
       // Current data visible in table.
       tableData: [],
@@ -26,20 +34,83 @@ export class DataTable extends React.Component {
       currentPage: 1,
       // Which column is sorted and how, e.g.,
       // {'colName': 'id', 'sort': 'DESC'}.
-      sortCol: {colName: '', sort: ''}
+      sortCol: {colName: '', sort: ''},
+      // Mapping of row key to estimated type.
+      columnTypeInfo: {},
+      // Whether they want to add a new row.
+      addingNewRow: false
     };
     this.navigateToPreviousPage = this.navigateToPreviousPage.bind(this);
     this.navigateToNextPage = this.navigateToNextPage.bind(this);
     this.navigateToPage = this.navigateToPage.bind(this);
     this.toggleColumnSort = this.toggleColumnSort.bind(this);
     this.deleteSelectedRows = this.deleteSelectedRows.bind(this);
-    this.addNewRow = this.addNewRow.bind(this);
+    this.showNewRowForm = this.showNewRowForm.bind(this);
     this.updateColumnValue = this.updateColumnValue.bind(this);
+    this.saveNewRow = this.saveNewRow.bind(this);
+    this.hideNewRowForm = this.hideNewRowForm.bind(this);
     this.searchTableDebounced = debounce(this.searchTable.bind(this));
   }
 
-  addNewRow() {
+  showNewRowForm() {
+    this.setState({
+      addingNewRow: true
+    });
+  }
 
+  saveNewRow(newRow) {
+    this.addNewRowOnServer(newRow).done(() => {
+      this.hideNewRowForm();
+    });
+  }
+
+  hideNewRowForm() {
+    this.setState({
+      addingNewRow: false
+    });
+  }
+
+  addNewRowOnServer(row) {
+    return this.doAjax(this.props.dataSource, {
+      method: 'POST',
+      data: JSON.stringify(row),
+      processData: false,
+      contentType: 'application/json'
+    })
+        .done((newRow) => {
+          this.addNewRowIntoDataSet(newRow);
+          this.refreshCurrentPage();
+          Toast.showNewSuccessToast('Successfully added row!',
+              `Added new row with id: ${newRow.id}`);
+        });
+  }
+
+  addNewRowIntoDataSet(newRow) {
+    // Table is currently filtered.
+    if (this.currentFilterQuery.length) {
+      // And it matches the current filter.
+      if (this.rowMatchesQuery(newRow, this.currentFilterQuery)) {
+        // Put it in fullData, so it's visible in current visible data.
+        this.fullData.push(newRow);
+      }
+      // Always add to preFilteredData, so it is in table when filter is
+      // cleared and fullData is reinstated as preFilteredData.
+      this.preFilteredData.push(newRow);
+    } else {
+      this.fullData.push(newRow);
+    }
+    // Always re-sort everything so row is in current place.
+    this.reSortAllData();
+  }
+
+  reSortAllData() {
+    // Sort new row back into data.
+    if (this.state.sortCol.colName.length) {
+      this.sortDataOnColumn(this.fullData, this.state.sortCol.colName,
+          this.state.sortCol.sort);
+      this.sortDataOnColumn(this.preFilteredData, this.state.sortCol.colName,
+          this.state.sortCol.sort);
+    }
   }
 
   updateColumnValue(row, key, val) {
@@ -51,50 +122,64 @@ export class DataTable extends React.Component {
       return;
     }
 
-    const colType = getType(row[key]);
-    let convertedVal = val;
+    const colType = this.state.columnTypeInfo[key];
+    let convertedVal = tryToConvertStringToType(val, colType);
 
-    if (colType === 'number') {
-      convertedVal = Number(val);
-      if (Number.isNaN(convertedVal)) {
-        Toast.showNewErrorToast('Failed to update Cell!',
-            `Attempting to convert "${val}" to number failed. `
-            + 'Is it a valid number?', {autohide: false});
-        return;
-      }
-    } else if (colType === 'array' || colType === 'plainObject') {
-      try {
-        convertedVal = JSON.parse(val);
-      } catch (e) {
-        Toast.showNewErrorToast('Failed to update cell!',
-            `Attempting to convert "${val}" failed. `
-            + 'It is likely not valid JSON.', {autohide: false});
-        return;
-      }
+    if (convertedVal === null) {
+      Toast.showNewErrorToast('Failed to Update Cell!',
+          `Attempting to convert "${val}" to ${colType} failed. `
+          + `Is it a valid ${colType}?`, {delay: 7000});
+      return;
     }
 
     const originalValue = row[key];
     row[key] = convertedVal;
 
-    // TODO: Handle cases of editing non-editable cells (e.g., id). They
-    //       should either not be able to edit them in the UI or the update
-    //       attempt should fail w/ an error message.
+    this.updateRowOnServer(row)
+        .fail(() => {
+          // Reset value back to original on failure.
+          row[key] = originalValue;
+        });
+  }
 
-    this.doAjax(`${this.props.dataSource}/${row.id}`, {
+  updateRowOnServer(row) {
+    return this.doAjax(`${this.props.dataSource}/${row.id}`, {
       method: 'PUT',
       data: JSON.stringify(row),
       processData: false,
       contentType: 'application/json'
     })
-        .fail(() => {
-          // Reset value back to original on failure.
-          row[key] = originalValue;
-        })
         .done(() => {
           this.refreshCurrentPage();
           Toast.showNewSuccessToast('Success updating cell!',
               `Updating row with id ${row.id} was successful!`);
         });
+  }
+
+  rowMatchesQuery(row, query) {
+    for (const value of Object.values(row)) {
+      if (getType(value) === 'string') {
+        if (value.includes(query)) {
+          return true;
+        }
+      } else if (getType(value) === 'number') {
+        if (String(value).includes(query)) {
+          return true;
+        }
+      } else if (getType(value) === 'array') {
+        if (arrayContainsSubstring(value, query)) {
+          return true;
+        }
+      } else if (getType(value) === 'plainObject') {
+        if (arrayContainsSubstring(Object.values(value), query)) {
+          return true;
+        }
+        if (arrayContainsSubstring(Object.keys(value), query)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   searchTable(query) {
@@ -104,6 +189,8 @@ export class DataTable extends React.Component {
     }
 
     query = query.trim();
+    this.currentFilterQuery = query;
+
     if (query === '') {
       // The only way to get in here is if the user had something in the search
       // bar and deleted it, hence resetting the filter.
@@ -121,29 +208,7 @@ export class DataTable extends React.Component {
 
       // Always do filter on the full dataset.
       this.fullData = this.preFilteredData.filter((row) => {
-        for (const value of Object.values(row)) {
-          if (getType(value) === 'string') {
-            if (value.includes(query)) {
-              return true;
-            }
-          } else if (getType(value) === 'number') {
-            if (String(value).includes(query)) {
-              return true;
-            }
-          } else if (getType(value) === 'array') {
-            if (arrayContainsSubstring(value, query)) {
-              return true;
-            }
-          } else if (getType(value) === 'plainObject') {
-            if (arrayContainsSubstring(Object.values(value), query)) {
-              return true;
-            }
-            if (arrayContainsSubstring(Object.keys(value), query)) {
-              return true;
-            }
-          }
-        }
-        return false;
+        return this.rowMatchesQuery(row, query);
       });
     }
 
@@ -156,25 +221,26 @@ export class DataTable extends React.Component {
    * (key) name.
    */
   sortDataOnColumn(data, colName, sortOrder) {
+    const type = this.state.columnTypeInfo[colName];
     data.sort((a, b) => {
       let aVal = a[colName];
       let bVal = b[colName];
 
-      if (getType(aVal) === 'array') {
+      if (type === 'array') {
         // If it's an array, sort by first element. Note, this might fail
         // if the first item is the same in both arrays. E.g., you could get
         // [0, 100, 5] before [0, 2, 3]. It might make sense to do deeper
         // comparisons if aVal[0] === bVal[0].
         aVal = aVal[0];
         bVal = bVal[0];
-      } else if (getType(aVal) === 'plainObject') {
+      } else if (type === 'plainObject') {
         // If object, stringify and then sort. It's a bit wonky, but sorting
         // objects is inherently wonky.
         aVal = JSON.stringify(aVal);
         bVal = JSON.stringify(bVal);
       }
 
-      if (getType(aVal) === 'number') {
+      if (type === 'number') {
         // Numeric sorting.
         return sortOrder === SORT_TYPES.ascending ? aVal - bVal : bVal - aVal;
       }
@@ -287,9 +353,25 @@ export class DataTable extends React.Component {
     this.fetchInitialData();
   }
 
+  calculateDataTypeInformation() {
+    const typeInfo = {};
+    Object.entries(this.fullData[0]).forEach(([key, value]) => {
+      let type = getType(value);
+      if (type === 'string') {
+        // Check if string is a valid date string, helps do validation later.
+        if (isValidDate(new Date(value))) {
+          type = 'date';
+        }
+      }
+      typeInfo[key] = type;
+    });
+    this.state.columnTypeInfo = typeInfo;
+  }
+
   fetchInitialData() {
     this.doAjax(this.props.dataSource).done((response) => {
       this.fullData = response;
+      this.calculateDataTypeInformation();
       this.navigateToPage(1);
     });
   }
@@ -312,12 +394,22 @@ export class DataTable extends React.Component {
               <SearchBox onSearchChange={this.searchTableDebounced}/>
             </div>
             <div className="col-auto">
-              <AddButton onAddClick={this.addNewRow}/>
+              <AddButton onAddClick={this.showNewRowForm}/>
             </div>
             <div className="col-auto">
               <DeleteButton onDeleteClick={this.deleteSelectedRows}/>
             </div>
           </div>
+          {
+              this.state.addingNewRow &&
+              <div className="row pb-3">
+                <div className="col">
+                  <NewRowForm typeInfo={this.state.columnTypeInfo}
+                              onSaveClick={this.saveNewRow}
+                              onCancelClick={this.hideNewRowForm}/>
+                </div>
+              </div>
+          }
           <div className="row">
             <div className="col">
               <Table ref={this.tableComponentRef}

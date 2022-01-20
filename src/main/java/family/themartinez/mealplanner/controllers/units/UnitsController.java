@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -39,7 +40,7 @@ public class UnitsController {
   }
 
   @PostMapping("/units")
-  public void addUnit(@RequestBody Unit unit) {
-    unitRepository.save(unit);
+  public @ResponseBody Unit addUnit(@RequestBody Unit unit) {
+    return unitRepository.save(unit);
   }
 }

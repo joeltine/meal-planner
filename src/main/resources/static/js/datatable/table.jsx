@@ -103,9 +103,12 @@ export class Table extends React.Component {
         if ($.isArray(val) || $.isPlainObject(val)) {
           colVal = JSON.stringify(colVal);
         }
+        // TODO: Make the "editable" check more generic than just looking for
+        //       a column named "id". E.g., maybe the server can return type
+        //       info and/or whether the column is editable.
         cols.push(<Td key={colIndex} value={colVal} onValueUpdate={(newVal) => {
           this.props.onColumnValueUpdate(row, key, newVal);
-        }}/>);
+        }} editable={key !== 'id'}/>);
       });
       rows.push(<tr onClick={(e) => {
         this.onRowClick(e, row);

@@ -63,21 +63,21 @@ export class Toast {
     const styles = STATE_CLASS_MAP[this.state];
     const mergedOptions = $.extend(defaultOptions, this.toastOptions);
     const toast = $(`
-    <div class="toast ${styles.container.stateClass}" role="alert">
-      <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
-        <svg class="feather mr-2" viewBox="0 0 24 24">
-          <use href="#alert-circle"/>
-        </svg>
-        <strong class="mr-auto toast-header-text">${this.header}</strong>
-        <small class="toast-time ml-2">${this.time}</small>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
-          <span>&times;</span>
-        </button>
-      </div>
-      <div class="toast-body">
-        ${this.body}
-      </div>
-    </div>`);
+      <div class="toast ${styles.container.stateClass}" role="alert">
+        <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
+          <svg class="feather mr-2" viewBox="0 0 24 24">
+            <use href="#alert-circle"/>
+          </svg>
+          <strong class="mr-auto toast-header-text">${this.header}</strong>
+          <small class="toast-time ml-2">${this.time}</small>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="toast-body">
+          ${this.body}
+        </div>
+      </div>`);
     toast.toast(mergedOptions);
     return toast;
   }
