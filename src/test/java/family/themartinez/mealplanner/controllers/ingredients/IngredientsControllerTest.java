@@ -115,7 +115,7 @@ public class IngredientsControllerTest {
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(ImmutableList.of(first))))
         .andExpect(status().isOk());
-    assertEquals(ingredientRepository.count(), totalRows - 1);
+    assertEquals(totalRows - 1, ingredientRepository.count());
     assertFalse(ingredientRepository.findById(first.getId()).isPresent());
   }
 
@@ -133,7 +133,7 @@ public class IngredientsControllerTest {
                 .with(csrf())
                 .content(objectMapper.writeValueAsString(ImmutableList.of(first, second))))
         .andExpect(status().isOk());
-    assertEquals(ingredientRepository.count(), totalRows - 2);
+    assertEquals(totalRows - 2, ingredientRepository.count());
     assertFalse(ingredientRepository.findById(first.getId()).isPresent());
     assertFalse(ingredientRepository.findById(second.getId()).isPresent());
   }
