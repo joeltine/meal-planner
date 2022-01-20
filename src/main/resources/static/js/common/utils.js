@@ -56,6 +56,9 @@ export function getType(value) {
  * just doesn't support the expectedType, it will return the original string.
  */
 export function tryToConvertStringToType(val, expectedType) {
+  if (val == null) {
+    return val;
+  }
   let convertedVal = val;
   if (expectedType === 'number') {
     convertedVal = Number(val);

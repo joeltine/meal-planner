@@ -76,7 +76,7 @@ export class DataTable extends React.Component {
   }
 
   addNewRowOnServer(row) {
-    return this.doAjax(this.props.dataSource, {
+    return sendAjax(this.props.dataSource, {
       method: 'POST',
       data: JSON.stringify(row),
       processData: false,
@@ -148,7 +148,7 @@ export class DataTable extends React.Component {
   }
 
   updateRowOnServer(row) {
-    return this.doAjax(`${this.props.dataSource}/${row.id}`, {
+    return sendAjax(`${this.props.dataSource}/${row.id}`, {
       method: 'PUT',
       data: JSON.stringify(row),
       processData: false,
@@ -315,7 +315,7 @@ export class DataTable extends React.Component {
   deleteSelectedRows() {
     const rowsToDelete = this.tableComponentRef.current.getSelectedRows();
     if (rowsToDelete.length) {
-      this.doAjax(this.props.dataSource, {
+      sendAjax(this.props.dataSource, {
         method: 'DELETE',
         data: JSON.stringify(rowsToDelete),
         contentType: 'application/json',
@@ -362,6 +362,10 @@ export class DataTable extends React.Component {
   }
 
   calculateDataTypeInformation() {
+    if (!this.fullData.length) {
+      return;
+    }
+
     const typeInfo = {};
     Object.entries(this.fullData[0]).forEach(([key, value]) => {
       let type = getType(value);
@@ -373,11 +377,13 @@ export class DataTable extends React.Component {
       }
       typeInfo[key] = type;
     });
-    this.state.columnTypeInfo = typeInfo;
+    this.setState({
+      columnTypeInfo: typeInfo
+    });
   }
 
   fetchInitialData() {
-    this.doAjax(this.props.dataSource).done((response) => {
+    sendAjax(this.props.dataSource).done((response) => {
       this.fullData = response;
       this.calculateDataTypeInformation();
       this.navigateToPage(1);
@@ -391,7 +397,7 @@ export class DataTable extends React.Component {
   }
 
   maybeRenderNewRowForm() {
-    if (!this.state.addingNewRow) {
+    if (!this.state.addingNewRow || !this.fullData.length) {
       return;
     }
     return (
@@ -403,10 +409,6 @@ export class DataTable extends React.Component {
           </div>
         </div>
     );
-  }
-
-  doAjax(endpoint, extraOptions) {
-    return sendAjax(endpoint, extraOptions);
   }
 
   render() {
