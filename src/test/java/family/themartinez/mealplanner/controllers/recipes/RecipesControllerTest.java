@@ -1,5 +1,6 @@
 package family.themartinez.mealplanner.controllers.recipes;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -103,8 +104,26 @@ class RecipesControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(3)))
         .andExpect(jsonPath("$[0].name", equalTo("Chicken Chili")))
+        .andExpect(jsonPath("$[0].instructions", equalTo("Do lots of stuff")))
+        .andExpect(jsonPath("$[0].description", equalTo("Some delicious chili")))
+        .andExpect(jsonPath("$[0].externalLink", equalTo("https://recipes.com/chili")))
+        .andExpect(jsonPath("$[0].prepTimeMin", equalTo(30)))
+        .andExpect(jsonPath("$[0].cookTimeMin", equalTo(20)))
+        .andExpect(jsonPath("$[0].categories", contains("Soups", "Chili", "Spicy")))
         .andExpect(jsonPath("$[1].name", equalTo("Beef Tacos")))
-        .andExpect(jsonPath("$[2].name", equalTo("Omelettes")));
+        .andExpect(jsonPath("$[1].instructions", equalTo("Taco the stuff\nThen eat them.")))
+        .andExpect(jsonPath("$[1].description", equalTo("")))
+        .andExpect(jsonPath("$[1].externalLink", equalTo("https://recipes.com/tacos")))
+        .andExpect(jsonPath("$[1].prepTimeMin", equalTo(123)))
+        .andExpect(jsonPath("$[1].cookTimeMin", equalTo(67)))
+        .andExpect(jsonPath("$[1].categories", contains("Mexican", "Spicy")))
+        .andExpect(jsonPath("$[2].name", equalTo("Omelettes")))
+        .andExpect(jsonPath("$[2].instructions", equalTo("Break eggs\nThen scramble.")))
+        .andExpect(jsonPath("$[2].description", equalTo("A breakfast to remember")))
+        .andExpect(jsonPath("$[2].externalLink", equalTo("https://google.com/eggsnstuff")))
+        .andExpect(jsonPath("$[2].prepTimeMin", equalTo(99)))
+        .andExpect(jsonPath("$[2].cookTimeMin", equalTo(32)))
+        .andExpect(jsonPath("$[2].categories").isEmpty());
   }
 
   @Test
