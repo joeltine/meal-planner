@@ -123,7 +123,7 @@ export class Pagination extends React.Component {
             </div>
             <div className="col pr-0">
               <nav className="float-right">
-                <ul className="pagination">
+                <ul className="pagination" aria-label="pagination">
                   <li aria-label="prev-button"
                       className={`page-item ${prevActiveState}`}
                       onClick={this.handlePrevClick}>
