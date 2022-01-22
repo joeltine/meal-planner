@@ -227,6 +227,50 @@ describe('NewRowForm test suite', function () {
     }
   });
 
+  it('should invalidate bad date input', async function () {
+    const saveSpy = jasmine.createSpy();
+    const {getByPlaceholderText, getByRole} = render(
+        <NewRowForm
+            typeInfo={{
+              'id': Types.NUMBER,
+              'bar': Types.NUMBER,
+              'foo': Types.STRING,
+              'baz': Types.PLAIN_OBJECT,
+              'bat': Types.ARRAY,
+              'dat': Types.DATE
+            }} onSaveClick={saveSpy}/>)
+    const saveButton = getByRole('button', {name: 'Save'});
+    expect(saveButton).toBeVisible();
+    fireEvent.click(saveButton);
+    const dateInput = getByPlaceholderText('dat');
+    expect(dateInput).toBeInvalid();
+    expect(saveSpy).toHaveBeenCalledTimes(0);
+
+    const validInputs = ['1975-01-02T00:00:12Z', 'December 17, 1995 03:24:00',
+      '1970-01-01', '2011-10-10T14:48:00', '2011-10-10T14:48:00.000+09:00',
+      '01 Jun 2016 14:31:46 -0700', '1-1-2021',
+      'Sat, 22 Jan 2022 23:30:32 GMT',
+      'Sat Jan 22 2022 16:30:32 GMT-0700 (Mountain Standard Time)',
+      '2/22/1975', '1/22/2022, 4:30:32 PM'];
+    const invalidInputs = ['test', '1642894122977', '20220102'];
+
+    for (let invalid of invalidInputs) {
+      await userEvent.clear(dateInput);
+      await userEvent.type(dateInput, invalid);
+      fireEvent.click(saveButton);
+      expect(dateInput).withContext(
+          `input="${dateInput.value}"`).toBeInvalid();
+    }
+
+    for (let valid of validInputs) {
+      await userEvent.clear(dateInput);
+      await userEvent.type(dateInput, valid);
+      fireEvent.click(saveButton);
+      expect(dateInput).withContext(
+          `input="${dateInput.value}"`).toBeValid();
+    }
+  });
+
   it('should call onSaveClick when form is valid', async function () {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
