@@ -11,10 +11,12 @@ import {
   debounce,
   getType,
   isValidDate,
-  tryToConvertStringToType
+  tryToConvertStringToType,
+  Types
 } from "../common/utils";
 import {sendAjax} from "../common/ajax";
 import {NewRowForm} from "./newrowform";
+import PropTypes from "prop-types";
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -163,19 +165,19 @@ export class DataTable extends React.Component {
 
   rowMatchesQuery(row, query) {
     for (const value of Object.values(row)) {
-      if (getType(value) === 'string') {
+      if (getType(value) === Types.STRING) {
         if (value.includes(query)) {
           return true;
         }
-      } else if (getType(value) === 'number') {
+      } else if (getType(value) === Types.NUMBER) {
         if (String(value).includes(query)) {
           return true;
         }
-      } else if (getType(value) === 'array') {
+      } else if (getType(value) === Types.ARRAY) {
         if (arrayContainsSubstring(value, query)) {
           return true;
         }
-      } else if (getType(value) === 'plainObject') {
+      } else if (getType(value) === Types.PLAIN_OBJECT) {
         if (arrayContainsSubstring(Object.values(value), query)) {
           return true;
         }
@@ -231,21 +233,21 @@ export class DataTable extends React.Component {
       let aVal = a[colName];
       let bVal = b[colName];
 
-      if (type === 'array') {
+      if (type === Types.ARRAY) {
         // If it's an array, sort by first element. Note, this might fail
         // if the first item is the same in both arrays. E.g., you could get
         // [0, 100, 5] before [0, 2, 3]. It might make sense to do deeper
         // comparisons if aVal[0] === bVal[0].
         aVal = aVal[0];
         bVal = bVal[0];
-      } else if (type === 'plainObject') {
+      } else if (type === Types.PLAIN_OBJECT) {
         // If object, stringify and then sort. It's a bit wonky, but sorting
         // objects is inherently wonky.
         aVal = JSON.stringify(aVal);
         bVal = JSON.stringify(bVal);
       }
 
-      if (type === 'number') {
+      if (type === Types.NUMBER) {
         // Numeric sorting.
         return sortOrder === SORT_TYPES.ascending ? aVal - bVal : bVal - aVal;
       }
@@ -369,10 +371,10 @@ export class DataTable extends React.Component {
     const typeInfo = {};
     Object.entries(this.fullData[0]).forEach(([key, value]) => {
       let type = getType(value);
-      if (type === 'string') {
+      if (type === Types.STRING) {
         // Check if string is a valid date string, helps do validation later.
         if (isValidDate(new Date(value))) {
-          type = 'date';
+          type = Types.DATE;
         }
       }
       typeInfo[key] = type;
@@ -449,3 +451,7 @@ export class DataTable extends React.Component {
     );
   }
 }
+
+DataTable.propTypes = {
+  dataSource: PropTypes.string.isRequired
+};

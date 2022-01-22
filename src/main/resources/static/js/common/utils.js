@@ -30,6 +30,14 @@ export function isValidDate(d) {
   }
 }
 
+export const Types = {
+  STRING: 'string',
+  NUMBER: 'number',
+  ARRAY: 'array',
+  PLAIN_OBJECT: 'plainObject',
+  DATE: 'date'
+};
+
 /**
  * Tries to determine type of passed value. Returns simple string indicator of
  * detected type.
@@ -37,15 +45,15 @@ export function isValidDate(d) {
  */
 export function getType(value) {
   if (Object.prototype.toString.call(value) === '[object String]') {
-    return 'string';
+    return Types.STRING;
   } else if (Object.prototype.toString.call(value) === '[object Number]') {
-    return 'number';
+    return Types.NUMBER;
   } else if ($.isArray(value)) {
-    return 'array';
+    return Types.ARRAY;
   } else if ($.isPlainObject(value)) {
-    return 'plainObject';
+    return Types.PLAIN_OBJECT;
   } else if (Object.prototype.toString.call(value) === "[object Date]") {
-    return 'date';
+    return Types.DATE;
   } else {
     return typeof value;
   }
@@ -60,18 +68,30 @@ export function tryToConvertStringToType(val, expectedType) {
     return val;
   }
   let convertedVal = val;
-  if (expectedType === 'number') {
+  if (expectedType === Types.NUMBER) {
     convertedVal = Number(val);
     if (Number.isNaN(convertedVal)) {
       return null;
     }
-  } else if (expectedType === 'array' || expectedType === 'plainObject') {
+  } else if (expectedType === Types.ARRAY) {
     try {
       convertedVal = JSON.parse(val);
+      if (!$.isArray(convertedVal)) {
+        return null;
+      }
     } catch (e) {
       return null;
     }
-  } else if (expectedType === 'date') {
+  } else if (expectedType === Types.PLAIN_OBJECT) {
+    try {
+      convertedVal = JSON.parse(val);
+      if (!$.isPlainObject(convertedVal)) {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  } else if (expectedType === Types.DATE) {
     if (!isValidDate(new Date(val))) {
       return null;
     }

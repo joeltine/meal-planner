@@ -45,8 +45,8 @@ class AddRecipesControllerTest {
 
   @BeforeEach
   void setUp() {
-    this.populateUnitRepository();
-    this.populateIngredientRepository();
+    populateUnitRepository();
+    populateIngredientRepository();
   }
 
   @AfterEach

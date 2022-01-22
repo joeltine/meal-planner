@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 export class DeleteButton extends React.Component {
   render() {
@@ -13,3 +14,7 @@ export class DeleteButton extends React.Component {
     );
   }
 }
+
+DeleteButton.propTypes = {
+  onDeleteClick: PropTypes.func
+};

@@ -1,6 +1,7 @@
 import React from 'react';
 import {SORT_TYPES} from "./sorttypes";
 import {Td} from "./td";
+import PropTypes from "prop-types";
 
 export class Table extends React.Component {
   constructor(props) {
@@ -25,7 +26,7 @@ export class Table extends React.Component {
   getColumnHeaders(data) {
     const columnHeaders = [];
     const columnIndicator = this.getColumnHeaderIndicator(data);
-    const sortCol = this.props.sortCol;
+    const sortCol = this.props.sortCol || {};
 
     Object.keys(columnIndicator).forEach((colName, index) => {
       let sortSvg = 'icon-chevron-up-down';
@@ -127,13 +128,13 @@ export class Table extends React.Component {
     return (
         <table className="table table-bordered table-hover datatable"
                ref={this.tableRef}>
-          <thead className="thead-dark">
+          <thead className="thead-dark" aria-label="table-header">
           <tr>{columnHeaders}</tr>
           </thead>
-          <tbody>
+          <tbody aria-label="table-body">
           {rows}
           </tbody>
-          <tfoot className="thead-dark">
+          <tfoot className="thead-dark" aria-label="table-footer">
           <tr>{columnFooters}</tr>
           </tfoot>
         </table>
@@ -141,3 +142,9 @@ export class Table extends React.Component {
   }
 }
 
+Table.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sortCol: PropTypes.objectOf(PropTypes.string),
+  onColumnHeaderClick: PropTypes.func,
+  onColumnValueUpdate: PropTypes.func
+};

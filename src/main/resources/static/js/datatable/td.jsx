@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class Td extends React.Component {
   constructor(props) {
@@ -49,3 +50,9 @@ export class Td extends React.Component {
     }
   }
 }
+
+Td.propTypes = {
+  value: PropTypes.any.isRequired,
+  onValueUpdate: PropTypes.func,
+  editable: PropTypes.bool
+};

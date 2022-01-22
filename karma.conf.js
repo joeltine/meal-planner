@@ -14,6 +14,7 @@ module.exports = function (config) {
     files: [
       'third-party/third-party.js',
       '**/*test.js',
+      '**/*test.jsx',
       '**/*test.html',
       {
         pattern: '**/*.map',
@@ -32,11 +33,34 @@ module.exports = function (config) {
     preprocessors: {
       'third-party/third-party.js': ['webpack'],
       '**/*test.js': ['webpack'],
+      '**/*test.jsx': ['webpack'],
       '**/*test.html': ['html2js']
     },
 
     webpack: {
       "mode": "development",
+
+      resolve: {
+        // Which extensions Webpack will resolve. "..." means to include the
+        // defaults (e.g., "js", etc.) in addition to the extra entries.
+        extensions: ['.jsx', '...'],
+      },
+
+      module: {
+        rules: [
+          {
+            test: /\.?jsx$/,
+            exclude: /node_modules/,
+            use: {
+              loader: "babel-loader",
+              options: {
+                presets: ['@babel/preset-react'],
+                cacheDirectory: true
+              }
+            }
+          },
+        ]
+      },
     },
 
     // test results reporter to use

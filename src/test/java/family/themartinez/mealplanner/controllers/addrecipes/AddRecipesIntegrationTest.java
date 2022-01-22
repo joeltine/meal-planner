@@ -57,6 +57,9 @@ public class AddRecipesIntegrationTest {
     recipeRepository.deleteAll(recipes);
   }
 
+  // TODO: This test is fragile as it relies on the contents of the meal_planner_dev DB. E.g.,
+  //       if "grams" unit gets deleted, this fails. Either populate the DB here or use a new
+  //       mock DB.
   @Test
   void canSubmitFilledOutForm() {
     driver = chrome.getWebDriver();

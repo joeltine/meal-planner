@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from "prop-types";
 
 // Max number of boxes shown in pagination widget. This number includes "..."
 // separators as well.
@@ -7,7 +8,6 @@ const MAX_PAGES = 9;
 export class Pagination extends React.Component {
   constructor(props) {
     super(props);
-
     this.handlePrevClick = this.handlePrevClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
     this.handlePageNavigationClick = this.handlePageNavigationClick.bind(this);
@@ -118,18 +118,20 @@ export class Pagination extends React.Component {
     return (
         <div className="container-fluid">
           <div className="row">
-            <div className="col pl-0">
+            <div className="col pl-0 page-summary">
               Showing {showingStartRange} to {showingEndRange} of {this.props.totalItems} entries
             </div>
             <div className="col pr-0">
               <nav className="float-right">
                 <ul className="pagination">
-                  <li className={`page-item ${prevActiveState}`}
+                  <li aria-label="prev-button"
+                      className={`page-item ${prevActiveState}`}
                       onClick={this.handlePrevClick}>
                     <a className="page-link">Previous</a>
                   </li>
                   {pages}
-                  <li className={`page-item ${nextActiveState}`}
+                  <li aria-label="next-button"
+                      className={`page-item ${nextActiveState}`}
                       onClick={this.handleNextClick}>
                     <a className="page-link">Next</a>
                   </li>
@@ -141,3 +143,12 @@ export class Pagination extends React.Component {
     );
   }
 }
+
+Pagination.propTypes = {
+  totalItems: PropTypes.number.isRequired,
+  itemsPerPage: PropTypes.number.isRequired,
+  activePage: PropTypes.number.isRequired,
+  onPreviousClick: PropTypes.func,
+  onNextClick: PropTypes.func,
+  onPageNavigate: PropTypes.func
+};

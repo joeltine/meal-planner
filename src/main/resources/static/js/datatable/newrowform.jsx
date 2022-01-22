@@ -1,5 +1,6 @@
 import React from 'react';
 import {tryToConvertStringToType} from "../common/utils";
+import PropTypes from "prop-types";
 
 export class NewRowForm extends React.Component {
   constructor(props) {
@@ -15,13 +16,17 @@ export class NewRowForm extends React.Component {
     const convertedValues = {};
     const validityMessages = {};
     for (let [key, val] of Object.entries(this.values)) {
+      if (val != null) {
+        val = val.trim();
+      }
+
       const expectedType = this.props.typeInfo[key];
       const convertedVal = tryToConvertStringToType(val, expectedType);
-      if (val === null) {
+      if (val === null || !val.length) {
         const msg = `Field cannot be empty`;
         this.inputRefs[key].current.setCustomValidity(msg);
         validityMessages[key] = msg;
-      } else if (convertedVal === null) {
+      } else if (convertedVal === null || convertedVal === Infinity) {
         const msg = `Cannot convert ${val} to ${expectedType}`;
         this.inputRefs[key].current.setCustomValidity(msg);
         validityMessages[key] = msg;
@@ -127,3 +132,9 @@ export class NewRowForm extends React.Component {
     );
   }
 }
+
+NewRowForm.propTypes = {
+  typeInfo: PropTypes.objectOf(PropTypes.string).isRequired,
+  onSaveClick: PropTypes.func,
+  onCancelClick: PropTypes.func
+};
