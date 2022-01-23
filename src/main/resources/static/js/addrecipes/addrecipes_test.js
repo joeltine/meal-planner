@@ -1,5 +1,6 @@
 import 'jasmine-ajax';
 import {AddRecipesController} from './addrecipes';
+import JasmineDOM from "@testing-library/jasmine-dom";
 
 describe('AddRecipesController test suite', function () {
   let controller;
@@ -14,8 +15,10 @@ describe('AddRecipesController test suite', function () {
   let ingredientRow;
   let submitButton;
   let addIngredientButton;
+  let resetFormButton;
 
   beforeAll(function () {
+    jasmine.getEnv().addMatchers(JasmineDOM);
     window.CSRF_HEADER_NAME = 'csrf-header-name';
     window.CSRF_TOKEN = 'csrf-token';
   });
@@ -34,6 +37,7 @@ describe('AddRecipesController test suite', function () {
     inputExternalLink = $('#inputExternalLink');
     submitButton = $('#submit');
     addIngredientButton = $('#addIngredient');
+    resetFormButton = $('#resetForm');
     controller = new AddRecipesController();
     jasmine.Ajax.install();
     jasmine.clock().install();
@@ -369,5 +373,47 @@ describe('AddRecipesController test suite', function () {
     expect($('.ingredientInputRow').length).toBe(1);
     expect($('.toast-error').is(':visible')).toBeTrue();
     expect($('.toast-error').text()).toContain('bad stuff');
+  });
+
+  it('should remove ingredient row clicking close button', function () {
+    addIngredientButton.click();
+    addIngredientButton.click();
+    addIngredientButton.click();
+    addIngredientButton.click();
+    let rows = $('.ingredientInputRow');
+    expect(rows.length).toBe(5);
+    const row1 = rows.eq(1);
+    row1.find('.closeIngredientRow').click();
+    expect(row1[0]).not.toBeInTheDocument();
+    rows = $('.ingredientInputRow');
+    expect(rows.length).toBe(4);
+    rows.eq(0).find('.closeIngredientRow').click();
+    rows.eq(1).find('.closeIngredientRow').click();
+    rows.eq(2).find('.closeIngredientRow').click();
+    rows = $('.ingredientInputRow');
+    expect(rows.length).toBe(1);
+    // Trying to delete last row does nothing
+    rows.eq(0).find('.closeIngredientRow').click();
+    expect(rows.length).toBe(1);
+  });
+
+  it('should reset form on clicking reset form button', function () {
+    addIngredientButton.click();
+    inputRecipeName.val('Some soup');
+    inputDescription.val('It\'s soup');
+    inputInstructions.val('Put it in a pot');
+    inputCookTime.val('99');
+    inputPrepTime.val('3');
+    ingredientRow.find('#inputQuantity').val('1.25');
+    ingredientRow.find('#inputUnit').val('1');
+    ingredientRow.find('#inputIngredient').autoComplete('set',
+        {value: '1', text: 'Milk'});
+    inputCategories.val('italian, breakfast');
+    inputExternalLink.val('http://www.example.com');
+    resetFormButton.click();
+    recipeForm.find(':input').each(function () {
+      expect($(this).val()).toBe('');
+    });
+    expect($('.ingredientInputRow').length).toBe(1);
   });
 });

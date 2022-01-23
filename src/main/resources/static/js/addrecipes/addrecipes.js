@@ -42,7 +42,16 @@ export class AddRecipesController {
 
     this.main.on('click', '#resetForm', this.resetForm.bind(this));
 
+    this.recipeForm.on('click', '.closeIngredientRow',
+        this.closeIngredientRow.bind(this));
+
     this.createAutocomplete(this.recipeForm.find('#inputIngredient'));
+  }
+
+  closeIngredientRow(e) {
+    if ($('.ingredientInputRow').length > 1) {
+      $(e.currentTarget).closest('.ingredientInputRow').remove();
+    }
   }
 
   importRecipe() {

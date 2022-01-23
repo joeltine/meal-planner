@@ -49,7 +49,7 @@
     </div>
 
     <div class="form-row ingredientInputRow" id="ingredientInputRow">
-      <div class="form-group col-md-2">
+      <div class="form-group col-md-1">
         <label for="inputQuantity">Quantity</label>
         <input type="number" class="form-control" id="inputQuantity" step="0.01" required>
       </div>
@@ -60,7 +60,7 @@
           <option th:each="unit : ${units}" th:text="${unit.name}" th:value="${unit.id}"></option>
         </select>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col-md w-100">
         <label for="inputIngredient">Ingredient</label>
         <select class="form-control" id="inputIngredient"
                 placeholder="Type to search ingredients..."
@@ -69,10 +69,14 @@
                 required>
         </select>
       </div>
-      <div class="form-group col-md-4">
+      <div class="form-group col w-100">
         <label for="inputIngredientDisplayName">Display name</label>
         <input class="form-control" id="inputIngredientDisplayName"
                placeholder="optional display name">
+      </div>
+      <div class="form-group flex-shrink-1 m-auto">
+        <button type="button" class="btn btn-link closeIngredientRow" style="margin-top:13px;">X
+        </button>
       </div>
       <div class="row d-none ingredientOriginalTextRow">
         <div class="col-md-12">
