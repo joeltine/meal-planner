@@ -332,6 +332,8 @@ export class DataTable extends React.Component {
               const filteredIndex = this.preFilteredData.indexOf(row);
               if (index > -1 && filteredIndex > -1) {
                 this.fullData.splice(index, 1);
+                // Also do deletion in pre-filtered set so that when filter is
+                // cleared, the row isn't reinstated.
                 this.preFilteredData.splice(filteredIndex, 1);
                 successes.push(row.id);
               } else {
@@ -411,6 +413,10 @@ export class DataTable extends React.Component {
           </div>
         </div>
     );
+  }
+
+  getFullData() {
+    return this.fullData;
   }
 
   render() {
