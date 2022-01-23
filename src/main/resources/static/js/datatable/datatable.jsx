@@ -314,6 +314,24 @@ export class DataTable extends React.Component {
     });
   }
 
+  /**
+   * Removes given row from passed array. Adds ids of rows successful/failed
+   * removal attempts to passed successes/failures Sets. If array is empty,
+   * nothing happens, neither successes/failures will be populated.
+   */
+  removeRowFromArrayIfExists(array, row, successes, failures) {
+    if (array.length) {
+      const index = array.indexOf(row);
+
+      if (index > -1) {
+        array.splice(index, 1);
+        successes.add(row.id);
+      } else {
+        failures.add(row.id);
+      }
+    }
+  }
+
   deleteSelectedRows() {
     const rowsToDelete = this.tableComponentRef.current.getSelectedRows();
     if (rowsToDelete.length) {
@@ -324,34 +342,30 @@ export class DataTable extends React.Component {
         processData: false
       })
           .done(() => {
-            const successes = [];
-            const failures = [];
+            const successes = new Set();
+            const failures = new Set();
 
             rowsToDelete.forEach((row) => {
-              const index = this.fullData.indexOf(row);
-              const filteredIndex = this.preFilteredData.indexOf(row);
-              if (index > -1 && filteredIndex > -1) {
-                this.fullData.splice(index, 1);
-                // Also do deletion in pre-filtered set so that when filter is
-                // cleared, the row isn't reinstated.
-                this.preFilteredData.splice(filteredIndex, 1);
-                successes.push(row.id);
-              } else {
-                failures.push(row.id);
-              }
+              this.removeRowFromArrayIfExists(this.fullData, row, successes,
+                  failures);
+              // Need to make sure row is deleted from pre-filtered data so
+              // when filter is reset the delete is preserved.
+              this.removeRowFromArrayIfExists(this.preFilteredData, row,
+                  successes, failures);
             });
 
-            if (successes.length) {
+            if (successes.size) {
               Toast.showNewSuccessToast('Delete successful!',
-                  `Successfully deleted row${successes.length > 1 ? 's'
-                      : ''} with id${successes.length > 1 ? 's'
-                      : ''}: ${successes.join(', ')}.`);
+                  `Successfully deleted row${successes.size > 1 ? 's'
+                      : ''} with id${successes.size > 1 ? 's'
+                      : ''}: ${Array.from(successes).join(', ')}.`);
             }
 
-            if (failures.length) {
+            if (failures.size) {
               Toast.showNewErrorToast('Delete failed!',
-                  `Attempting to delete row${failures.length > 1 ? 's'
-                      : ''} (${failures.join(', ')}) not found in table `
+                  `Attempting to delete row${failures.size > 1 ? 's'
+                      : ''} (${Array.from(failures).join(
+                      ', ')}) not found in table `
                   + `data. This shouldn\'t happen unless there\'s a race `
                   + `condition.`, {autohide: false});
             }

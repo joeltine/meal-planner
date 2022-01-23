@@ -102,7 +102,8 @@ export class NewRowForm extends React.Component {
     cols.push(this.buildButtons());
 
     return (
-        <form ref={this.formRef} className={this.state.validationState}>
+        <form ref={this.formRef} className={this.state.validationState}
+              aria-label="new-row-form">
           <div className="form-row">
             {cols}
           </div>
