@@ -13,7 +13,7 @@ public interface IngredientRepository extends CrudRepository<Ingredient, Integer
               + "WHERE name LIKE CONCAT('%', ?1, '%') "
               + "ORDER BY "
               + "CASE "
-              + "WHEN name RLIKE CONCAT('$\\\\b', ?1, '\\\\b') THEN 1 "
+              + "WHEN name RLIKE CONCAT('^', ?1, '\\\\b') THEN 1 "
               + "WHEN name LIKE CONCAT(?1, '%') THEN 2 "
               + "WHEN name RLIKE CONCAT('\\\\b', ?1, '\\\\b') THEN 3 "
               + "ELSE 4 "
