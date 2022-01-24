@@ -146,7 +146,7 @@ public class AddRecipesController {
         // Otherwise, attempt a natural language lookup best attempt.
         else {
           // TODO: Add feature where if we have multiple results w/ the same match score, we return
-          // all results and let the client choose one.
+          //       all results and let the client choose one.
           logger.info(
               "Unable to find exact match, attempting natural language lookup for: {}.",
               ingredientLookupName);

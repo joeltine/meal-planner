@@ -84,7 +84,7 @@ class RecipeScraperTest(unittest.TestCase):
     self.assertEqual(35, recipe_json['total_time'])
     self.assertEqual(15, recipe_json['cook_time'])
     self.assertEqual(None, recipe_json['prep_time'])  # impl raises Error
-    self.assertEqual([], recipe_json['ingredients'])
+    self.assertEqual([], recipe_json['ingredients'])  # empty due to 'error'
     self.assertEqual('Do some stuff\nThen do more', recipe_json['instructions'])
     self.assertEqual(ALL_RECIPES_FETA_BURGERS_URL, recipe_json['canonical_url'])
     self.assertEqual('Meat and Poultry,Turkey', recipe_json['category'])
