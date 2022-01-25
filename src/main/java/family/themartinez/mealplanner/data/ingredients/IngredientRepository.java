@@ -25,6 +25,11 @@ public interface IngredientRepository extends CrudRepository<Ingredient, Integer
   List<Ingredient> findByName(String name);
 
   @Query(
+      value = "SELECT * FROM ingredients WHERE name RLIKE CONCAT('^', ?1, 's?$')",
+      nativeQuery = true)
+  List<Ingredient> findByNameIncludingPlural(String name);
+
+  @Query(
       value =
           "SELECT * FROM ingredients "
               + "WHERE MATCH (name) AGAINST (?1 IN NATURAL LANGUAGE MODE) LIMIT 5",

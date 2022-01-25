@@ -93,15 +93,17 @@ public class AddRecipesController {
     List<Unit> units;
     Unit foundUnit = null;
     if (ingredientParsed.getUnit() != null) {
-      logger.info("Mapping parsed unit {} to database equivalent.", ingredientParsed.getUnit());
+      logger.info("Mapping parsed unit \"{}\" to database equivalent.", ingredientParsed.getUnit());
       units = unitRepository.findByNameStartingWith(ingredientParsed.getUnit());
     } else {
-      logger.info("No unit parsed from ingredient line, assuming whole.");
+      logger.info("No unit parsed from ingredient line, assuming \"whole\".");
       units = unitRepository.findByNameStartingWith("whole");
     }
     if (units != null && units.size() > 0) {
       foundUnit = units.get(0);
-      logger.info("Unit mapped to {}.", foundUnit.getName());
+      logger.info("Unit mapped to \"{}\".", foundUnit.getName());
+    } else {
+      logger.info("Wasn't able to match unit to anything in the DB.");
     }
     return foundUnit;
   }
@@ -109,29 +111,30 @@ public class AddRecipesController {
   private Ingredient maybeFindIngredient(ScrapedIngredient ingredient) {
     IngredientParsed ingredientParsed = ingredient.getIngredientParsed();
     String ingredientLookupName =
-        ingredientParsed.getProduct() != null
+        ingredientParsed.getProduct() == null || ingredientParsed.getProduct().isEmpty()
             ? ingredient.getIngredientRaw()
             : ingredientParsed.getProduct();
     Ingredient foundIngredient = null;
-    logger.info("Trying to find exact db match for ingredient {}.", ingredientLookupName);
-    // First attempt to find an exact ingredient match by name.
-    List<Ingredient> exactMatch = ingredientRepository.findByName(ingredientLookupName);
+    logger.info("Trying to find exact db match for ingredient \"{}\".", ingredientLookupName);
+    // First attempt to find an exact ingredient match by name (including plural).
+    List<Ingredient> exactMatch =
+        ingredientRepository.findByNameIncludingPlural(ingredientLookupName);
     if (exactMatch.size() > 0) {
       foundIngredient = exactMatch.get(0);
-      logger.info("Found exact match: {}!", foundIngredient.getName());
+      logger.info("Found exact match: \"{}\"!", foundIngredient.getName());
     } else {
       // Otherwise, attempt a natural language lookup best attempt.
       // TODO: Add feature where if we have multiple results w/ the same match score, we return
       //       all results and let the client choose one.
       logger.info(
-          "Unable to find exact match, attempting natural language lookup for: {}.",
+          "Unable to find exact match, attempting natural language lookup for: \"{}\".",
           ingredientLookupName);
       List<Ingredient> naturalLanguageMatches =
           ingredientRepository.findTop5ByNameUsingNaturalLanguage(ingredientLookupName);
       if (naturalLanguageMatches.size() > 0) {
         foundIngredient = naturalLanguageMatches.get(0);
         logger.info(
-            "Returning top natural language ingredient result: {}.", foundIngredient.getName());
+            "Returning top natural language ingredient result: \"{}\".", foundIngredient.getName());
       } else {
         logger.info("Natural language lookup produced no results.");
       }
@@ -148,8 +151,7 @@ public class AddRecipesController {
 
     List<ScrapedIngredient> ingredients = scrapedRecipe.getIngredients();
     for (ScrapedIngredient ingredient : ingredients) {
-      logger.info(
-          "Attempting processing on raw ingredient line: {}.", ingredient.getIngredientRaw());
+      logger.info("Processing raw ingredient line: \"{}\".", ingredient.getIngredientRaw());
 
       IngredientParsed ingredientParsed = ingredient.getIngredientParsed();
 
@@ -157,6 +159,7 @@ public class AddRecipesController {
       Unit foundUnit = maybeFindUnit(ingredientParsed);
       if (foundUnit != null) {
         ingredientParsed.setUnitId(foundUnit.getId());
+        ingredientParsed.setUnit(foundUnit.getName());
       }
 
       // Attempt ingredient lookup from DB.
