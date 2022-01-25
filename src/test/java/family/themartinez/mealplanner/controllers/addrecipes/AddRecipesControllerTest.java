@@ -2,6 +2,9 @@ package family.themartinez.mealplanner.controllers.addrecipes;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -17,24 +20,36 @@ import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
+import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
+import family.themartinez.mealplanner.scraper.ScrapedRecipe;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class AddRecipesControllerTest {
 
   @Autowired private UnitRepository unitRepository;
@@ -42,6 +57,28 @@ class AddRecipesControllerTest {
   @Autowired private RecipeRepository recipeRepository;
   @Autowired private IngredientListRepository ingredientListRepository;
   @Autowired private MockMvc mockMvc;
+
+  @MockBean ExternalRecipeScraper scraperMock;
+
+  private static String fetaBurgersJson;
+  private static String beefWellingtonJson;
+
+  private ObjectMapper mapper = new ObjectMapper();
+
+  @BeforeAll
+  static void beforeAll() throws IOException {
+    fetaBurgersJson =
+        Files.readString(
+            Path.of(
+                System.getProperty("user.dir"),
+                "src/test/java/family/themartinez/mealplanner/controllers/addrecipes/feta_burgers_recipe_test.json"));
+
+    beefWellingtonJson =
+        Files.readString(
+            Path.of(
+                System.getProperty("user.dir"),
+                "src/test/java/family/themartinez/mealplanner/controllers/addrecipes/beef_wellington_recipe_test.json"));
+  }
 
   @BeforeEach
   void setUp() {
@@ -64,21 +101,31 @@ class AddRecipesControllerTest {
     chicken.setName("Chicken breast, raw");
     Ingredient water = new Ingredient();
     water.setName("Water");
+    // TODO: Populate ingredientRepository with a lot more ingredients.
     ingredientRepository.saveAll(List.of(milk, chicken, water));
   }
 
   private void populateUnitRepository() {
     Unit grams = new Unit();
     grams.setName("grams");
+    Unit ounces = new Unit();
+    ounces.setName("ounces");
     Unit pounds = new Unit();
     pounds.setName("pounds");
+    Unit sprigs = new Unit();
+    sprigs.setName("sprigs");
+    Unit pints = new Unit();
+    pints.setName("pints");
     Unit teaspoons = new Unit();
     teaspoons.setName("teaspoons");
     Unit tablespoons = new Unit();
     tablespoons.setName("tablespoons");
     Unit liters = new Unit();
     liters.setName("liters");
-    unitRepository.saveAll(List.of(grams, pounds, teaspoons, tablespoons, liters));
+    Unit slices = new Unit();
+    slices.setName("slices");
+    unitRepository.saveAll(
+        List.of(grams, pounds, teaspoons, tablespoons, liters, slices, pints, sprigs, ounces));
   }
 
   @Test
@@ -235,8 +282,30 @@ class AddRecipesControllerTest {
     Elements options = doc.getElementById("inputUnit").children();
     assertEquals("grams", options.get(1).text());
     assertEquals("liters", options.get(2).text());
-    assertEquals("pounds", options.get(3).text());
-    assertEquals("tablespoons", options.get(4).text());
-    assertEquals("teaspoons", options.get(5).text());
+    assertEquals("ounces", options.get(3).text());
+    assertEquals("pints", options.get(4).text());
+    assertEquals("pounds", options.get(5).text());
+    assertEquals("slices", options.get(6).text());
+    assertEquals("sprigs", options.get(7).text());
+    assertEquals("tablespoons", options.get(8).text());
+    assertEquals("teaspoons", options.get(9).text());
   }
+
+  @Test
+  public void scrapeRecipeShouldReturnResults() throws Exception {
+    ScrapedRecipe scrapedRecipe = mapper.readValue(fetaBurgersJson, ScrapedRecipe.class);
+    when(scraperMock.scrapeRecipe(any())).thenReturn(scrapedRecipe);
+    MvcResult result =
+        this.mockMvc
+            .perform(get("/scrapeRecipe").param("url", "https://www.recipes.com/cheeseburgers"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andReturn();
+    MockHttpServletResponse response = result.getResponse();
+    verify(scraperMock).scrapeRecipe("https://www.recipes.com/cheeseburgers");
+    // TODO: Finish writing tests.
+
+  }
+
+  // TODO: Write more unit tests against scrapeRecipe logic.
 }

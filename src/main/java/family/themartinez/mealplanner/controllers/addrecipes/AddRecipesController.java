@@ -1,7 +1,6 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import family.themartinez.mealplanner.data.ingredientlists.IngredientList;
 import family.themartinez.mealplanner.data.ingredientlists.IngredientListRepository;
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
@@ -11,17 +10,15 @@ import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
 import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
-import java.io.IOException;
+import family.themartinez.mealplanner.scraper.IngredientParsed;
+import family.themartinez.mealplanner.scraper.ScrapedIngredient;
+import family.themartinez.mealplanner.scraper.ScrapedRecipe;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -45,8 +42,8 @@ public class AddRecipesController {
   private ImmutableList<Unit> unitsList;
   private final ExternalRecipeScraper scraper;
 
-  AddRecipesController() throws IOException {
-    this.scraper = new ExternalRecipeScraper();
+  AddRecipesController(ExternalRecipeScraper scraper) {
+    this.scraper = scraper;
   }
 
   @GetMapping(PATH)
@@ -92,78 +89,84 @@ public class AddRecipesController {
     return this.unitsList;
   }
 
-  @GetMapping(path = "/scrapeRecipe")
-  public @ResponseBody Map<String, Object> scrapeRecipe(@RequestParam String url) throws Exception {
-    logger.info("Attempting to scrape recipe from {}.", url);
-    Pair<Integer, String> output = this.scraper.scrapeRecipe(url);
-    Integer exitCode = output.getFirst();
-    if (exitCode != 0) {
-      throw new RuntimeException(output.getSecond());
+  private Unit maybeFindUnit(IngredientParsed ingredientParsed) {
+    List<Unit> units;
+    Unit foundUnit = null;
+    if (ingredientParsed.getUnit() != null) {
+      logger.info("Mapping parsed unit {} to database equivalent.", ingredientParsed.getUnit());
+      units = unitRepository.findByNameStartingWith(ingredientParsed.getUnit());
     } else {
-      String scrapedResults = output.getSecond();
-      logger.info("Successfully scraped recipe with output: {}.", scrapedResults);
-      JSONObject results = new JSONObject(scrapedResults);
-      JSONArray ingredients = results.getJSONArray("ingredients");
-      Iterator<Object> iterator = ingredients.iterator();
-      while (iterator.hasNext()) {
-        JSONObject ingredientInfo = (JSONObject) iterator.next();
-        JSONObject ingredientParsed = ingredientInfo.getJSONObject("ingredientParsed");
-        logger.info(
-            "Attempting processing on raw ingredient line: {}.",
-            ingredientInfo.getString("ingredientRaw"));
-        Integer unitId = -1;
-        List<Unit> unit;
-        if (!ingredientParsed.isNull("unit")) {
-          logger.info(
-              "Mapping parsed unit {} to database equivalent.", ingredientParsed.getString("unit"));
-          unit = unitRepository.findByNameStartingWith(ingredientParsed.getString("unit"));
-        } else {
-          logger.info("No unit parsed from ingredient line, assuming whole.");
-          unit = unitRepository.findByNameStartingWith("whole");
-        }
-        if (unit != null && unit.size() > 0) {
-          logger.info("Unit mapped to {}.", unit.get(0).getName());
-          unitId = unit.get(0).getId();
-        }
-        ingredientParsed.put("unitDbLookup", unitId);
-
-        // If "product" is null, just try lookups with the raw input name.
-        String ingredientLookupName =
-            ingredientParsed.isNull("product")
-                ? ingredientInfo.getString("ingredientRaw")
-                : ingredientParsed.getString("product");
-        Integer ingredientId = -1;
-        String ingredientName = "";
-
-        logger.info("Trying to find exact db match for ingredient {}.", ingredientLookupName);
-        List<Ingredient> exactMatch = ingredientRepository.findByName(ingredientLookupName);
-        // First attempt to find an exact ingredient match by name.
-        if (exactMatch.size() > 0) {
-          ingredientId = exactMatch.get(0).getId();
-          ingredientName = exactMatch.get(0).getName();
-          logger.info("Found exact match: {}!", ingredientName);
-        }
-        // Otherwise, attempt a natural language lookup best attempt.
-        else {
-          // TODO: Add feature where if we have multiple results w/ the same match score, we return
-          //       all results and let the client choose one.
-          logger.info(
-              "Unable to find exact match, attempting natural language lookup for: {}.",
-              ingredientLookupName);
-          List<Ingredient> naturalLanguageMatches =
-              ingredientRepository.findTop5ByNameUsingNaturalLanguage(ingredientLookupName);
-          if (naturalLanguageMatches.size() > 0) {
-            ingredientId = naturalLanguageMatches.get(0).getId();
-            ingredientName = naturalLanguageMatches.get(0).getName();
-            logger.info("Returning top natural language ingredient result: {}.", ingredientName);
-          } else {
-            logger.info("Natural language lookup produced no results.");
-          }
-        }
-        ingredientParsed.put(
-            "ingredientDbLookup", ImmutableMap.of("id", ingredientId, "name", ingredientName));
-      }
-      return results.toMap();
+      logger.info("No unit parsed from ingredient line, assuming whole.");
+      units = unitRepository.findByNameStartingWith("whole");
     }
+    if (units != null && units.size() > 0) {
+      foundUnit = units.get(0);
+      logger.info("Unit mapped to {}.", foundUnit.getName());
+    }
+    return foundUnit;
+  }
+
+  private Ingredient maybeFindIngredient(ScrapedIngredient ingredient) {
+    IngredientParsed ingredientParsed = ingredient.getIngredientParsed();
+    String ingredientLookupName =
+        ingredientParsed.getProduct() != null
+            ? ingredient.getIngredientRaw()
+            : ingredientParsed.getProduct();
+    Ingredient foundIngredient = null;
+    logger.info("Trying to find exact db match for ingredient {}.", ingredientLookupName);
+    // First attempt to find an exact ingredient match by name.
+    List<Ingredient> exactMatch = ingredientRepository.findByName(ingredientLookupName);
+    if (exactMatch.size() > 0) {
+      foundIngredient = exactMatch.get(0);
+      logger.info("Found exact match: {}!", foundIngredient.getName());
+    } else {
+      // Otherwise, attempt a natural language lookup best attempt.
+      // TODO: Add feature where if we have multiple results w/ the same match score, we return
+      //       all results and let the client choose one.
+      logger.info(
+          "Unable to find exact match, attempting natural language lookup for: {}.",
+          ingredientLookupName);
+      List<Ingredient> naturalLanguageMatches =
+          ingredientRepository.findTop5ByNameUsingNaturalLanguage(ingredientLookupName);
+      if (naturalLanguageMatches.size() > 0) {
+        foundIngredient = naturalLanguageMatches.get(0);
+        logger.info(
+            "Returning top natural language ingredient result: {}.", foundIngredient.getName());
+      } else {
+        logger.info("Natural language lookup produced no results.");
+      }
+    }
+
+    return foundIngredient;
+  }
+
+  @GetMapping(path = "/scrapeRecipe")
+  public @ResponseBody ScrapedRecipe scrapeRecipe(@RequestParam String url) throws Exception {
+    logger.info("Attempting to scrape recipe from {}.", url);
+    ScrapedRecipe scrapedRecipe = this.scraper.scrapeRecipe(url);
+    logger.info("Successfully scraped recipe with output: {}.", scrapedRecipe.toString());
+
+    List<ScrapedIngredient> ingredients = scrapedRecipe.getIngredients();
+    for (ScrapedIngredient ingredient : ingredients) {
+      logger.info(
+          "Attempting processing on raw ingredient line: {}.", ingredient.getIngredientRaw());
+
+      IngredientParsed ingredientParsed = ingredient.getIngredientParsed();
+
+      // Attempt unit lookup from DB.
+      Unit foundUnit = maybeFindUnit(ingredientParsed);
+      if (foundUnit != null) {
+        ingredientParsed.setUnitId(foundUnit.getId());
+      }
+
+      // Attempt ingredient lookup from DB.
+      Ingredient foundIngredient = maybeFindIngredient(ingredient);
+      if (foundIngredient != null) {
+        ingredientParsed.setIngredientId(foundIngredient.getId());
+        ingredientParsed.setName(foundIngredient.getName());
+      }
+    }
+
+    return scrapedRecipe;
   }
 }

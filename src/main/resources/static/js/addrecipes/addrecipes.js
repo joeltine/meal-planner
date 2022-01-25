@@ -90,23 +90,23 @@ export class AddRecipesController {
                 `(Original: ${rawOriginalText})`);
             row.find('#inputQuantity').val(
                 parsedInfo['quantity']);
-            if (parsedInfo['unitDbLookup']) {
-              row.find('#inputUnit').val(parsedInfo['unitDbLookup']);
+            if (parsedInfo['unitId']) {
+              row.find('#inputUnit').val(parsedInfo['unitId']);
             }
-            if (parsedInfo['ingredientDbLookup']
-                && parsedInfo['ingredientDbLookup']['id'] != -1) {
+            if (parsedInfo['ingredientId']
+                && parsedInfo['ingredientId'] != -1) {
               row.find(
                   'input[id="inputIngredient"]').autoComplete('set',
                   {
-                    value: parsedInfo['ingredientDbLookup']['id'],
-                    text: parsedInfo['ingredientDbLookup']['name']
+                    value: parsedInfo['ingredientId'],
+                    text: parsedInfo['name']
                   });
             }
             let displayProduct = '';
             if (parsedInfo['product']) {
               displayProduct = parsedInfo['product'];
-            } else if (parsedInfo['ingredientDbLookup']) {
-              displayProduct = parsedInfo['ingredientDbLookup']['name'];
+            } else if (parsedInfo['ingredientId']) {
+              displayProduct = parsedInfo['name'];
             }
             row.find('input[id="inputIngredientDisplayName"]').val(
                 displayProduct + (parsedInfo['preparationNotes']

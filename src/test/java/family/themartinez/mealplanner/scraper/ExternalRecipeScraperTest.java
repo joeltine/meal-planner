@@ -4,7 +4,6 @@ import java.io.IOException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.util.Pair;
 
 class ExternalRecipeScraperTest {
   ExternalRecipeScraper scraper;
@@ -20,10 +19,7 @@ class ExternalRecipeScraperTest {
   }
 
   @Test
-  void scrapeRecipe() throws IOException, InterruptedException {
-    Pair<Integer, String> out =
-        scraper.scrapeRecipe(
-            "https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/");
-    System.out.println(out);
+  void scrapeRecipe() {
+    // TODO: Write me after mocking out execPythonScraper.
   }
 }

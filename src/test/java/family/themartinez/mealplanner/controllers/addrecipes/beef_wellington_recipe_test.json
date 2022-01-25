@@ -1,0 +1,759 @@
+{
+  "title": "The Ultimate Beef Wellington",
+  "total_time": 420,
+  "cook_time": null,
+  "prep_time": null,
+  "ingredients": [
+    {
+      "confidence": 0.513871,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "white button mushrooms",
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "pint",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "3 pints (1 1/2 pounds) white button mushrooms"
+    },
+    {
+      "confidence": 0.9820936,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "peeled and roughly chopped",
+        "product": "shallots",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Vegetables and Vegetable Products",
+          "description": "Shallots, raw",
+          "fdcId": "170499",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 shallots, peeled and roughly chopped"
+    },
+    {
+      "confidence": 0.961915,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "peeled and roughly chopped",
+        "product": "garlic",
+        "productSizeModifier": null,
+        "quantity": 4.0,
+        "unit": "clove",
+        "usdaInfo": {
+          "category": null,
+          "description": "Garlic, raw",
+          "fdcId": "787793",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "4 cloves garlic, peeled and roughly chopped"
+    },
+    {
+      "confidence": 0.8181916,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "leaves only",
+        "product": "fresh thyme",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "sprig",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Thyme, fresh",
+          "fdcId": "173470",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 sprigs fresh thyme, leaves only"
+    },
+    {
+      "confidence": 0.9951426999999999,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "unsalted butter",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Butter, without salt",
+          "fdcId": "173430",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 tablespoons unsalted butter"
+    },
+    {
+      "confidence": 0.9785884,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "extra-virgin olive oil",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "usdaInfo": {
+          "category": "Fats and Oils",
+          "description": "Oil, olive, salad or cooking",
+          "fdcId": "171413",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 tablespoons extra-virgin olive oil"
+    },
+    {
+      "confidence": 0.558765,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "freshly ground",
+        "product": "Kosher salt and black pepper",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Kosher salt and freshly ground black pepper"
+    },
+    {
+      "confidence": 0.511617,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "center cut beef tenderloin (filet mignon), trimmed",
+        "product": null,
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "pound",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "One 3-pound center cut beef tenderloin (filet mignon), trimmed"
+    },
+    {
+      "confidence": 0.948121,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "Extra-virgin olive oil",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Fats and Oils",
+          "description": "Oil, olive, salad or cooking",
+          "fdcId": "171413",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "Extra-virgin olive oil"
+    },
+    {
+      "confidence": 0.558765,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "freshly ground",
+        "product": "Kosher salt and black pepper",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Kosher salt and freshly ground black pepper"
+    },
+    {
+      "confidence": 0.8853451,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "prosciutto",
+        "productSizeModifier": null,
+        "quantity": 12.0,
+        "unit": "slice",
+        "usdaInfo": {
+          "category": null,
+          "description": "Ham, prosciutto",
+          "fdcId": "781950",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "12 thin slices prosciutto"
+    },
+    {
+      "confidence": 0.8840026,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "leaves only",
+        "product": "fresh thyme",
+        "productSizeModifier": null,
+        "quantity": 6.0,
+        "unit": "sprig",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Thyme, fresh",
+          "fdcId": "173470",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "6 sprigs of fresh thyme, leaves only"
+    },
+    {
+      "confidence": 0.9894027999999999,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "Dijon mustard",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Mustard, prepared, yellow",
+          "fdcId": "172234",
+          "matchMethod": "closestUnbranded"
+        }
+      },
+      "ingredientRaw": "2 tablespoons Dijon mustard"
+    },
+    {
+      "confidence": 0.520138,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "out",
+        "product": "Flour puff pastry",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Flour, for rolling out puff pastry"
+    },
+    {
+      "confidence": 0.863117,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "puff pastry",
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": "pound",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "1 pound puff pastry, thawed if using frozen"
+    },
+    {
+      "confidence": 0.9544561,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "lightly beaten",
+        "product": "eggs",
+        "productSizeModifier": "large",
+        "quantity": 2.0,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Egg, whole, raw, fresh",
+          "fdcId": "171287",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 large eggs, lightly beaten"
+    },
+    {
+      "confidence": 0.974884,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "coarse sea salt",
+        "productSizeModifier": null,
+        "quantity": 0.5,
+        "unit": "teaspoon",
+        "usdaInfo": {
+          "category": null,
+          "description": "SEA SALT",
+          "fdcId": "390225",
+          "matchMethod": "closestBranded"
+        }
+      },
+      "ingredientRaw": "1/2 teaspoon coarse sea salt"
+    },
+    {
+      "confidence": 0.9540601,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "Minced",
+        "product": "chives",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Vegetables and Vegetable Products",
+          "description": "Chives, raw",
+          "fdcId": "169994",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "Minced chives, for garnish"
+    },
+    {
+      "confidence": 0.771374,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "recipe follows",
+        "product": "Green Peppercorn Sauce",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Green Peppercorn Sauce, recipe follows"
+    },
+    {
+      "confidence": 0.393549,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "recipe follows",
+        "product": "Roasted Fingerling Potatoes with Fresh Herbs and Garlic",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Roasted Fingerling Potatoes with Fresh Herbs and Garlic, recipe follows"
+    },
+    {
+      "confidence": 0.628313,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "Warm recipe follows",
+        "product": "Wilted Winter Greens",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Warm Wilted Winter Greens, recipe follows"
+    },
+    {
+      "confidence": 0.9969736,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "olive oil",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "usdaInfo": {
+          "category": "Fats and Oils",
+          "description": "Oil, olive, salad or cooking",
+          "fdcId": "171413",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 tablespoons olive oil"
+    },
+    {
+      "confidence": 0.9525967,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "sliced",
+        "product": "shallots",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Vegetables and Vegetable Products",
+          "description": "Shallots, raw",
+          "fdcId": "170499",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 shallots, sliced"
+    },
+    {
+      "confidence": 0.9820812999999999,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "peeled and smashed",
+        "product": "garlic",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "clove",
+        "usdaInfo": {
+          "category": null,
+          "description": "Garlic, raw",
+          "fdcId": "787793",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 cloves garlic, peeled and smashed"
+    },
+    {
+      "confidence": 0.8184658,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "leaves only",
+        "product": "fresh thyme",
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "sprig",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Thyme, fresh",
+          "fdcId": "173470",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "3 sprigs fresh thyme, leaves only"
+    },
+    {
+      "confidence": 0.9956935,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "brandy",
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": "cup",
+        "usdaInfo": {
+          "category": null,
+          "description": "Brandy",
+          "fdcId": "789684",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1 cup brandy"
+    },
+    {
+      "confidence": 0.9694312,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "beef stock",
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": "box",
+        "usdaInfo": {
+          "category": "Soups, Sauces, and Gravies",
+          "description": "Soup, stock, beef, home-prepared",
+          "fdcId": "172883",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1 box beef stock"
+    },
+    {
+      "confidence": 0.9923923,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "cream",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "cup",
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Cream, fluid, light (coffee cream or table cream)",
+          "fdcId": "170857",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 cups cream"
+    },
+    {
+      "confidence": 0.985436,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "grainy mustard",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "tablespoon",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "2 tablespoons grainy mustard"
+    },
+    {
+      "confidence": 0.222982,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "in brine, drained brine reserved",
+        "product": "green peppercorns",
+        "productSizeModifier": null,
+        "quantity": 0.5,
+        "unit": "cup",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "1/2 cup green peppercorns in brine, drained, brine reserved"
+    },
+    {
+      "confidence": 0.850123,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "fingerling",
+        "product": "potatoes",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "pint",
+        "usdaInfo": {
+          "category": "Vegetables and Vegetable Products",
+          "description": "Potatoes, flesh and skin, raw",
+          "fdcId": "170026",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 pints fingerling potatoes"
+    },
+    {
+      "confidence": 0.9935023000000001,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "fresh rosemary",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "sprig",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Rosemary, fresh",
+          "fdcId": "173473",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 sprigs fresh rosemary"
+    },
+    {
+      "confidence": 0.73436,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "fresh sage",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "sprig",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "2 to 3 sprigs fresh sage"
+    },
+    {
+      "confidence": 0.9950236,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "fresh thyme",
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "sprig",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Thyme, fresh",
+          "fdcId": "173470",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "3 sprigs fresh thyme"
+    },
+    {
+      "confidence": 0.9575248,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "left unpeeled",
+        "product": "garlic",
+        "productSizeModifier": null,
+        "quantity": 6.0,
+        "unit": "clove",
+        "usdaInfo": {
+          "category": null,
+          "description": "Garlic, raw",
+          "fdcId": "787793",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "6 cloves garlic, left unpeeled"
+    },
+    {
+      "confidence": 0.931966,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "plus for sheet pan",
+        "product": "extra-virgin olive oil",
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "tablespoon",
+        "usdaInfo": {
+          "category": "Fats and Oils",
+          "description": "Oil, olive, salad or cooking",
+          "fdcId": "171413",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "3 tablespoons extra-virgin olive oil, plus for sheet pan"
+    },
+    {
+      "confidence": 0.944659,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "Salt and pepper",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": null
+      },
+      "ingredientRaw": "Salt and pepper"
+    },
+    {
+      "confidence": 0.9956575,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "honey",
+        "productSizeModifier": null,
+        "quantity": 0.25,
+        "unit": "cup",
+        "usdaInfo": {
+          "category": "Sweets",
+          "description": "Honey",
+          "fdcId": "169640",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1/4 cup honey"
+    },
+    {
+      "confidence": 0.9521716,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "balsamic vinegar",
+        "productSizeModifier": null,
+        "quantity": 0.5,
+        "unit": "cup",
+        "usdaInfo": {
+          "category": "Spices and Herbs",
+          "description": "Vinegar, balsamic",
+          "fdcId": "172241",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1/2 cup balsamic vinegar"
+    },
+    {
+      "confidence": 0.9983236,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "walnuts",
+        "productSizeModifier": null,
+        "quantity": 0.5,
+        "unit": "pint",
+        "usdaInfo": {
+          "category": "Nut and Seed Products",
+          "description": "Nuts, walnuts, english",
+          "fdcId": "170187",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1/2 pint walnuts, for garnish"
+    },
+    {
+      "confidence": 0.161551,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "assorted or escarole, washed, stemmed",
+        "product": "winter greens",
+        "productSizeModifier": null,
+        "quantity": 3.0,
+        "unit": "bunch",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "3 bunches assorted winter greens (such as Swiss chard, radicchio, or escarole), washed, stemmed, and torn into pieces"
+    },
+    {
+      "confidence": 0.983127,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "grainy mustard",
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": "tablespoon",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "1 tablespoon grainy mustard"
+    },
+    {
+      "confidence": 0.948121,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "Extra-virgin olive oil",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Fats and Oils",
+          "description": "Oil, olive, salad or cooking",
+          "fdcId": "171413",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "Extra-virgin olive oil"
+    },
+    {
+      "confidence": 0.974478,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "pomegranate seeds",
+        "productSizeModifier": null,
+        "quantity": 0.5,
+        "unit": "cup",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "1/2 cup pomegranate seeds, for garnish"
+    },
+    {
+      "confidence": 0.9532615,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "Parmesan shavings",
+        "productSizeModifier": null,
+        "quantity": null,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Cheese, parmesan, hard",
+          "fdcId": "170848",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "Parmesan shavings, for garnish"
+    },
+    {
+      "confidence": 0.9545374,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "chopped",
+        "product": "shallot",
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Vegetables and Vegetable Products",
+          "description": "Shallots, raw",
+          "fdcId": "170499",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "1 shallot, chopped, for garnish"
+    }
+  ],
+  "instructions": "For the Duxelles:\nTo make the Duxelles: Add mushrooms, shallots, garlic, and thyme to a food processor and pulse until finely chopped. Add butter and olive oil to a large saute pan and set over medium heat. Add the shallot and mushroom mixture and saute for 8 to 10 minutes until most of the liquid has evaporated. Season with salt and pepper and set aside to cool.\nFor the Beef:\nTo prepare the beef: Tie the tenderloin in 4 places so it holds its cylindrical shape while cooking. Drizzle with olive oil, then season with salt and pepper and sear all over, including the ends, in a hot, heavy-based skillet lightly coated with olive oil - about 2 to 3 minutes. Meanwhile set out your prosciutto on a sheet of plastic wrap (plastic needs to be about a foot and a half in length so you can wrap and tie the roast up in it) on top of your cutting board. Shingle the prosciutto so it forms a rectangle that is big enough to encompass the entire filet of beef. Using a rubber spatula cover evenly with a thin layer of duxelles. Season the surface of the duxelles with salt and pepper and sprinkle with fresh thyme leaves. When the beef is seared, remove from heat, cut off twine and smear lightly all over with Dijon mustard. Allow to cool slightly, then roll up in the duxelles covered prosciutto using the plastic wrap to tie it up nice and tight. Tuck in the ends of the prosciutto as you roll to completely encompass the beef. Roll it up tightly in plastic wrap and twist the ends to seal it completely and hold it in a nice log shape. Set in the refrigerator for 30 minutes to ensure it maintains its shape.\nPreheat oven to 425 degrees F.\nOn a lightly floured surface, roll the puff pastry out to about a 1/4-inch thickness. Depending on the size of your sheets you may have to overlap 2 sheets and press them together. Remove beef from refrigerator and cut off plastic. Set the beef in the center of the pastry and fold over the longer sides, brushing with egg wash to seal. Trim ends if necessary then brush with egg wash and fold over to completely seal the beef - saving ends to use as a decoration on top if desired. Top with coarse sea salt. Place the beef seam side down on a baking sheet.\nBrush the top of the pastry with egg wash then make a couple of slits in the top of the pastry using the tip of a paring knife \u00bf this creates vents that will allow the steam to escape when cooking. Bake for 40 to 45 minutes until pastry is golden brown and beef registers 125 degrees F on an instant-read thermometer. Remove from oven and rest before cutting into thick slices. Garnish with minced chives, and serve with Green Peppercorn Sauce, Roasted Fingerling Potatoes with Fresh Herbs and Garlic, and Warm Wilted Winter Greens.\nAdd olive oil to pan after removing beef. Add shallots, garlic, and thyme; saute for 1 to 2 minutes, then, off heat, add brandy and flambe using a long kitchen match. After flame dies down, return to the heat, add stock and reduce by about half. Strain out solids, then add 2 cups cream and mustard. Reduce by half again, then shut off heat and add green peppercorns.\nPreheat oven to 500 degrees F and place a baking sheet inside to heat.\nAdd potatoes, rosemary, sage, thyme, and garlic to a medium bowl. Drizzle with olive oil, and season with salt and pepper. Remove sheet pan from oven, lightly coat with olive oil, and pour potatoes onto pan. Place potatoes in oven and reduce heat to 425 degrees F. Roast for 20 minutes, or until crispy on outside and tender on inside.\nCook honey and balsamic together over medium-high heat in a large saute pan, about 5 minutes. Toast walnuts in a small skillet; set aside to cool.\nPile greens on a platter. Stir mustard into balsamic-honey dressing, then whisk in about 1 cup extra-virgin olive oil; pour over greens. Season greens with salt and pepper and garnish with walnuts, pomegranate seeds, shavings of Parmesan, and shallot.",
+  "canonical_url": "https://www.foodnetwork.com/recipes/tyler-florence/the-ultimate-beef-wellington-recipe2-1952280",
+  "category": null
+}

@@ -14,10 +14,22 @@ To build the project:
 mvn compile
 ```
 
-Running tests:
+Running all tests:
 
 ```
 mvn clean test
+```
+
+Run only python tests:
+
+```
+mvn exec:exec@python-test 
+```
+
+Run JS tests:
+
+```
+npm test
 ```
 
 Configure git hooks:
