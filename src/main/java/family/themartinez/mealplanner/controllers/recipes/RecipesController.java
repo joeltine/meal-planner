@@ -35,7 +35,6 @@ public class RecipesController {
   @PutMapping("/recipes/{id:[0-9]+}")
   public void updateRecipe(@RequestBody Recipe recipe, @PathVariable Integer id) {
     Recipe existingRecipe = recipeRepository.findById(id).orElseThrow();
-    existingRecipe.setCreatedAt(recipe.getCreatedAt());
     existingRecipe.setName(recipe.getName());
     existingRecipe.setInstructions(recipe.getInstructions());
     existingRecipe.setDescription(recipe.getDescription());

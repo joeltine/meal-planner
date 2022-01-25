@@ -3,7 +3,6 @@ package family.themartinez.mealplanner.data.ingredientlists;
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.units.Unit;
-import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "ingredient_lists")
@@ -22,10 +20,6 @@ public class IngredientList {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Integer id;
-
-  @CreatedDate
-  @Column(name = "created_at", insertable = false, updatable = false)
-  private Instant createdAt;
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "recipe_id", nullable = false)
@@ -83,14 +77,6 @@ public class IngredientList {
 
   public void setRecipe(Recipe recipe) {
     this.recipe = recipe;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
   }
 
   public Integer getId() {

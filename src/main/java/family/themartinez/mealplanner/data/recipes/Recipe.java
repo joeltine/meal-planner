@@ -1,18 +1,20 @@
 package family.themartinez.mealplanner.data.recipes;
 
 import com.google.common.collect.ImmutableList;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import family.themartinez.mealplanner.data.converters.ImmutableListConverter;
-import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
+@TypeDefs({@TypeDef(name = "json", typeClass = JsonType.class)})
 @Entity
 @Table(name = "recipes")
 public class Recipe {
@@ -22,18 +24,14 @@ public class Recipe {
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @CreatedDate
-  @Column(name = "created_at", insertable = false, updatable = false)
-  private Instant createdAt;
-
   @Column(name = "name", nullable = false)
   private String name;
 
-  @Lob
+  @Type(type = "text")
   @Column(name = "instructions", nullable = false)
   private String instructions;
 
-  @Lob
+  @Type(type = "text")
   @Column(name = "description")
   private String description;
 
@@ -46,7 +44,7 @@ public class Recipe {
   @Column(name = "cook_time_min", nullable = false)
   private Integer cookTimeMin;
 
-  @Column(name = "categories")
+  @Column(name = "categories", columnDefinition = "json")
   @Convert(converter = ImmutableListConverter.class)
   private ImmutableList<String> categories;
 
@@ -104,14 +102,6 @@ public class Recipe {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Instant getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(Instant createdAt) {
-    this.createdAt = createdAt;
   }
 
   public Integer getId() {

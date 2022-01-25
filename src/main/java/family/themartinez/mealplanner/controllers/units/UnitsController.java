@@ -33,7 +33,6 @@ public class UnitsController {
   @PutMapping("/units/{id:[0-9]+}")
   public void updateUnit(@RequestBody Unit unit, @PathVariable Integer id) {
     Unit existingUnit = unitRepository.findById(id).orElseThrow();
-    existingUnit.setCreatedAt(unit.getCreatedAt());
     existingUnit.setName(unit.getName());
     unitRepository.save(existingUnit);
   }

@@ -1,6 +1,7 @@
 package family.themartinez.mealplanner.data.ingredients;
 
 import com.google.common.collect.ImmutableList;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import family.themartinez.mealplanner.data.converters.ImmutableListConverter;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -9,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
+@TypeDefs({@TypeDef(name = "json", typeClass = JsonType.class)})
 @Entity
 @Table(name = "ingredients")
 public class Ingredient {
@@ -25,11 +29,11 @@ public class Ingredient {
   @Column(name = "api_id")
   private Integer apiId;
 
-  @Column(name = "aisle")
+  @Column(name = "aisle", columnDefinition = "json")
   @Convert(converter = ImmutableListConverter.class)
   private ImmutableList<String> aisle;
 
-  @Column(name = "categories")
+  @Column(name = "categories", columnDefinition = "json")
   @Convert(converter = ImmutableListConverter.class)
   private ImmutableList<String> categories;
 
