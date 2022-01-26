@@ -149,7 +149,11 @@ export class AddRecipesController {
   createAutocomplete(element) {
     element.autoComplete({
       resolverSettings: {
-        url: '/ingredientsAc'
+        url: '/ingredientsAc',
+        fail: (jqxhr) => {
+          this.showFailureAlert(
+              `Request to auto-complete ingredient failed! Response text: ${jqxhr.responseText}`);
+        }
       }
     });
   }
