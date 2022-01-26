@@ -14,7 +14,7 @@ class ScrapedRecipeTest {
 
   private static String testScraperOutput;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeAll
   public static void beforeAll() throws IOException {

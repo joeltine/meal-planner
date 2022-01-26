@@ -1,13 +1,23 @@
 import {CommonController} from './common';
 
 describe('CommonController test suite', function () {
+  let uiContainer = $('<div></div>');
+
+  beforeAll(function () {
+    $('body').append(uiContainer);
+  });
+
   beforeEach(function () {
-    const html = window.__html__['common/common_test.html'];
-    $('body').append(html);
+    const html = window.__html__['js/common/common_test.html'];
+    uiContainer.append(html);
   });
 
   afterEach(function () {
-    $('body').empty();
+    uiContainer.empty();
+  });
+
+  afterAll(function () {
+    uiContainer.remove();
   });
 
   it('sets nav-link with pathname to active', function () {

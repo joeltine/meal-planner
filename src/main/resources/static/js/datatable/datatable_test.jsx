@@ -211,7 +211,7 @@ describe('DataTable test suite', function () {
       {id: 11, foo: "bat", bar: ["innr"], bat: {t: "jill"}}];
   });
 
-  afterEach(() => {
+  afterEach((done) => {
     jasmine.Ajax.uninstall();
     // Clear any toasts on timers hanging around.
     jasmine.clock().tick(5000);
@@ -219,10 +219,24 @@ describe('DataTable test suite', function () {
     // Clear any permanent toasts still on the page.
     const toasts = Array.from(
         document.getElementById('toastContainer').querySelectorAll('.toast'));
+    let total = toasts.length;
     toasts.forEach((toast) => {
-      $(toast).toast('hide');
+      const $toast = $(toast);
+      $toast.toast('hide');
+      // Hide is async, so we need to only finish the test after all toasts
+      // are gone.
+      $toast.on('hidden.bs.toast', function () {
+        total--;
+        if (total === 0) {
+          done();
+        }
+      })
     });
+
     tableData = null;
+    if (!total) {
+      done();
+    }
   });
 
   it('should fetch initial data, render, and look like a new datatable app',
@@ -1035,9 +1049,7 @@ describe('DataTable test suite', function () {
       'contentType': 'text/plain',
       'responseText': 'Failure!'
     });
-
     assertErrorToast('PUT request to /foo/1 failed');
-
     expect(id1BarCell).toHaveTextContent('["inner"]');
   });
 
@@ -1051,7 +1063,7 @@ describe('DataTable test suite', function () {
     expect(request.method).toBe('GET');
     request.respondWith({
       'status': 500,
-      'contentType': 'plain/text',
+      'contentType': 'text/plain',
       'responseText': 'Failure'
     });
     assertErrorToast('request to /foo failed');

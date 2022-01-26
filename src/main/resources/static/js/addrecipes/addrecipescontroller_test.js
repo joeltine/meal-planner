@@ -1,6 +1,108 @@
 import 'jasmine-ajax';
-import {AddRecipesController} from './addrecipes';
+import {AddRecipesController} from './addrecipescontroller';
 import JasmineDOM from "@testing-library/jasmine-dom";
+
+const fetaBurgersJson = {
+  "title": "Spinach and Feta Turkey Burgers",
+  "total_time": 35,
+  "cook_time": 15,
+  "prep_time": 20,
+  "ingredients": [
+    {
+      "confidence": 0.9764371000000001,
+      "error": null,
+      "ingredientParsed": {
+        "ingredientId": 24,
+        "name": "eggs",
+        "preparationNotes": "beaten",
+        "product": "eggs",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": null,
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Egg, whole, raw, fresh",
+          "fdcId": "171287",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 eggs, beaten"
+    },
+    {
+      "confidence": 0.9817117,
+      "error": null,
+      "ingredientParsed": {
+        "ingredientId": 69,
+        "name": "garlic cloves",
+        "preparationNotes": "minced",
+        "product": "garlic",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unit": "clove",
+        "usdaInfo": {
+          "category": null,
+          "description": "Garlic, raw",
+          "fdcId": "787793",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "2 cloves garlic, minced"
+    },
+    {
+      "confidence": 0.9916780000000001,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": null,
+        "product": "feta cheese",
+        "productSizeModifier": null,
+        "quantity": 4.0,
+        "unit": "ounce",
+        "usdaInfo": {
+          "category": "Dairy and Egg Products",
+          "description": "Cheese, feta",
+          "fdcId": "173420",
+          "matchMethod": "exact"
+        }
+      },
+      "ingredientRaw": "4 ounces feta cheese"
+    },
+    {
+      "confidence": 0.334193,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "thawed and squeezed dry",
+        "product": null,
+        "productSizeModifier": null,
+        "quantity": 1.0,
+        "unit": "box",
+        "usdaInfo": null
+      },
+      "ingredientRaw": "1 (10 ounce) box frozen chopped spinach, thawed and squeezed dry"
+    },
+    {
+      "confidence": 0.9139855,
+      "error": null,
+      "ingredientParsed": {
+        "preparationNotes": "ground",
+        "product": "turkey",
+        "productSizeModifier": null,
+        "quantity": 2.0,
+        "unitId": 4,
+        "unit": "pound",
+        "usdaInfo": {
+          "category": "Poultry Products",
+          "description": "Turkey, whole, light meat, raw",
+          "fdcId": "171490",
+          "matchMethod": "closestUnbranded"
+        }
+      },
+      "ingredientRaw": "2 pounds ground turkey"
+    }
+  ],
+  "instructions": "Preheat grill.\nCook burgers.",
+  "canonical_url": "https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/",
+  "category": "Meat and Poultry,Turkey,Ground Turkey Recipes"
+};
 
 describe('AddRecipesController test suite', function () {
   let controller;
@@ -16,16 +118,27 @@ describe('AddRecipesController test suite', function () {
   let submitButton;
   let addIngredientButton;
   let resetFormButton;
+  let importRecipeModalButton;
+  let importUrl;
+  let dismissImportModal;
+  let importRecipeButton;
+  let importRecipeModal;
+  let uiContainer = $('<div></div>');
 
   beforeAll(function () {
     jasmine.getEnv().addMatchers(JasmineDOM);
+    $('body').append(uiContainer);
     window.CSRF_HEADER_NAME = 'csrf-header-name';
     window.CSRF_TOKEN = 'csrf-token';
   });
 
+  afterAll(function () {
+    uiContainer.remove();
+  });
+
   beforeEach(function () {
-    const html = window.__html__['addrecipes/addrecipes_test.html'];
-    $('body').append(html);
+    const html = window.__html__['js/addrecipes/addrecipescontroller_test.html'];
+    uiContainer.append(html);
     recipeForm = $('#recipeForm');
     inputRecipeName = $('#inputRecipeName');
     inputDescription = $('#inputDescription');
@@ -38,13 +151,19 @@ describe('AddRecipesController test suite', function () {
     submitButton = $('#submit');
     addIngredientButton = $('#addIngredient');
     resetFormButton = $('#resetForm');
-    controller = new AddRecipesController();
+    importRecipeModalButton = $('#importRecipeModalButton');
+    importRecipeModal = $('#importRecipeModal');
+    importUrl = $('#importUrl');
+    dismissImportModal = $('#dismissImportModal');
+    importRecipeButton = $('#importRecipe');
     jasmine.Ajax.install();
     jasmine.clock().install();
+    controller = new AddRecipesController();
   });
 
   afterEach(function () {
-    $('body').empty();
+    controller.dispose();
+    uiContainer.empty();
     controller = null;
     jasmine.Ajax.uninstall();
     jasmine.clock().uninstall();
@@ -415,5 +534,88 @@ describe('AddRecipesController test suite', function () {
       expect($(this).val()).toBe('');
     });
     expect($('.ingredientInputRow').length).toBe(1);
+  });
+
+  it('should dismiss import recipe modal', function (done) {
+    importRecipeModal.on('hidden.bs.modal', function (event) {
+      expect(importRecipeModal[0]).not.toBeVisible();
+      done();
+    });
+    importRecipeModal.on('shown.bs.modal', function (event) {
+      expect(importRecipeModal[0]).toBeVisible();
+      dismissImportModal.click();
+    });
+
+    importRecipeModalButton.click();
+  });
+
+  it('should import recipe correctly', function (done) {
+    importRecipeModal.on('hidden.bs.modal', function (event) {
+      expect(importRecipeModal[0]).not.toBeVisible();
+      done();
+    });
+    importRecipeModal.on('shown.bs.modal', function (event) {
+      expect(importRecipeModal[0]).toBeVisible();
+      const url = 'https://recipes.com/fetacheeseburgers';
+      importUrl.val(url);
+      importRecipeButton.click();
+
+      const request = jasmine.Ajax.requests.mostRecent();
+      expect(request.url).toBe(`/scrapeRecipe?url=${encodeURIComponent(url)}`);
+      expect(request.method).toBe('GET');
+      request.respondWith({
+        'status': 200,
+        'contentType': 'application/json',
+        'responseText': JSON.stringify(fetaBurgersJson)
+      });
+
+      expect(inputRecipeName[0]).toHaveValue('Spinach and Feta Turkey Burgers');
+      expect(inputPrepTime[0]).toHaveValue(20);
+      expect(inputCookTime[0]).toHaveValue(15);
+      expect(inputInstructions[0]).toHaveValue('Preheat grill.\nCook burgers.');
+      expect(inputExternalLink[0]).toHaveValue(
+          'https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/');
+      expect(inputCategories[0]).toHaveValue(
+          'Meat and Poultry,Turkey,Ground Turkey Recipes');
+
+      const ingredientRows = $('.ingredientInputRow');
+      const eggs = ingredientRows.eq(0);
+      expect(eggs.find('#inputQuantity').val()).toEqual('2');
+      expect(eggs.find('#inputUnit').val()).toEqual('');
+      expect(eggs.find('#inputIngredient').val()).toEqual('eggs');
+      expect(eggs.find('#inputIngredientDisplayName').val()).toEqual(
+          'eggs, beaten');
+
+      const garlic = ingredientRows.eq(1);
+      expect(garlic.find('#inputQuantity').val()).toEqual('2');
+      expect(garlic.find('#inputUnit').val()).toEqual('');
+      expect(garlic.find('#inputIngredient').val()).toEqual('garlic cloves');
+      expect(garlic.find('#inputIngredientDisplayName').val()).toEqual(
+          'garlic, minced');
+
+      const feta = ingredientRows.eq(2);
+      expect(feta.find('#inputQuantity').val()).toEqual('4');
+      expect(feta.find('#inputUnit').val()).toEqual('');
+      expect(feta.find('#inputIngredient').val()).toEqual('');
+      expect(feta.find('#inputIngredientDisplayName').val()).toEqual(
+          'feta cheese');
+
+      const spinach = ingredientRows.eq(3);
+      expect(spinach.find('#inputQuantity').val()).toEqual('1');
+      expect(spinach.find('#inputUnit').val()).toEqual('');
+      expect(spinach.find('#inputIngredient').val()).toEqual('');
+      // TODO: Improve the algo for display name so we get something better here.
+      expect(spinach.find('#inputIngredientDisplayName').val()).toEqual(
+          ', thawed and squeezed dry');
+
+      const turkey = ingredientRows.eq(4);
+      expect(turkey.find('#inputQuantity').val()).toEqual('2');
+      expect(turkey.find('#inputUnit').val()).toEqual('4');
+      expect(turkey.find('#inputIngredient').val()).toEqual('');
+      expect(turkey.find('#inputIngredientDisplayName').val()).toEqual(
+          'turkey, ground');
+    });
+
+    importRecipeModalButton.click();
   });
 });

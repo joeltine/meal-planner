@@ -4,7 +4,7 @@ module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: 'src/main/resources/static/js',
+    basePath: 'src/main/resources/static/',
 
     // frameworks to use
     // available frameworks: https://www.npmjs.com/search?q=keywords:karma-adapter
@@ -12,7 +12,9 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'third-party/third-party.js',
+      'css/third-party/bootstrap.4.6.1.min.css',
+      'css/common/main.css',
+      'js/third-party/third-party.js',
       '**/*test.js',
       '**/*test.jsx',
       '**/*test.html',
@@ -31,7 +33,7 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://www.npmjs.com/search?q=keywords:karma-preprocessor
     preprocessors: {
-      'third-party/third-party.js': ['webpack'],
+      'js/third-party/third-party.js': ['webpack'],
       '**/*test.js': ['webpack'],
       '**/*test.jsx': ['webpack'],
       '**/*test.html': ['html2js']
@@ -92,5 +94,5 @@ module.exports = function (config) {
     // Concurrency level
     // how many browser instances should be started simultaneously
     concurrency: 5
-  })
+  });
 }
