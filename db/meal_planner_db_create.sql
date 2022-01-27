@@ -62,3 +62,12 @@ create table if not exists recipe_types
     constraint recipe_types_id_uindex
         unique (id)
 );
+
+create table if not exists meal_types
+(
+    id   int auto_increment
+        primary key,
+    name varchar(64) not null,
+    constraint meal_types_id_uindex
+        unique (id)
+);
