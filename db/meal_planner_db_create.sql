@@ -53,3 +53,12 @@ create table if not exists ingredient_lists
         foreign key (unit_id) references units (id)
             on update cascade on delete cascade
 );
+
+create table if not exists recipe_types
+(
+    id   int auto_increment
+        primary key,
+    name varchar(64) not null,
+    constraint recipe_types_id_uindex
+        unique (id)
+);
