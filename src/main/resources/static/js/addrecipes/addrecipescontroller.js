@@ -1,7 +1,7 @@
 import 'bootstrap-autocomplete';
 import {CommonController} from '../common/common';
-import {Toast} from "../toasts/toast";
-import {sendAjax} from "../common/ajax";
+import {Toast} from '../toasts/toast';
+import {sendAjax} from '../common/ajax';
 
 export class AddRecipesController {
   constructor() {
@@ -50,6 +50,15 @@ export class AddRecipesController {
         this.closeIngredientRow.bind(this));
 
     this.createAutocomplete(this.recipeForm.find('#inputIngredient'));
+
+    // Prevent enter from submitting form. Too many things rely on it, eg,
+    // selecting an element from autocomplete.
+    this.recipeForm.on('keydown', ':input:not(textarea):not(:submit)',
+        function (event) {
+          if (event.key == 'Enter') {
+            event.preventDefault();
+          }
+        });
   }
 
   showModal() {

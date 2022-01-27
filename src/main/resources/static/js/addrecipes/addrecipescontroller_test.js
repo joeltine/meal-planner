@@ -173,6 +173,15 @@ describe('AddRecipesController test suite', function () {
     submitButton.click();
     let request = jasmine.Ajax.requests;
     expect(request.count()).toBe(0);
+
+  });
+
+  it('enter button does not submit form', function () {
+    const e = jQuery.Event('keypress');
+    e.which = 13; // Enter
+    e.keyCode = 13;
+    inputRecipeName.trigger(e);
+    expect(recipeForm[0]).not.toHaveClass('was-validated');
   });
 
   it('recipe name is required to submit', function () {
