@@ -223,18 +223,16 @@
               </arguments>
             </configuration>
           </execution>
-          <!-- This isn't working, WTF. -->
-          <!-- https://stackoverflow.com/questions/70828395/running-python-m-unittest-failing-with-maven-exec-maven-plugin -->
           <execution>
             <configuration>
-              <executable>python3</executable>
               <workingDirectory>src/main/resources/scripts</workingDirectory>
+              <executable>python3</executable>
               <arguments>
                 <argument>-m</argument>
                 <argument>unittest</argument>
                 <argument>discover</argument>
                 <argument>-p</argument>
-                <argument>'*_test.py'</argument>
+                <argument>*_test.py</argument>
               </arguments>
             </configuration>
             <id>python-test</id>
