@@ -101,7 +101,9 @@ const fetaBurgersJson = {
   ],
   "instructions": "Preheat grill.\nCook burgers.",
   "canonical_url": "https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/",
-  "category": "Meat and Poultry,Turkey,Ground Turkey Recipes"
+  "recipe_categories": [2],
+  "recipe_types": [3, 8],
+  "meal_types": [1, 3],
 };
 
 describe('AddRecipesController test suite', function () {
@@ -113,6 +115,8 @@ describe('AddRecipesController test suite', function () {
   let inputPrepTime;
   let inputCookTime;
   let inputCategories;
+  let inputRecipeTypes;
+  let inputMealTypes;
   let inputExternalLink;
   let ingredientRow;
   let submitButton;
@@ -146,7 +150,9 @@ describe('AddRecipesController test suite', function () {
     ingredientRow = $('.ingredientInputRow');
     inputPrepTime = $('#inputPrepTime');
     inputCookTime = $('#inputCookTime');
-    inputCategories = $('#inputCategories');
+    inputCategories = $('#inputRecipeCategories');
+    inputRecipeTypes = $('#inputRecipeType');
+    inputMealTypes = $('#inputMealType');
     inputExternalLink = $('#inputExternalLink');
     submitButton = $('#submit');
     addIngredientButton = $('#addIngredient');
@@ -173,15 +179,18 @@ describe('AddRecipesController test suite', function () {
     submitButton.click();
     let request = jasmine.Ajax.requests;
     expect(request.count()).toBe(0);
-
   });
 
   it('enter button does not submit form', function () {
+    const submitSpy = spyOn(controller, 'handleSubmit');
     const e = jQuery.Event('keypress');
     e.which = 13; // Enter
     e.keyCode = 13;
     inputRecipeName.trigger(e);
     expect(recipeForm[0]).not.toHaveClass('was-validated');
+    let requests = jasmine.Ajax.requests;
+    expect(requests.count()).toBe(0);
+    expect(submitSpy).not.toHaveBeenCalled();
   });
 
   it('recipe name is required to submit', function () {
@@ -193,6 +202,7 @@ describe('AddRecipesController test suite', function () {
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
         {value: '1', text: 'Milk'});
+    inputRecipeTypes.val([1, 3, 5]);
     submitButton.click();
     let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(0);
@@ -210,6 +220,7 @@ describe('AddRecipesController test suite', function () {
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
         {value: '1', text: 'Milk'});
+    inputRecipeTypes.val([1, 3, 5]);
     submitButton.click();
     let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(0);
@@ -223,6 +234,7 @@ describe('AddRecipesController test suite', function () {
     inputDescription.val('It\'s soup');
     inputInstructions.val('Put it in a pot');
     inputPrepTime.val('99');
+    inputRecipeTypes.val([1, 3, 5]);
     ingredientRow.find('#inputQuantity').val('1.25');
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
@@ -241,6 +253,7 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputPrepTime.val('0');
     inputCookTime.val('0');
+    inputRecipeTypes.val([1, 3, 5]);
     ingredientRow.find('#inputQuantity').val('1.25');
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
@@ -268,6 +281,7 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([1, 3, 5]);
     ingredientRow.find('#inputQuantity').val('-1');
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
@@ -289,6 +303,7 @@ describe('AddRecipesController test suite', function () {
     inputRecipeName.val('Chicken soup');
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
+    inputRecipeTypes.val([1, 3, 5]);
     inputPrepTime.val('3');
     ingredientRow.find('#inputQuantity').val('1');
     ingredientRow.find('#inputUnit').val('1');
@@ -298,21 +313,27 @@ describe('AddRecipesController test suite', function () {
     let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(1);
     let request = requests.mostRecent();
-    expect(request.url).toBe('/addrecipes');
-    expect(request.method).toBe('PUT');
+    expect(request.url).toBe('/recipes');
+    expect(request.method).toBe('POST');
     expect(request.data()).toEqual({
       'name': 'Chicken soup',
       'description': '',
       'externalLink': '',
-      'categories': [],
-      'prepTime': '3',
-      'cookTime': '99',
+      'recipeCategories': [],
+      'mealTypes': [],
+      'recipeTypes': [
+        {'recipeType': {'id': 5}},
+        {'recipeType': {'id': 1}},
+        {'recipeType': {'id': 3}}
+      ],
+      'prepTimeMin': 3,
+      'cookTimeMin': 99,
       'instructions': 'Put it in a pot',
-      'ingredients': [{
-        'quantity': '1',
-        'unit': '1',
-        'ingredient': '1',
-        'displayName': ''
+      'ingredientLists': [{
+        'quantity': 1,
+        'unit': {'id': 1},
+        'ingredient': {'id': 1},
+        'ingredientDisplayName': ''
       }]
     });
   });
@@ -322,6 +343,7 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([1, 3, 5]);
     ingredientRow.find('#inputQuantity').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
         {value: '1', text: 'Milk'});
@@ -333,11 +355,29 @@ describe('AddRecipesController test suite', function () {
     expect(requests.count()).toBe(1);
   });
 
+  it('recipe type is required to submit', function () {
+    inputRecipeName.val('Chicken soup');
+    inputInstructions.val('Put it in a pot');
+    inputCookTime.val('99');
+    inputPrepTime.val('3');
+    ingredientRow.find('#inputQuantity').val('1');
+    ingredientRow.find('#inputIngredient').autoComplete('set',
+        {value: '1', text: 'Milk'});
+    ingredientRow.find('#inputUnit').val('1');
+    submitButton.click();
+    let requests = jasmine.Ajax.requests;
+    expect(requests.count()).toBe(0);
+    inputRecipeTypes.val([1, 3, 5]);
+    submitButton.click();
+    expect(requests.count()).toBe(1);
+  });
+
   it('ingredient name is required to submit', function () {
     inputRecipeName.val('Chicken soup');
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([1, 3, 5]);
     ingredientRow.find('#inputQuantity').val('1');
     ingredientRow.find('#inputUnit').val('1');
     submitButton.click();
@@ -374,7 +414,9 @@ describe('AddRecipesController test suite', function () {
     inputCookTime.val('99');
     inputPrepTime.val('3');
     inputExternalLink.val('http://www.example.com');
-    inputCategories.val('italian, breakfast');
+    inputCategories.val([5, 10]);
+    inputMealTypes.val([1, 2]);
+    inputRecipeTypes.val([2, 4]);
     ingredientRow.eq(0).find('#inputQuantity').val('1');
     ingredientRow.eq(0).find('#inputUnit').val('1');
     ingredientRow.eq(0).find('#inputIngredient').autoComplete('set',
@@ -391,27 +433,31 @@ describe('AddRecipesController test suite', function () {
     let requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(1);
     let request = requests.mostRecent();
-    expect(request.url).toBe('/addrecipes');
-    expect(request.method).toBe('PUT');
+    expect(request.url).toBe('/recipes');
+    expect(request.method).toBe('POST');
     expect(request.data()).toEqual({
       'name': 'Chicken soup',
       'description': 'It\'s soup',
       'instructions': 'Put it in a pot',
-      'prepTime': '3',
-      'cookTime': '99',
-      'categories': ['italian', 'breakfast'],
+      'prepTimeMin': 3,
+      'cookTimeMin': 99,
+      'recipeCategories': [{'recipeCategory': {'id': 5}},
+        {'recipeCategory': {'id': 10}}],
+      'mealTypes': [{'mealType': {'id': 1}}, {'mealType': {'id': 2}}],
+      'recipeTypes': [{'recipeType': {'id': 2}}, {'recipeType': {'id': 4}}],
       'externalLink': 'http://www.example.com',
-      'ingredients': [{
-        'quantity': '1',
-        'unit': '1',
-        'ingredient': '1',
-        'displayName': ''
-      },
+      'ingredientLists': [
         {
-          'quantity': '21',
-          'unit': '2',
-          'ingredient': '3',
-          'displayName': 'chicken breast, cubed'
+          'quantity': 1,
+          'unit': {'id': 1},
+          'ingredient': {'id': 1},
+          'ingredientDisplayName': ''
+        },
+        {
+          'quantity': 21,
+          'unit': {'id': 2},
+          'ingredient': {'id': 3},
+          'ingredientDisplayName': 'chicken breast, cubed'
         }]
     });
     expect(request.requestHeaders[window.CSRF_HEADER_NAME]).toEqual(
@@ -425,6 +471,7 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([2, 4]);
     ingredientRow.eq(0).find('#inputQuantity').val('1');
     ingredientRow.eq(0).find('#inputUnit').val('1');
     ingredientRow.eq(0).find('#inputIngredient').autoComplete('set',
@@ -452,7 +499,12 @@ describe('AddRecipesController test suite', function () {
       expect($(this).prop('disabled')).toBeFalse();
     }));
     recipeForm.find(':input').each(function () {
-      expect($(this).val()).toBe('');
+      const el = $(this);
+      if (el.is('select') && el.prop('multiple')) {
+        expect($(this).val()).toEqual([]);
+      } else {
+        expect($(this).val()).toEqual('');
+      }
     });
     expect($('.ingredientInputRow').length).toBe(1);
     expect($('.toast-success').is(':visible')).toBeTrue(
@@ -470,6 +522,9 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([2, 4]);
+    inputMealTypes.val([1, 2]);
+    inputCategories.val([3, 8]);
     ingredientRow.eq(0).find('#inputQuantity').val('1');
     ingredientRow.eq(0).find('#inputUnit').val('1');
     ingredientRow.eq(0).find('#inputIngredient').autoComplete('set',
@@ -495,6 +550,9 @@ describe('AddRecipesController test suite', function () {
     expect(inputInstructions.val()).toBe('Put it in a pot');
     expect(inputCookTime.val()).toBe('99');
     expect(inputPrepTime.val()).toBe('3');
+    expect(inputRecipeTypes.val()).toEqual(['2', '4']);
+    expect(inputMealTypes.val()).toEqual(['1', '2']);
+    expect(inputCategories.val()).toEqual(['3', '8']);
     expect(ingredientRow.eq(0).find('#inputQuantity').val()).toBe('1');
     expect(ingredientRow.eq(0).find('#inputUnit').val()).toBe('1');
     expect(ingredientRow.eq(0).find('#inputIngredient').val()).toBe('Milk');
@@ -532,15 +590,22 @@ describe('AddRecipesController test suite', function () {
     inputInstructions.val('Put it in a pot');
     inputCookTime.val('99');
     inputPrepTime.val('3');
+    inputRecipeTypes.val([2, 4]);
+    inputMealTypes.val([2, 3]);
+    inputCategories.val([2, 4]);
     ingredientRow.find('#inputQuantity').val('1.25');
     ingredientRow.find('#inputUnit').val('1');
     ingredientRow.find('#inputIngredient').autoComplete('set',
         {value: '1', text: 'Milk'});
-    inputCategories.val('italian, breakfast');
     inputExternalLink.val('http://www.example.com');
     resetFormButton.click();
     recipeForm.find(':input').each(function () {
-      expect($(this).val()).toBe('');
+      const el = $(this);
+      if (el.is('select') && el.prop('multiple')) {
+        expect($(this).val()).toEqual([]);
+      } else {
+        expect($(this).val()).toEqual('');
+      }
     });
     expect($('.ingredientInputRow').length).toBe(1);
   });
@@ -558,7 +623,7 @@ describe('AddRecipesController test suite', function () {
     importRecipeModalButton.click();
   });
 
-  it('should import recipe correctly', function (done) {
+  fit('should import recipe correctly', function (done) {
     importRecipeModal.on('hidden.bs.modal', function (event) {
       expect(importRecipeModal[0]).not.toBeVisible();
       done();
@@ -584,8 +649,9 @@ describe('AddRecipesController test suite', function () {
       expect(inputInstructions[0]).toHaveValue('Preheat grill.\nCook burgers.');
       expect(inputExternalLink[0]).toHaveValue(
           'https://www.allrecipes.com/recipe/158968/spinach-and-feta-turkey-burgers/');
-      expect(inputCategories[0]).toHaveValue(
-          'Meat and Poultry,Turkey,Ground Turkey Recipes');
+      expect(inputCategories.val()).toEqual(['2']);
+      expect(inputMealTypes.val()).toEqual(['1', '3']);
+      expect(inputRecipeTypes.val()).toEqual(['8', '3']);
 
       const ingredientRows = $('.ingredientInputRow');
       const eggs = ingredientRows.eq(0);

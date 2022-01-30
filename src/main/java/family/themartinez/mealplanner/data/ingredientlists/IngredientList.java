@@ -1,10 +1,12 @@
 package family.themartinez.mealplanner.data.ingredientlists;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.units.Unit;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,8 +23,9 @@ public class IngredientList {
   @Column(name = "id", nullable = false)
   private Integer id;
 
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
   @JoinColumn(name = "recipe_id", nullable = false)
+  @JsonBackReference
   private Recipe recipe;
 
   @ManyToOne(optional = false)

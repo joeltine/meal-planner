@@ -82,6 +82,9 @@ public class AddRecipesIntegrationTest {
     driver.findElement(By.id("inputInstructions")).sendKeys("Do all the things");
     driver.findElement(By.id("inputPrepTime")).sendKeys("30");
     driver.findElement(By.id("inputCookTime")).sendKeys("25");
+    new Select(driver.findElement(By.id("inputMealType"))).selectByVisibleText("breakfast");
+    new Select(driver.findElement(By.id("inputRecipeType"))).selectByVisibleText("entree");
+    new Select(driver.findElement(By.id("inputRecipeCategories"))).selectByVisibleText("Mexican");
     driver.findElement(By.id("submit")).click();
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("toast-success")));
   }

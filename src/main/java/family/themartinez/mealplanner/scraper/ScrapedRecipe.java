@@ -19,12 +19,22 @@ public class ScrapedRecipe {
   private Integer prepTime;
 
   private List<ScrapedIngredient> ingredients;
+
   private String instructions;
+
+  private String category;
 
   @JsonProperty("canonical_url")
   private String canonicalUrl;
 
-  private String category;
+  @JsonProperty("recipe_categories")
+  private List<Integer> recipeCategories;
+
+  @JsonProperty("recipe_types")
+  private List<Integer> recipeTypes;
+
+  @JsonProperty("meal_types")
+  private List<Integer> mealTypes;
 
   public ScrapedRecipe() {}
 
@@ -36,7 +46,10 @@ public class ScrapedRecipe {
       List<ScrapedIngredient> ingredients,
       String instructions,
       String canonicalUrl,
-      String category) {
+      String category,
+      List<Integer> recipeCategories,
+      List<Integer> recipeTypes,
+      List<Integer> mealTypes) {
     this.title = title;
     this.totalTime = totalTime;
     this.cookTime = cookTime;
@@ -45,6 +58,9 @@ public class ScrapedRecipe {
     this.instructions = instructions;
     this.canonicalUrl = canonicalUrl;
     this.category = category;
+    this.recipeCategories = recipeCategories;
+    this.recipeTypes = recipeTypes;
+    this.mealTypes = mealTypes;
   }
 
   public String getTitle() {
@@ -109,6 +125,30 @@ public class ScrapedRecipe {
 
   public void setCategory(String category) {
     this.category = category;
+  }
+
+  public List<Integer> getRecipeCategories() {
+    return recipeCategories;
+  }
+
+  public void setRecipeCategories(List<Integer> recipeCategories) {
+    this.recipeCategories = recipeCategories;
+  }
+
+  public List<Integer> getRecipeTypes() {
+    return recipeTypes;
+  }
+
+  public void setRecipeTypes(List<Integer> recipeTypes) {
+    this.recipeTypes = recipeTypes;
+  }
+
+  public List<Integer> getMealTypes() {
+    return mealTypes;
+  }
+
+  public void setMealTypes(List<Integer> mealTypes) {
+    this.mealTypes = mealTypes;
   }
 
   @Override

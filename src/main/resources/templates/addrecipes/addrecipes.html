@@ -40,7 +40,7 @@
       <div class="form-group col-md-12">
         <label for="inputDescription">Description</label>
         <textarea class="form-control" id="inputDescription" placeholder="Description of recipe"
-                  maxLength="65535" rows="6"></textarea>
+                  maxLength="65535" rows="4"></textarea>
       </div>
     </div>
 
@@ -127,16 +127,36 @@
         <label for="inputCookTime">Cook Time (min)</label>
         <input type="number" class="form-control" id="inputCookTime" min="1" step="1" required>
       </div>
+    </div>
 
-      <div class="form-group col-md-8">
-        <label for="inputCategories">Categories (comma separated)</label>
-        <input type="text" class="form-control" id="inputCategories"
-               pattern="^[\w\s-]+(,[\w\s-]+){0,}$" placeholder="vegan, breakfast, mexican, ...">
+    <div class="form-row">
+      <div class="form-group col-md-auto">
+        <label for="inputRecipeType">Recipe Type</label>
+        <select id="inputRecipeType" class="form-control" multiple required size="8">
+          <option th:each="recipeType : ${recipeTypes}" th:text="${recipeType.name}"
+                  th:value="${recipeType.id}"></option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-auto">
+        <label for="inputMealType">Meal Type</label>
+        <select id="inputMealType" class="form-control" multiple size="4">
+          <option th:each="mealType : ${mealTypes}" th:text="${mealType.name}"
+                  th:value="${mealType.id}"></option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-auto">
+        <label for="inputRecipeCategories">Other Categories</label>
+        <select id="inputRecipeCategories" class="form-control" multiple size="8">
+          <option th:each="recipeCategory : ${recipeCategories}" th:text="${recipeCategory.name}"
+                  th:value="${recipeCategory.id}"></option>
+        </select>
       </div>
     </div>
 
     <div class="form-row">
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-9">
         <label for="inputExternalLink">External link</label>
         <input type="url" minlength="5" maxlength="2048"
                placeholder="https://www.example.com/"

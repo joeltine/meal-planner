@@ -71,3 +71,66 @@ create table if not exists meal_types
     constraint meal_types_id_uindex
         unique (id)
 );
+
+create table if not exists recipe_categories
+(
+    id   int auto_increment
+        primary key,
+    name varchar(64) not null,
+    constraint recipe_categories_id_uindex
+        unique (id)
+);
+
+create table if not exists recipe_category_associations
+(
+    id                 int auto_increment,
+    recipe_category_id int          not null,
+    recipe_id          int unsigned not null,
+    constraint recipe_category_associations_pk
+        primary key (id),
+    constraint recipe_category_associations_recipe_categories_id_fk
+        foreign key (recipe_category_id) references recipe_categories (id)
+            on update cascade on delete cascade,
+    constraint recipe_category_associations_recipes_id_fk
+        foreign key (recipe_id) references recipes (id)
+            on update cascade on delete cascade
+);
+
+create unique index recipe_category_associations_id_uindex
+    on recipe_category_associations (id);
+
+create table if not exists meal_type_associations
+(
+    id           int auto_increment,
+    meal_type_id int          not null,
+    recipe_id    int unsigned not null,
+    constraint meal_type_associations_pk
+        primary key (id),
+    constraint meal_type_associations_meal_types_id_fk
+        foreign key (meal_type_id) references meal_types (id)
+            on update cascade on delete cascade,
+    constraint meal_type_associations_recipes_id_fk
+        foreign key (recipe_id) references recipes (id)
+            on update cascade on delete cascade
+);
+
+create unique index meal_type_associations_id_uindex
+    on meal_type_associations (id);
+
+create table if not exists recipe_type_associations
+(
+    id             int auto_increment,
+    recipe_type_id int          not null,
+    recipe_id      int unsigned not null,
+    constraint recipe_type_associations_pk
+        primary key (id),
+    constraint recipe_type_associations_recipe_types_id_fk
+        foreign key (recipe_type_id) references recipe_types (id)
+            on update cascade on delete cascade,
+    constraint recipe_type_associations_recipes_id_fk
+        foreign key (recipe_id) references recipes (id)
+            on update cascade on delete cascade
+);
+
+create unique index recipe_type_associations_id_uindex
+    on recipe_type_associations (id);

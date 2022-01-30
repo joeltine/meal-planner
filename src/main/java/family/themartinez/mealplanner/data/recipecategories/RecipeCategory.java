@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.data.recipes;
+package family.themartinez.mealplanner.data.recipecategories;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "meal_types")
-public class MealType {
+@Table(name = "recipe_categories")
+public class RecipeCategory {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

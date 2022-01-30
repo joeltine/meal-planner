@@ -11,7 +11,9 @@ export class AddRecipesController {
     this.inputInstructions = this.recipeForm.find('#inputInstructions');
     this.inputPrepTime = this.recipeForm.find('#inputPrepTime');
     this.inputCookTime = this.recipeForm.find('#inputCookTime');
-    this.inputCategories = this.recipeForm.find('#inputCategories');
+    this.inputCategories = this.recipeForm.find('#inputRecipeCategories');
+    this.inputRecipeTypes = this.recipeForm.find('#inputRecipeType');
+    this.inputMealTypes = this.recipeForm.find('#inputMealType');
     this.inputExternalLink = this.recipeForm.find('#inputExternalLink');
     this.addIngredient = this.recipeForm.find('#addIngredient');
     this.main = $('#main');
@@ -55,7 +57,7 @@ export class AddRecipesController {
     // selecting an element from autocomplete.
     this.recipeForm.on('keydown', ':input:not(textarea):not(:submit)',
         function (event) {
-          if (event.key == 'Enter') {
+          if (event.key === 'Enter') {
             event.preventDefault();
           }
         });
@@ -94,7 +96,9 @@ export class AddRecipesController {
           this.inputPrepTime.val(data['prep_time']);
           this.inputCookTime.val(data['cook_time']);
           this.inputExternalLink.val(data['canonical_url']);
-          this.inputCategories.val(data['category']);
+          this.inputCategories.val(data['recipe_categories']);
+          this.inputMealTypes.val(data['meal_types']);
+          this.inputRecipeTypes.val(data['recipe_types']);
 
           // Populate all ingredient rows.
           this.populateIngredientRowsFromParsed(data['ingredients']);
@@ -189,34 +193,37 @@ export class AddRecipesController {
     this.recipeForm.removeClass('needs-validation').addClass('was-validated');
   }
 
-  scrapeAndValidateForm() {
-    const formData = {};
-    const name = this.inputRecipeName.val();
-    const description = this.inputDescription.val();
-    const instructions = this.inputInstructions.val();
-    const prepTime = this.inputPrepTime.val();
-    const cookTime = this.inputCookTime.val();
-    const categories = this.inputCategories.val();
-    const externalLink = this.inputExternalLink.val();
+  /**
+   * Builds/returns a list of objects with form {keyStr: {id: 1234}}.
+   */
+  buildNestedTypeObj(idList, keyStr) {
+    const things = [];
+    for (let id of idList) {
+      things.push({[keyStr]: {id: Number(id)}});
+    }
+    return things;
+  }
 
-    formData.name = name;
-    formData.description = description;
-    formData.instructions = instructions;
-    formData.prepTime = prepTime;
-    formData.cookTime = cookTime;
-    const categoryArray = categories ? categories.split(',').map(
-        category => category.trim().toLowerCase()) : [];
-    formData.categories = categoryArray;
-    formData.externalLink = externalLink;
+  buildRecipeCategoriesObj(categoryIds) {
+    return this.buildNestedTypeObj(categoryIds, "recipeCategory");
+  }
 
-    formData.ingredients = [];
+  buildMealTypesObj(mealTypeIds) {
+    return this.buildNestedTypeObj(mealTypeIds, "mealType");
+  }
 
+  buildRecipeTypesObj(recipeTypeIds) {
+    return this.buildNestedTypeObj(recipeTypeIds, "recipeType");
+  }
+
+  buildIngredientListsObj() {
+    const lists = [];
     this.recipeForm.find('.ingredientInputRow').each(function () {
       const row = $(this);
       const quantityInput = row.find('#inputQuantity');
       const quantity = quantityInput.val();
-      const unit = row.find('#inputUnit').val();
-      const ingredient = row.find('input[name="inputIngredient"]').val();
+      const unitId = row.find('#inputUnit').val();
+      const ingredientId = row.find('input[name="inputIngredient"]').val();
       const displayName = row.find(
           'input[id="inputIngredientDisplayName"]').val();
 
@@ -226,13 +233,38 @@ export class AddRecipesController {
         quantityInput.get(0).setCustomValidity('');
       }
 
-      formData.ingredients.push({
-        quantity: quantity,
-        unit: unit,
-        ingredient: ingredient,
-        displayName: displayName
-      })
+      lists.push({
+        unit: {id: Number(unitId)},
+        ingredient: {id: Number(ingredientId)},
+        quantity: Number(quantity),
+        ingredientDisplayName: displayName
+      });
     });
+    return lists;
+  }
+
+  scrapeAndValidateForm() {
+    const formData = {};
+    const name = this.inputRecipeName.val();
+    const description = this.inputDescription.val();
+    const instructions = this.inputInstructions.val();
+    const prepTime = this.inputPrepTime.val();
+    const cookTime = this.inputCookTime.val();
+    const categories = this.inputCategories.val();
+    const recipeTypes = this.inputRecipeTypes.val();
+    const mealTypes = this.inputMealTypes.val();
+    const externalLink = this.inputExternalLink.val();
+
+    formData.name = name;
+    formData.description = description;
+    formData.instructions = instructions;
+    formData.prepTimeMin = Number(prepTime);
+    formData.cookTimeMin = Number(cookTime);
+    formData.externalLink = externalLink;
+    formData.recipeCategories = this.buildRecipeCategoriesObj(categories);
+    formData.recipeTypes = this.buildRecipeTypesObj(recipeTypes);
+    formData.mealTypes = this.buildMealTypesObj(mealTypes);
+    formData.ingredientLists = this.buildIngredientListsObj();
 
     return formData;
   }
@@ -241,10 +273,10 @@ export class AddRecipesController {
     const inputs = this.recipeForm.find(':input');
     inputs.prop('disabled', true);
 
-    this.sendAjax('/addrecipes', {
+    this.sendAjax('/recipes', {
       data: JSON.stringify(data),
       contentType: 'application/json',
-      method: 'PUT',
+      method: 'POST',
       processData: false
     })
         .done(() => {

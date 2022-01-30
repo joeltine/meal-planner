@@ -8,4 +8,6 @@ public interface UnitRepository extends CrudRepository<Unit, Integer> {
   List<Unit> findAllByOrderByNameAsc();
 
   List<Unit> findByNameStartingWith(String name);
+
+  List<Unit> findByName(String name);
 }

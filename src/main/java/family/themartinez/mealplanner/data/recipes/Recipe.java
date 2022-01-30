@@ -1,15 +1,23 @@
 package family.themartinez.mealplanner.data.recipes;
 
-import com.google.common.collect.ImmutableList;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vladmihalcea.hibernate.type.json.JsonType;
-import family.themartinez.mealplanner.data.converters.ImmutableListConverter;
+import family.themartinez.mealplanner.data.ingredientlists.IngredientList;
+import family.themartinez.mealplanner.data.mealtypes.MealTypeAssociation;
+import family.themartinez.mealplanner.data.recipecategories.RecipeCategoryAssociation;
+import family.themartinez.mealplanner.data.recipetypes.RecipeTypeAssociation;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
@@ -44,16 +52,68 @@ public class Recipe {
   @Column(name = "cook_time_min", nullable = false)
   private Integer cookTimeMin;
 
-  @Column(name = "categories", columnDefinition = "json")
-  @Convert(converter = ImmutableListConverter.class)
-  private ImmutableList<String> categories;
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(FetchMode.JOIN)
+  @JsonManagedReference
+  private Set<IngredientList> ingredientLists = new HashSet<>();
 
-  public ImmutableList<String> getCategories() {
-    return categories;
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(FetchMode.JOIN)
+  @JsonManagedReference
+  private Set<RecipeTypeAssociation> recipeTypes = new HashSet<>();
+
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(FetchMode.JOIN)
+  @JsonManagedReference
+  private Set<MealTypeAssociation> mealTypes = new HashSet<>();
+
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Fetch(FetchMode.JOIN)
+  @JsonManagedReference
+  private Set<RecipeCategoryAssociation> recipeCategories = new HashSet<>();
+
+  public Set<RecipeTypeAssociation> getRecipeTypes() {
+    return recipeTypes;
   }
 
-  public void setCategories(ImmutableList<String> categories) {
-    this.categories = categories;
+  public void setRecipeTypes(Set<RecipeTypeAssociation> recipeTypes) {
+    this.recipeTypes.clear();
+    if (recipeTypes != null) {
+      this.recipeTypes.addAll(recipeTypes);
+    }
+  }
+
+  public Set<MealTypeAssociation> getMealTypes() {
+    return mealTypes;
+  }
+
+  public void setMealTypes(Set<MealTypeAssociation> mealTypes) {
+    this.mealTypes.clear();
+    if (mealTypes != null) {
+      this.mealTypes.addAll(mealTypes);
+    }
+  }
+
+  public Set<RecipeCategoryAssociation> getRecipeCategories() {
+    return recipeCategories;
+  }
+
+  public void setRecipeCategories(Set<RecipeCategoryAssociation> recipeCategories) {
+    this.recipeCategories.clear();
+    if (recipeCategories != null) {
+      this.recipeCategories.addAll(recipeCategories);
+    }
+  }
+
+  public Set<IngredientList> getIngredientLists() {
+    return ingredientLists;
+  }
+
+  public void setIngredientLists(Set<IngredientList> ingredientLists) {
+    this.ingredientLists.clear();
+    if (ingredientLists != null) {
+      this.ingredientLists.addAll(ingredientLists);
+    }
   }
 
   public Integer getCookTimeMin() {

@@ -1,4 +1,4 @@
-package family.themartinez.mealplanner.data.recipes;
+package family.themartinez.mealplanner.data.recipetypes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

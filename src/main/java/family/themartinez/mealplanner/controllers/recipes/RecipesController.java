@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-// TODO: Move these CRUD controllers to an inheritance model, almost all the functionality is the
-//       same across them.
 @RestController
 public class RecipesController {
   @Autowired private RecipeRepository recipeRepository;
@@ -32,17 +30,25 @@ public class RecipesController {
     recipeRepository.deleteAllById(ids);
   }
 
+  @DeleteMapping("/recipes/{id:[0-9]+}")
+  public void deleteRecipe(@PathVariable Integer id) {
+    recipeRepository.deleteById(id);
+  }
+
   @PutMapping("/recipes/{id:[0-9]+}")
-  public void updateRecipe(@RequestBody Recipe recipe, @PathVariable Integer id) {
+  public Recipe updateRecipe(@RequestBody Recipe recipe, @PathVariable Integer id) {
     Recipe existingRecipe = recipeRepository.findById(id).orElseThrow();
     existingRecipe.setName(recipe.getName());
     existingRecipe.setInstructions(recipe.getInstructions());
     existingRecipe.setDescription(recipe.getDescription());
     existingRecipe.setExternalLink(recipe.getExternalLink());
+    existingRecipe.setIngredientLists(recipe.getIngredientLists());
     existingRecipe.setPrepTimeMin(recipe.getPrepTimeMin());
     existingRecipe.setCookTimeMin(recipe.getCookTimeMin());
-    existingRecipe.setCategories(recipe.getCategories());
-    recipeRepository.save(existingRecipe);
+    existingRecipe.setRecipeCategories(recipe.getRecipeCategories());
+    existingRecipe.setMealTypes(recipe.getMealTypes());
+    existingRecipe.setRecipeTypes(recipe.getRecipeTypes());
+    return recipeRepository.save(existingRecipe);
   }
 
   @PostMapping("/recipes")

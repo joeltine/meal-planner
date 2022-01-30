@@ -107,16 +107,68 @@
         <label for="inputCookTime">Cook Time (min)</label>
         <input type="number" class="form-control" id="inputCookTime" min="1" step="1" required>
       </div>
+    </div>
 
-      <div class="form-group col-md-8">
-        <label for="inputCategories">Categories (comma separated)</label>
-        <input type="text" class="form-control" id="inputCategories"
-               pattern="^[\w\s-]+(,[\w\s-]+){0,}$" placeholder="vegan, breakfast, mexican, ...">
+    <div class="form-row">
+      <div class="form-group col-md-auto">
+        <label for="inputRecipeType">Recipe Type</label>
+        <select id="inputRecipeType" class="form-control" size="8" multiple required>
+          <option value="5">appetizer</option>
+          <option value="8">baked good</option>
+          <option value="9">beverage</option>
+          <option value="1">condiment</option>
+          <option value="6">dessert</option>
+          <option value="3">entree</option>
+          <option value="12">preserving</option>
+          <option value="11">salad</option>
+          <option value="2">sauce</option>
+          <option value="4">side dish</option>
+          <option value="7">snack</option>
+          <option value="10">soup</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-auto">
+        <label for="inputMealType">Meal Type</label>
+        <select id="inputMealType" class="form-control" multiple size="4">
+          <option value="1">breakfast</option>
+          <option value="2">lunch</option>
+          <option value="3">dinner</option>
+          <option value="4">brunch</option>
+        </select>
+      </div>
+
+      <div class="form-group col-md-auto">
+        <label for="inputRecipeCategories">Other Categories</label>
+        <select id="inputRecipeCategories" class="form-control" multiple size="8">
+          <option value="17">American</option>
+          <option value="11">BBQ</option>
+          <option value="4">Chinese</option>
+          <option value="21">Cajun</option>
+          <option value="15">European</option>
+          <option value="19">French</option>
+          <option value="2">Italian</option>
+          <option value="5">Indian</option>
+          <option value="9">Japanese</option>
+          <option value="1">Mexican</option>
+          <option value="18">Middle Eastern</option>
+          <option value="16">Mediterranean</option>
+          <option value="20">Spanish</option>
+          <option value="3">Thai</option>
+          <option value="10">Vietnamese</option>
+          <option value="12">dairy-free</option>
+          <option value="13">gluten-free</option>
+          <option value="6">holidays</option>
+          <option value="14">low-calorie</option>
+          <option value="8">low-carb</option>
+          <option value="7">vegetarian</option>
+          <option value="22">vegan</option>
+        </select>
       </div>
     </div>
 
     <div class="form-row">
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-9">
         <label for="inputExternalLink">External link</label>
         <input type="url" minlength="5" maxlength="2048"
                placeholder="https://www.example.com/"
