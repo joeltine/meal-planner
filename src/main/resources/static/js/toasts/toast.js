@@ -66,7 +66,7 @@ export class Toast {
       <div class="toast ${styles.container.stateClass}" role="alert">
         <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
           <svg class="feather mr-2" viewBox="0 0 24 24">
-            <use href="#alert-circle"/>
+            <use href="#icon-alert-circle"/>
           </svg>
           <strong class="mr-auto toast-header-text">${this.header}</strong>
           <small class="toast-time ml-2">${this.time}</small>

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RecipeEditor {
 
   @GetMapping("/recipeEditor")
-  public String getIngredientEditorPage() {
+  public String getRecipeEditorPage() {
     return "recipeeditor/recipeEditor";
   }
 }

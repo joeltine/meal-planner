@@ -68,10 +68,34 @@
     <polyline points="18 9 12 3 6 9"></polyline>
   </symbol>
 
-  <symbol id="alert-circle">
+  <symbol id="icon-alert-circle">
     <circle cx="12" cy="12" r="10"></circle>
     <line x1="12" y1="8" x2="12" y2="12"></line>
     <line x1="12" y1="16" x2="12.01" y2="16"></line>
+  </symbol>
+
+  <symbol id="icon-globe">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="2" y1="12" x2="22" y2="12"></line>
+    <path
+        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+  </symbol>
+
+  <symbol id="icon-sunrise">
+    <path d="M17 18a5 5 0 0 0-10 0"></path>
+    <line x1="12" y1="2" x2="12" y2="9"></line>
+    <line x1="4.22" y1="10.22" x2="5.64" y2="11.64"></line>
+    <line x1="1" y1="18" x2="3" y2="18"></line>
+    <line x1="21" y1="18" x2="23" y2="18"></line>
+    <line x1="18.36" y1="11.64" x2="19.78" y2="10.22"></line>
+    <line x1="23" y1="22" x2="1" y2="22"></line>
+    <polyline points="8 6 12 2 16 6"></polyline>
+  </symbol>
+
+  <symbol id="icon-info">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
   </symbol>
 </svg>
 
@@ -129,6 +153,30 @@
                 <use href="#icon-list"/>
               </svg>
               Recipe Editor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/recipeTypeEditor">
+              <svg class="feather" viewBox="0 0 24 24">
+                <use href="#icon-info"/>
+              </svg>
+              Recipe Type Editor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/recipeCategoriesEditor">
+              <svg class="feather" viewBox="0 0 24 24">
+                <use href="#icon-globe"/>
+              </svg>
+              Recipe Category Editor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/mealTypeEditor">
+              <svg class="feather" viewBox="0 0 24 24">
+                <use href="#icon-sunrise"/>
+              </svg>
+              Meal Type Editor
             </a>
           </li>
           <li class="nav-item">
