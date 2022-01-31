@@ -2,13 +2,21 @@ package family.themartinez.mealplanner.controllers.addrecipes;
 
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.ingredients.IngredientRepository;
+import family.themartinez.mealplanner.data.mealtypes.MealType;
+import family.themartinez.mealplanner.data.mealtypes.MealTypeRepository;
+import family.themartinez.mealplanner.data.recipecategories.RecipeCategory;
+import family.themartinez.mealplanner.data.recipecategories.RecipeCategoryRepository;
+import family.themartinez.mealplanner.data.recipetypes.RecipeType;
+import family.themartinez.mealplanner.data.recipetypes.RecipeTypeRepository;
 import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
 import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
 import family.themartinez.mealplanner.scraper.IngredientParsed;
 import family.themartinez.mealplanner.scraper.ScrapedIngredient;
 import family.themartinez.mealplanner.scraper.ScrapedRecipe;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +31,9 @@ public class ScrapeRecipeController {
 
   @Autowired private UnitRepository unitRepository;
   @Autowired private IngredientRepository ingredientRepository;
+  @Autowired private RecipeCategoryRepository recipeCategoryRepository;
+  @Autowired private MealTypeRepository mealTypeRepository;
+  @Autowired private RecipeTypeRepository recipeTypeRepository;
 
   private final ExternalRecipeScraper scraper;
 
@@ -35,7 +46,12 @@ public class ScrapeRecipeController {
     logger.info("Attempting to scrape recipe from {}.", url);
     ScrapedRecipe scrapedRecipe = this.scraper.scrapeRecipe(url);
     logger.info("Successfully scraped recipe with output: {}.", scrapedRecipe.toString());
+    maybeLookUpIngredientInfo(scrapedRecipe);
+    maybeLookUpCategoricals(scrapedRecipe);
+    return scrapedRecipe;
+  }
 
+  private void maybeLookUpIngredientInfo(ScrapedRecipe scrapedRecipe) {
     List<ScrapedIngredient> ingredients = scrapedRecipe.getIngredients();
     for (ScrapedIngredient ingredient : ingredients) {
       logger.info("Processing raw ingredient line: \"{}\".", ingredient.getIngredientRaw());
@@ -56,13 +72,42 @@ public class ScrapeRecipeController {
         ingredientParsed.setName(foundIngredient.getName());
       }
     }
+  }
 
+  private void maybeLookUpCategoricals(ScrapedRecipe scrapedRecipe) {
     if (scrapedRecipe.getCategory() != null && !scrapedRecipe.getCategory().isEmpty()) {
-      scrapedRecipe.getCategory().split(",");
-      // TODO: Finish me.
-    }
+      logger.info(
+          "Found category string, \"{}\", attempting to match to DB categories.",
+          scrapedRecipe.getCategory());
+      List<String> categories =
+          Arrays.stream(scrapedRecipe.getCategory().split(","))
+              .map(String::trim)
+              .collect(Collectors.toList());
+      for (String category : categories) {
+        List<RecipeCategory> recipeCategories = recipeCategoryRepository.findByName(category);
+        if (recipeCategories.size() > 0) {
+          logger.info("Found match for \"{}\" in recipe_categories.", category);
+          scrapedRecipe.addToRecipeCategories(
+              recipeCategories.stream().map(RecipeCategory::getId).collect(Collectors.toList()));
+          continue;
+        }
 
-    return scrapedRecipe;
+        List<MealType> mealTypes = mealTypeRepository.findByName(category);
+        if (mealTypes.size() > 0) {
+          logger.info("Found match for \"{}\" in meal_types.", category);
+          scrapedRecipe.addToMealTypes(
+              mealTypes.stream().map(MealType::getId).collect(Collectors.toList()));
+          continue;
+        }
+
+        List<RecipeType> recipeTypes = recipeTypeRepository.findByName(category);
+        if (recipeTypes.size() > 0) {
+          logger.info("Found match for \"{}\" in recipe_types.", category);
+          scrapedRecipe.addToRecipeTypes(
+              recipeTypes.stream().map(RecipeType::getId).collect(Collectors.toList()));
+        }
+      }
+    }
   }
 
   private Unit maybeFindUnit(IngredientParsed ingredientParsed) {

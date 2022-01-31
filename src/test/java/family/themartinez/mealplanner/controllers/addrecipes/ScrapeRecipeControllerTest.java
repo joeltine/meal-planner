@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -20,6 +22,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.collect.ImmutableList;
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.ingredients.IngredientRepository;
+import family.themartinez.mealplanner.data.mealtypes.MealType;
+import family.themartinez.mealplanner.data.mealtypes.MealTypeRepository;
+import family.themartinez.mealplanner.data.recipecategories.RecipeCategory;
+import family.themartinez.mealplanner.data.recipecategories.RecipeCategoryRepository;
+import family.themartinez.mealplanner.data.recipetypes.RecipeType;
+import family.themartinez.mealplanner.data.recipetypes.RecipeTypeRepository;
 import family.themartinez.mealplanner.data.units.Unit;
 import family.themartinez.mealplanner.data.units.UnitRepository;
 import family.themartinez.mealplanner.scraper.ExternalRecipeScraper;
@@ -56,6 +64,10 @@ class ScrapeRecipeControllerTest {
 
   @Autowired private UnitRepository unitRepository;
   @Autowired private IngredientRepository ingredientRepository;
+  @Autowired private RecipeCategoryRepository recipeCategoryRepository;
+  @Autowired private RecipeTypeRepository recipeTypeRepository;
+  @Autowired private MealTypeRepository mealTypeRepository;
+
   @Autowired private MockMvc mockMvc;
 
   @BeforeAll
@@ -75,6 +87,9 @@ class ScrapeRecipeControllerTest {
 
   @BeforeEach
   void setUp() {
+    populateRecipeCategoryRepository();
+    populateMealTypeRepository();
+    populateRecipeTypeRepository();
     populateUnitRepository();
     populateIngredientRepository();
   }
@@ -83,6 +98,9 @@ class ScrapeRecipeControllerTest {
   void tearDown() {
     ingredientRepository.deleteAll();
     unitRepository.deleteAll();
+    recipeCategoryRepository.deleteAll();
+    recipeTypeRepository.deleteAll();
+    mealTypeRepository.deleteAll();
   }
 
   @Test
@@ -102,7 +120,17 @@ class ScrapeRecipeControllerTest {
     assertEquals(20, scrapedRecipe.getPrepTime());
     assertEquals(15, scrapedRecipe.getCookTime());
     assertEquals(35, scrapedRecipe.getTotalTime());
-    assertEquals("Meat and Poultry,Turkey,Ground Turkey Recipes", scrapedRecipe.getCategory());
+
+    RecipeCategory americanCateogry = recipeCategoryRepository.findByName("American").get(0);
+    RecipeCategory meatCategory = recipeCategoryRepository.findByName("meat and poultry").get(0);
+    MealType lunchType = mealTypeRepository.findByName("lunch").get(0);
+    RecipeType entreeType = recipeTypeRepository.findByName("entree").get(0);
+
+    assertThat(
+        scrapedRecipe.getRecipeCategories(),
+        containsInAnyOrder(americanCateogry.getId(), meatCategory.getId()));
+    assertThat(scrapedRecipe.getMealTypes(), containsInAnyOrder(lunchType.getId()));
+    assertThat(scrapedRecipe.getRecipeTypes(), containsInAnyOrder(entreeType.getId()));
 
     List<ScrapedIngredient> ingredients = scrapedRecipe.getIngredients();
     ScrapedIngredient eggs = ingredients.get(0);
@@ -155,6 +183,13 @@ class ScrapeRecipeControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andReturn();
     verify(scraperMock).scrapeRecipe("https://www.recipes.com/beefwellington");
+
+    MealType dinnerType = mealTypeRepository.findByName("dinner").get(0);
+    RecipeType entreeType = recipeTypeRepository.findByName("entree").get(0);
+
+    assertThat(scrapedRecipe.getRecipeCategories(), empty());
+    assertThat(scrapedRecipe.getMealTypes(), containsInAnyOrder(dinnerType.getId()));
+    assertThat(scrapedRecipe.getRecipeTypes(), containsInAnyOrder(entreeType.getId()));
 
     List<ScrapedIngredient> ingredients = scrapedRecipe.getIngredients();
     ScrapedIngredient whiteMushrooms = ingredients.get(0);
@@ -277,8 +312,7 @@ class ScrapeRecipeControllerTest {
             "honey",
             "balsamic vinegar",
             "walnuts",
-            "pomegranate seeds",
-            "parmesan cheese");
+            "pomegranate seeds");
     ImmutableList.Builder<Ingredient> toAdd = ImmutableList.builder();
     for (String ingredient : ingredientNames) {
       Ingredient newIngredient = new Ingredient();
@@ -309,5 +343,51 @@ class ScrapeRecipeControllerTest {
       unitsToAdd.add(u);
     }
     unitRepository.saveAll(unitsToAdd.build());
+  }
+
+  private void populateRecipeCategoryRepository() {
+    ImmutableList.Builder<RecipeCategory> toAdd = ImmutableList.builder();
+    ImmutableList<String> names =
+        ImmutableList.of(
+            "Italian",
+            "Thai",
+            "Chinese",
+            "Indian",
+            "holidays",
+            "American",
+            "vegan",
+            "vegetarian",
+            "low-carb",
+            "Japanese",
+            "Vietnamese",
+            "meat and poultry");
+    for (String name : names) {
+      RecipeCategory category = new RecipeCategory();
+      category.setName(name);
+      toAdd.add(category);
+    }
+    recipeCategoryRepository.saveAll(toAdd.build());
+  }
+
+  private void populateMealTypeRepository() {
+    ImmutableList.Builder<MealType> toAdd = ImmutableList.builder();
+    ImmutableList<String> names = ImmutableList.of("breakfast", "lunch", "dinner");
+    for (String name : names) {
+      MealType type = new MealType();
+      type.setName(name);
+      toAdd.add(type);
+    }
+    mealTypeRepository.saveAll(toAdd.build());
+  }
+
+  private void populateRecipeTypeRepository() {
+    ImmutableList.Builder<RecipeType> toAdd = ImmutableList.builder();
+    ImmutableList<String> names = ImmutableList.of("entree", "sauce", "condiment");
+    for (String name : names) {
+      RecipeType type = new RecipeType();
+      type.setName(name);
+      toAdd.add(type);
+    }
+    recipeTypeRepository.saveAll(toAdd.build());
   }
 }

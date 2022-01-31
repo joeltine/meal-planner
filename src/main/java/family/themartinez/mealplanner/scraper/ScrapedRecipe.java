@@ -3,6 +3,7 @@ package family.themartinez.mealplanner.scraper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 
 /** Object representation of results returned from scrape_recipe.py. */
@@ -28,13 +29,13 @@ public class ScrapedRecipe {
   private String canonicalUrl;
 
   @JsonProperty("recipe_categories")
-  private List<Integer> recipeCategories;
+  private List<Integer> recipeCategories = new ArrayList<>();
 
   @JsonProperty("recipe_types")
-  private List<Integer> recipeTypes;
+  private List<Integer> recipeTypes = new ArrayList<>();
 
   @JsonProperty("meal_types")
-  private List<Integer> mealTypes;
+  private List<Integer> mealTypes = new ArrayList<>();
 
   public ScrapedRecipe() {}
 
@@ -135,6 +136,10 @@ public class ScrapedRecipe {
     this.recipeCategories = recipeCategories;
   }
 
+  public void addToRecipeCategories(List<Integer> recipeCategories) {
+    this.recipeCategories.addAll(recipeCategories);
+  }
+
   public List<Integer> getRecipeTypes() {
     return recipeTypes;
   }
@@ -143,12 +148,20 @@ public class ScrapedRecipe {
     this.recipeTypes = recipeTypes;
   }
 
+  public void addToRecipeTypes(List<Integer> recipeTypes) {
+    this.recipeTypes.addAll(recipeTypes);
+  }
+
   public List<Integer> getMealTypes() {
     return mealTypes;
   }
 
   public void setMealTypes(List<Integer> mealTypes) {
     this.mealTypes = mealTypes;
+  }
+
+  public void addToMealTypes(List<Integer> mealTypes) {
+    this.mealTypes.addAll(mealTypes);
   }
 
   @Override

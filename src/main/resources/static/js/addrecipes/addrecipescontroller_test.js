@@ -623,7 +623,7 @@ describe('AddRecipesController test suite', function () {
     importRecipeModalButton.click();
   });
 
-  fit('should import recipe correctly', function (done) {
+  it('should import recipe correctly', function (done) {
     importRecipeModal.on('hidden.bs.modal', function (event) {
       expect(importRecipeModal[0]).not.toBeVisible();
       done();
