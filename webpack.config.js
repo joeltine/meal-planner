@@ -10,7 +10,7 @@ const config = {
     recipetypeeditor: './src/main/resources/static/js/recipetypeeditor/recipetypeeditor.jsx',
     mealtypeeditor: './src/main/resources/static/js/mealtypeeditor/mealtypeeditor.jsx',
     recipecategorieseditor: './src/main/resources/static/js/recipecategorieseditor/recipecategorieseditor.jsx',
-    planner: './src/main/resources/static/js/planner/planner.js',
+    planner: './src/main/resources/static/js/planner/planner.jsx',
     'third-party': './src/main/resources/static/js/third-party/third-party.js',
   },
 
