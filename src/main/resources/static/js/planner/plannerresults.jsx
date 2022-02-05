@@ -64,7 +64,7 @@ export class PlannerResults extends React.Component {
 
   getResultButtons() {
     return (
-        <div className="container" key="buttons">
+        <div className="container-fluid" key="buttons">
           <div className="row">
             <button className="btn btn-primary"
                     onClick={this.props.goBackButtonClick}>
@@ -88,7 +88,7 @@ export class PlannerResults extends React.Component {
     for (const recipe of this.props.results) {
       recipeContainers.push(
           <div key={recipe.id}
-               className="container mb-4 mt-4">
+               className="container-fluid mb-4 mt-4">
             <div className="row">
               <h4>{recipe.name}</h4>
             </div>

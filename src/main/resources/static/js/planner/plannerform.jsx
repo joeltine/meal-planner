@@ -85,7 +85,7 @@ export class PlannerForm extends React.Component {
 
   render() {
     return (
-        <form ref={this.formRef} className="container p-0">
+        <form ref={this.formRef} className="container-fluid p-0">
           <h5>Number of recipes</h5>
           <div className="row">
             <NumRecipes ref={this.numRecipeRef}/>

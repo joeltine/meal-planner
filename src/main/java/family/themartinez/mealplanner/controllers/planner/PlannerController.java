@@ -9,10 +9,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class PlannerController {
 
   @Autowired private RecipeRepository recipeRepository;
-  @Autowired private EntityManager entityManager;
   @Autowired JdbcTemplate jdbcTemplate;
-  @Autowired private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   private enum FilterTypes {
     RECIPE_TYPES("recipeTypes"),
@@ -85,7 +81,7 @@ public class PlannerController {
     query.add("LIMIT ?");
 
     List<Integer> values =
-        request.getFilters().stream().map(filter -> filter.getValue()).collect(Collectors.toList());
+        request.getFilters().stream().map(Filter::getValue).collect(Collectors.toList());
     values.add(request.getNumRecipes());
 
     List<Integer> recipeIds =
@@ -97,7 +93,9 @@ public class PlannerController {
   private String buildWhereClause(MealPlanRequest request) {
     String operator = request.getFilterLogicalOperator();
     if (!operatorToSql.containsKey(operator)) {
-      throw new NoSuchElementException(String.format(operator));
+      throw new NoSuchElementException(
+          String.format(
+              "Unsupported SQL operator '%s' building meal planner where clause.", operator));
     }
     String operatorSql = operatorToSql.get(operator);
 
@@ -109,7 +107,10 @@ public class PlannerController {
       Filter filter = filters.next();
 
       if (!constraintToSql.containsKey(filter.getConstraint())) {
-        throw new NoSuchElementException(String.format(filter.getConstraint()));
+        throw new NoSuchElementException(
+            String.format(
+                "Unsupported constraint '%s' in building meal planner where clause.",
+                filter.getConstraint()));
       }
 
       String constraintSql = constraintToSql.get(filter.getConstraint());
