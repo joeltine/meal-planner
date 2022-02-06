@@ -6,10 +6,17 @@ import {GoogleDocsClient} from "./googledocsclient";
 export class PlannerResults extends React.Component {
   constructor(props) {
     super(props);
-    this.docsClient = new GoogleDocsClient();
     this.state = {isSignedIn: false};
     this.exportToDocs = this.exportToDocs.bind(this);
     this.authenticateToGoogle = this.authenticateToGoogle.bind(this);
+  }
+
+  getDocsClient() {
+    return new Promise(function (resolve, reject) {
+      GAPI_CLIENT_READY.then(() => {
+        resolve(new GoogleDocsClient());
+      });
+    });
   }
 
   componentDidMount() {
@@ -47,7 +54,12 @@ export class PlannerResults extends React.Component {
   }
 
   exportToDocs() {
-    this.docsClient.createNewMealPlanDoc(this.state.results);
+    this.getDocsClient().then((client) => {
+      client.createNewMealPlanDoc(this.props.results).then((newDoc) => {
+        console.log('Meal Plan created');
+        console.log(newDoc);
+      });
+    }).catch(console.error);
   }
 
   updateSignInStatus(isSignedIn) {
