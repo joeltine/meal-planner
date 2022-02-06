@@ -1,8 +1,59 @@
 import React from "react";
 
+import {Toast} from "../toasts/toast";
+import {GoogleDocsClient} from "./googledocsclient";
+
 export class PlannerResults extends React.Component {
   constructor(props) {
     super(props);
+    this.docsClient = new GoogleDocsClient();
+    this.state = {isSignedIn: false};
+    this.exportToDocs = this.exportToDocs.bind(this);
+    this.authenticateToGoogle = this.authenticateToGoogle.bind(this);
+  }
+
+  componentDidMount() {
+    if (!GAPI_CLIENT_READY) {
+      Toast.showNewErrorToast('The gapi client wasn\'t initialized!',
+          'The gapi client wasn\'t initialized before trying to use the Meal Planner result page.',
+          {autohide: false});
+      return;
+    }
+
+    GAPI_CLIENT_READY.then(() => {
+      this.updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      gapi.auth2.getAuthInstance().isSignedIn.listen(
+          this.updateSignInStatus.bind(this));
+    }).catch((err) => {
+      Toast.showNewErrorToast('The gapi client failed to initialize!',
+          `An error occurred initializing the gapi client: ${JSON.stringify(
+              err)}`,
+          {autohide: false});
+    });
+  }
+
+  authenticateToGoogle() {
+    GAPI_CLIENT_READY.then(() => {
+      gapi.auth2.getAuthInstance().signIn().then(() => {
+        const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        Toast.showNewSuccessToast('Authentication Successful!',
+            `Successfully authenticated ${profile.getName()} using account ${profile.getEmail()}.`);
+      }).catch((err) => {
+        Toast.showNewErrorToast(
+            `Failed to authenticate!', 'Failed to sign-in to Google: ${JSON.stringify(
+                err)}`, {delay: 10000});
+      });
+    });
+  }
+
+  exportToDocs() {
+    this.docsClient.createNewMealPlanDoc(this.state.results);
+  }
+
+  updateSignInStatus(isSignedIn) {
+    this.setState({
+      isSignedIn: isSignedIn
+    });
   }
 
   buildIngredientsList(ingredientLists) {
@@ -62,17 +113,28 @@ export class PlannerResults extends React.Component {
     );
   }
 
+  getExportButton() {
+    return this.state.isSignedIn ?
+        <button
+            className="btn btn-primary ml-2"
+            onClick={this.exportToDocs}>
+          Export to Google Docs
+        </button> :
+        <button className="btn btn-warning ml-2"
+                onClick={this.authenticateToGoogle}>
+          Sign-in to Export to Google Docs
+        </button>;
+  }
+
   getResultButtons() {
     return (
         <div className="container-fluid" key="buttons">
           <div className="row">
-            <button className="btn btn-primary"
+            <button className="btn btn-danger"
                     onClick={this.props.goBackButtonClick}>
               Go Back
             </button>
-            <button className="btn btn-primary ml-2">
-              Export to Google Docs
-            </button>
+            {this.getExportButton()}
           </div>
         </div>
     );

@@ -18,6 +18,25 @@
 </main>
 
 <th:block layout:fragment="scripts">
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    const GAPI_CLIENT_READY = new Promise(function (resolve, reject) {
+      // Load gapi client/auth2 libraries.
+      gapi.load('client:auth2', {
+        callback: () => {
+          // Load Google Docs client API and prep gapi.auth2 OAuth library.
+          gapi.client.init({
+            discoveryDocs: ['https://docs.googleapis.com/$discovery/rest?version=v1'],
+            clientId: '104092167699-bhdgbdqd0ntudhhhqt8qq06l601v9dvj.apps.googleusercontent.com',
+            scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive'
+          }).then(() => {
+            resolve();
+          }).catch(reject);
+        },
+        onerror: reject
+      });
+    });
+  </script>
   <script src="/js/planner/planner.bundle.js"></script>
 </th:block>
 
