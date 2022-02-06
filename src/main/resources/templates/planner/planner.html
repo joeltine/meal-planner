@@ -24,11 +24,10 @@
       // Load gapi client/auth2 libraries.
       gapi.load('client:auth2', {
         callback: () => {
-          // Load Google Docs client API and prep gapi.auth2 OAuth library.
+          // Load Google Drive client API and prep gapi.auth2 OAuth library.
           gapi.client.init({
-            discoveryDocs: ['https://docs.googleapis.com/$discovery/rest?version=v1'],
             clientId: '104092167699-bhdgbdqd0ntudhhhqt8qq06l601v9dvj.apps.googleusercontent.com',
-            scope: 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive'
+            scope: 'https://www.googleapis.com/auth/drive'
           }).then(() => {
             resolve();
           }).catch(reject);

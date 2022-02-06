@@ -1,7 +1,8 @@
 import React from "react";
 
 import {Toast} from "../toasts/toast";
-import {GoogleDocsClient} from "./googledocsclient";
+import {GoogleDriveUploader} from "./googledriveuploader";
+import {renderToString} from "react-dom/server";
 
 export class PlannerResults extends React.Component {
   constructor(props) {
@@ -9,14 +10,6 @@ export class PlannerResults extends React.Component {
     this.state = {isSignedIn: false};
     this.exportToDocs = this.exportToDocs.bind(this);
     this.authenticateToGoogle = this.authenticateToGoogle.bind(this);
-  }
-
-  getDocsClient() {
-    return new Promise(function (resolve, reject) {
-      GAPI_CLIENT_READY.then(() => {
-        resolve(new GoogleDocsClient());
-      });
-    });
   }
 
   componentDidMount() {
@@ -53,13 +46,71 @@ export class PlannerResults extends React.Component {
     });
   }
 
+  buildSimplifiedResultHtmlForGoogleDocs() {
+    const results = [];
+
+    for (const recipe of this.props.results) {
+      results.push(
+          <section key={recipe.id}>
+            <h1>{recipe.name}</h1>
+            <a href={recipe.externalLink}>{recipe.externalLink}</a>
+            <h2>Time Requirements</h2>
+            <p>
+              <strong>Prep Time (min):&nbsp;</strong>
+              {recipe.prepTimeMin},&nbsp;
+              <strong>Cook Time (min):&nbsp;</strong>
+              {recipe.cookTimeMin}
+            </p>
+            <h2>Ingredients</h2>
+            {this.buildIngredientsList(recipe.ingredientLists)}
+            <h2>Instructions</h2>
+            <pre style={{fontFamily: "Arial"}}>{recipe.instructions}</pre>
+            {recipe.description &&
+                <React.Fragment>
+                  <h2>Description</h2>
+                  <pre style={{fontFamily: "Arial"}}>{recipe.description}</pre>
+                </React.Fragment>}
+          </section>
+      );
+    }
+
+    return renderToString(
+        <React.Fragment>
+          <title>Test Document</title>
+          <main>{results}</main>
+        </React.Fragment>
+    );
+  }
+
   exportToDocs() {
-    this.getDocsClient().then((client) => {
-      client.createNewMealPlanDoc(this.props.results).then((newDoc) => {
-        console.log('Meal Plan created');
-        console.log(newDoc);
+    GAPI_CLIENT_READY.then(() => {
+      const uploader = new GoogleDriveUploader({
+        file: new Blob([this.buildSimplifiedResultHtmlForGoogleDocs()],
+            {"type": "text/html"}),
+        metadata: {
+          name: `Meal Plan for ${new Date().toLocaleDateString()}`,
+          mimeType: 'application/vnd.google-apps.document'
+        },
+        token: gapi.client.getToken().access_token,
+        onComplete: (response) => {
+          const docInfo = JSON.parse(response);
+          Toast.showNewSuccessToast('Google Doc Successfully Created!',
+              `Successfully uploaded <a target="_blank" href="${this.buildGoogleDocUrl(
+                  docInfo.id)}">${docInfo.name}</a> to Google Docs.`,
+              {delay: 20000});
+        },
+        onError: (error) => {
+          Toast.showNewErrorToast(
+              `Failed to create Google Doc!', 'Request to upload file to Google Drive/Docs failed: ${JSON.stringify(
+                  error)}}`, {autohide: false});
+        }
       });
-    }).catch(console.error);
+      uploader.upload();
+    });
+  }
+
+  buildGoogleDocUrl(docId) {
+    return `https://docs.google.com/document/d/${docId}/edit`;
   }
 
   updateSignInStatus(isSignedIn) {
@@ -107,7 +158,7 @@ export class PlannerResults extends React.Component {
 
   getEmptyResultOutput() {
     return (
-        <div className="jumbotron mt-3">
+        <div className="jumbotron mt-3" key="emptyOutput">
           <h1 className="display-5">No recipes found!</h1>
           <p className="lead">
             No recipes were found matching your given criteria. Try removing
@@ -153,11 +204,7 @@ export class PlannerResults extends React.Component {
   }
 
   buildResultOutput() {
-    if (!this.props.results || !this.props.results.length) {
-      return this.getEmptyResultOutput();
-    }
-
-    const recipeContainers = [this.getResultButtons()];
+    const recipeContainers = [];
 
     for (const recipe of this.props.results) {
       recipeContainers.push(
@@ -207,10 +254,18 @@ export class PlannerResults extends React.Component {
   }
 
   render() {
-    return (
-        <div>
-          {this.buildResultOutput()}
-        </div>
-    );
+    let output;
+    if (!this.props.results || !this.props.results.length) {
+      output = this.getEmptyResultOutput();
+    } else {
+      output = [this.getResultButtons()];
+      output.push(
+          <div key="recipeHtmlContainer">
+            {this.buildResultOutput()}
+          </div>
+      );
+    }
+
+    return output;
   }
 }
