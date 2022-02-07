@@ -2,20 +2,23 @@
 #
 # Git pre-commit hooks.
 
-echo "Running Maven clean test for errors"
+echo "Running pre-commit hooks"
 
 # retrieving current working directory
-CWD=`pwd`
-MAIN_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CWD=$(pwd)
+
 # go to main project dir
-cd $MAIN_DIR/../
-# running maven clean test
+cd $(git rev-parse --show-toplevel)
+
+# run tests
 mvn clean test
+
 if [ $? -ne 0 ]; then
   "Error while testing the code"
   # go back to current working dir
-  cd $CWD
+  cd "$CWD" || exit 1
   exit 1
 fi
+
 # go back to current working dir
-cd $CWD
+cd "$CWD" || exit 1

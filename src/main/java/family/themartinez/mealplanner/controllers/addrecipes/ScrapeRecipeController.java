@@ -1,5 +1,6 @@
 package family.themartinez.mealplanner.controllers.addrecipes;
 
+import com.google.common.collect.ImmutableMap;
 import family.themartinez.mealplanner.data.ingredients.Ingredient;
 import family.themartinez.mealplanner.data.ingredients.IngredientRepository;
 import family.themartinez.mealplanner.data.mealtypes.MealType;
@@ -36,6 +37,12 @@ public class ScrapeRecipeController {
   @Autowired private RecipeTypeRepository recipeTypeRepository;
 
   private final ExternalRecipeScraper scraper;
+
+  // Map of common product names to their canonical names in the DB. This map is for very common
+  // ingredients who are often referred to by their colloquial names, but we don't want to change
+  // the actual DB name for clarity reasons. Use this rarely.
+  private final ImmutableMap<String, String> commonNameConversions =
+      ImmutableMap.of("garlic", "garlic cloves", "pepper", "black pepper", "sugar", "white sugar");
 
   ScrapeRecipeController(ExternalRecipeScraper scraper) {
     this.scraper = scraper;
@@ -129,12 +136,29 @@ public class ScrapeRecipeController {
     return foundUnit;
   }
 
+  private String maybeConvertCommonIngredientName(String ingredientName) {
+    if (ingredientName == null) {
+      return null;
+    }
+    if (commonNameConversions.containsKey(ingredientName)) {
+      String newName = commonNameConversions.get(ingredientName);
+      logger.info(
+          "Found common name conversion for \"{}\". Converting it to \"{}\".",
+          ingredientName,
+          newName);
+      return newName;
+    }
+    return ingredientName;
+  }
+
   private Ingredient maybeFindIngredient(ScrapedIngredient ingredient) {
     IngredientParsed ingredientParsed = ingredient.getIngredientParsed();
     String ingredientLookupName =
         ingredientParsed.getProduct() == null || ingredientParsed.getProduct().isEmpty()
             ? ingredient.getIngredientRaw()
             : ingredientParsed.getProduct();
+    // Maybe do conversion from colloquial common name to canonical DB name.
+    ingredientLookupName = maybeConvertCommonIngredientName(ingredientLookupName);
     Ingredient foundIngredient = null;
     logger.info("Trying to find exact db match for ingredient \"{}\".", ingredientLookupName);
     // First attempt to find an exact ingredient match by name (including plural).
