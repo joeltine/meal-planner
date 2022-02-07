@@ -6,6 +6,8 @@ import com.google.common.io.CharStreams;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 public class ExternalRecipeScraper {
 
@@ -35,7 +37,11 @@ public class ExternalRecipeScraper {
     String result =
         CharStreams.toString(new InputStreamReader(process.getInputStream(), Charsets.UTF_8));
     if (process.exitValue() != 0) {
-      throw new RuntimeException(result);
+      throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          String.format(
+              "Recipe URL scraping failed. Recipe website likely isn't in standard recipe schema format. Url: %s",
+              recipeUrl));
     }
     return result;
   }
