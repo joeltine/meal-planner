@@ -5,6 +5,7 @@
 To run the app locally:
 
 ```
+export SPRING_DATASOURCE_PASSWORD=MYSQL_PW
 mvn spring-boot:run
 ```
 
