@@ -1,13 +1,17 @@
 # Library to parse raw ingredient text and return structured data. Uses
 # Zestful data API for parsing ingredients: https://zestfuldata.com/docs.
+# The API key for zestful must be present in environment variable
+# ZESTFUL_API_KEY or the script will raise an exception.
+
 import http.client
 import json
+import os
 
 HEADERS = {
   'content-type': 'application/json',
   'x-rapidapi-host': 'zestful.p.rapidapi.com',
   # TODO: Hide this API key.
-  'x-rapidapi-key': 'ff1a2def8cmsh57f7cf808321f06p185419jsn3809ded16a09'
+  'x-rapidapi-key': os.environ['ZESTFUL_API_KEY']
 }
 
 
