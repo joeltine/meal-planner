@@ -46,8 +46,48 @@ export class PlannerResults extends React.Component {
     });
   }
 
+  buildGroceryList() {
+    const groceries = {};
+    const groceryItems = [];
+
+    for (const recipe of this.props.results) {
+      for (const ingredientListItem of recipe.ingredientLists) {
+        const ingredient = ingredientListItem.ingredient;
+        // Right now, you can technically have multiple lines of the same
+        // ingredient with different unit types (e.g., 1 ounce chicken AND
+        // 2 pounds chicken), so we key on unit id as well.
+        const key = `${ingredient.id}-${ingredientListItem.unit.id}`;
+        if (!groceries[key]) {
+          groceries[key] = {
+            quantity: 0,
+            unit: ingredientListItem.unit.name,
+            displayName: ingredient.displayName || ingredient.name
+          };
+        }
+        groceries[key].quantity += ingredientListItem.quantity;
+      }
+    }
+
+    for (const id in groceries) {
+      const grocery = groceries[id];
+      groceryItems.push(
+          <li key={id}>
+            {`${grocery.quantity} ${grocery.unit} ${grocery.displayName}`}
+          </li>
+      );
+    }
+
+    return (
+        <section key="groceryList">
+          <h1>Grocery List</h1>
+          <ul>{groceryItems}</ul>
+          <hr/>
+        </section>
+    );
+  }
+
   buildSimplifiedResultHtmlForGoogleDocs() {
-    const results = [];
+    const results = [this.buildGroceryList()];
 
     for (const recipe of this.props.results) {
       results.push(
@@ -70,6 +110,7 @@ export class PlannerResults extends React.Component {
                   <h2>Description</h2>
                   <pre style={{fontFamily: "Arial"}}>{recipe.description}</pre>
                 </React.Fragment>}
+            <hr/>
           </section>
       );
     }
