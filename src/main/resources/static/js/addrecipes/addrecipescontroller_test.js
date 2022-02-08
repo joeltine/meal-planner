@@ -86,7 +86,7 @@ const fetaBurgersJson = {
         "preparationNotes": "ground",
         "product": "turkey",
         "productSizeModifier": null,
-        "quantity": 2.0,
+        "quantity": 2.33333333,
         "unitId": 4,
         "unit": "pound",
         "usdaInfo": {
@@ -684,7 +684,8 @@ describe('AddRecipesController test suite', function () {
           ', thawed and squeezed dry');
 
       const turkey = ingredientRows.eq(4);
-      expect(turkey.find('#inputQuantity').val()).toEqual('2');
+      // Should truncate precision for a lot of decimal places 2.333333 => 2.33
+      expect(turkey.find('#inputQuantity').val()).toEqual('2.33');
       expect(turkey.find('#inputUnit').val()).toEqual('4');
       expect(turkey.find('#inputIngredient').val()).toEqual('');
       expect(turkey.find('#inputIngredientDisplayName').val()).toEqual(

@@ -121,8 +121,13 @@ export class AddRecipesController {
       originalTextRow.removeClass('d-none');
       originalTextRow.find('.ingredientOriginalText').text(
           `(Original: ${rawOriginalText})`);
-      row.find('#inputQuantity').val(parsedInfo['quantity']);
-
+      let quantity = Number(parsedInfo['quantity']);
+      if (quantity % 1 != 0) {
+        // If it's a decimal with more than 2 decimals, truncate precision.
+        const numDecimals = quantity.toString().split(".")[1].length;
+        quantity = numDecimals > 2 ? Number(quantity.toFixed(2)) : quantity;
+      }
+      row.find('#inputQuantity').val(quantity);
       // If we found a matching unit in DB, choose it in select.
       if (parsedInfo['unitId'] != null) {
         row.find('#inputUnit').val(parsedInfo['unitId']);
