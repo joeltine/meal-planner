@@ -1,6 +1,9 @@
 import json
+import os
 import unittest
 from unittest.mock import patch
+
+os.environ['ZESTFUL_API_KEY'] = '1234567890'
 
 from recipe_scraper import RecipeScraper
 
