@@ -49,6 +49,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+// TODO: Set it up so we import a "real" ingredient database into this test. That way we can do
+//       better verifications on the natural language lookup algorithm and things like the
+//       name conversion lookup.
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")

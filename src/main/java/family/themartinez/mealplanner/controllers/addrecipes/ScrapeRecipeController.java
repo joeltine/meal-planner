@@ -41,8 +41,29 @@ public class ScrapeRecipeController {
   // Map of common product names to their canonical names in the DB. This map is for very common
   // ingredients who are often referred to by their colloquial names, but we don't want to change
   // the actual DB name for clarity reasons. Use this rarely.
+  // TODO: Ideally the natural language lookup was good enough to not need this map.
   private final ImmutableMap<String, String> commonNameConversions =
-      ImmutableMap.of("garlic", "garlic cloves", "pepper", "black pepper", "sugar", "white sugar");
+      ImmutableMap.of(
+          "garlic",
+          "garlic cloves",
+          "pepper",
+          "black pepper",
+          "sugar",
+          "white sugar",
+          "onion",
+          "yellow onion",
+          // TODO: Make it so you don't have to specify plural variations here.
+          "onions",
+          "yellow onion",
+          "parsley",
+          "fresh parsley",
+          "milk",
+          "whole milk",
+          // TODO: Make it so you can specify multiple common names to a single canonical name.
+          "spinach",
+          "spinach leaves",
+          "baby spinach",
+          "spinach leaves");
 
   ScrapeRecipeController(ExternalRecipeScraper scraper) {
     this.scraper = scraper;
