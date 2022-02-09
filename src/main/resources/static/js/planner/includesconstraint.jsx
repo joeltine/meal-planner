@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class IncludesConstraint extends React.Component {
   constructor(props) {
@@ -22,3 +23,7 @@ export class IncludesConstraint extends React.Component {
     );
   }
 }
+
+IncludesConstraint.propTypes = {
+  defaultValue: PropTypes.string
+};

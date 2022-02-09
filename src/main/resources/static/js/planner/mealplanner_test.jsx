@@ -1,4 +1,3 @@
-import React from "react";
 import JasmineDOM from "@testing-library/jasmine-dom";
 
 describe('MealPlanner test suite', function () {

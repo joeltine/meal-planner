@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class FilterAnyAll extends React.Component {
   constructor(props) {
@@ -26,3 +27,7 @@ export class FilterAnyAll extends React.Component {
     );
   }
 }
+
+FilterAnyAll.propTypes = {
+  defaultValue: PropTypes.string
+};

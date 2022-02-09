@@ -4,6 +4,7 @@ import {FilterAnyAll} from "./filteranyall";
 import {FilterRow} from "./filterrow";
 import {PlanButton} from "./planbutton";
 import {sendAjax} from "../common/ajax";
+import PropTypes from "prop-types";
 
 let FILTER_ROW_ID = 0;
 
@@ -27,7 +28,7 @@ export class PlannerForm extends React.Component {
       planObj.numRecipes = this.numRecipeRef.current.getValue();
       planObj.filterLogicalOperator = this.filterAnyAllRef.current.getValue();
       planObj.filters = [];
-      Object.entries(this.rowRefs).forEach(([id, ref]) => {
+      Object.values(this.rowRefs).forEach((ref) => {
         planObj.filters.push(ref.getRowData());
       });
 
@@ -108,3 +109,7 @@ export class PlannerForm extends React.Component {
     );
   }
 }
+
+PlannerForm.propTypes = {
+  onResultUpdate: PropTypes.func.isRequired
+};

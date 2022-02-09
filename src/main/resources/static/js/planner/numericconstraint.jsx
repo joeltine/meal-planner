@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class NumericConstraint extends React.Component {
   constructor(props) {
@@ -23,3 +24,7 @@ export class NumericConstraint extends React.Component {
     );
   }
 }
+
+NumericConstraint.propTypes = {
+  defaultValue: PropTypes.string
+};

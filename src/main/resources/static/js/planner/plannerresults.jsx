@@ -3,6 +3,7 @@ import React from "react";
 import {Toast} from "../toasts/toast";
 import {GoogleDriveUploader} from "./googledriveuploader";
 import {renderToString} from "react-dom/server";
+import PropTypes from "prop-types";
 
 export class PlannerResults extends React.Component {
   constructor(props) {
@@ -256,7 +257,8 @@ export class PlannerResults extends React.Component {
             </div>
             <div className="row mb-2">
               <a target="_blank"
-                 href={recipe.externalLink}>{recipe.externalLink}</a>
+                 href={recipe.externalLink}
+                 rel="noreferrer">{recipe.externalLink}</a>
             </div>
             <div className="row">
               <h6>Time Requirements</h6>
@@ -310,3 +312,8 @@ export class PlannerResults extends React.Component {
     return output;
   }
 }
+
+PlannerResults.propTypes = {
+  results: PropTypes.arrayOf(PropTypes.object).isRequired,
+  goBackButtonClick: PropTypes.func.isRequired
+};

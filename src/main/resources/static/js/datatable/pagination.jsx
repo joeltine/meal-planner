@@ -35,7 +35,7 @@ export class Pagination extends React.Component {
     const itemClass = `page-item ${page === this.props.activePage ? 'active'
         : ''}`;
     return (
-        <li className={itemClass} key={page} onClick={(e) => {
+        <li className={itemClass} key={page} onClick={() => {
           this.handlePageNavigationClick(page);
         }}>
           <a className="page-link">{page}</a>

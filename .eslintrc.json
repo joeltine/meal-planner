@@ -34,5 +34,10 @@
     "CSRF_TOKEN": "readonly",
     "GAPI_CLIENT_READY": "readonly",
     "gapi": "readonly"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.jsx", "*.js"]
+    }
+  ]
 }

@@ -4,6 +4,7 @@ import {IncludesConstraint} from "./includesconstraint";
 import {Select} from "./select";
 import {sendAjax} from "../common/ajax";
 import {Typeahead} from "react-bootstrap-typeahead";
+import PropTypes from "prop-types";
 
 const FilterTypes = {
   RECIPE_TYPES: 'recipeTypes',
@@ -272,3 +273,9 @@ export class FilterRow extends React.Component {
     );
   }
 }
+
+FilterRow.propTypes = {
+  addRowClick: PropTypes.func.isRequired,
+  removeRowClick: PropTypes.func.isRequired,
+  identifier: PropTypes.string.isRequired
+};

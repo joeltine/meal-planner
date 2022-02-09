@@ -667,7 +667,7 @@ describe('DataTable test suite', function () {
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": [\"awesome\"], "bat": {\"igadi\": \"muscles\"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
     });
 
     assertSuccessToast('Added new row with id: 69');
@@ -701,7 +701,7 @@ describe('DataTable test suite', function () {
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": [\"awesome\"], "bat": {\"igadi\": \"muscles\"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
     });
 
     // Not in table or fulldata, until we clear filter.
@@ -753,7 +753,7 @@ describe('DataTable test suite', function () {
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": [\"awesome\"], "bat": {\"igadi\": \"muscles\"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
     });
 
     // Should be visible with current filter

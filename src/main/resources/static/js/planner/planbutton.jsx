@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class PlanButton extends React.Component {
   constructor(props) {
@@ -10,3 +11,7 @@ export class PlanButton extends React.Component {
                     onClick={this.props.onButtonClick}>Plan</button>);
   }
 }
+
+PlanButton.propTypes = {
+  onButtonClick: PropTypes.func.isRequired
+};

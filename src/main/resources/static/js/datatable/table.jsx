@@ -28,7 +28,7 @@ export class Table extends React.Component {
     const columnIndicator = this.getColumnHeaderIndicator(data);
     const sortCol = this.props.sortCol || {};
 
-    Object.keys(columnIndicator).forEach((colName, index) => {
+    Object.keys(columnIndicator).forEach((colName) => {
       let sortSvg = 'icon-chevron-up-down';
       if (sortCol['colName'] && sortCol['colName'] === colName) {
         sortSvg = sortCol['sort'] === SORT_TYPES.ascending ? 'icon-chevron-up'
@@ -36,7 +36,7 @@ export class Table extends React.Component {
       }
 
       columnHeaders.push(
-          <th scope="col" key={colName} onClick={(e) => {
+          <th scope="col" key={colName} onClick={() => {
             this.onColumnHeaderClick(colName);
           }}>
             {colName}
