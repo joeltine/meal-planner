@@ -611,11 +611,11 @@ describe('AddRecipesController test suite', function () {
   });
 
   it('should dismiss import recipe modal', function (done) {
-    importRecipeModal.on('hidden.bs.modal', function (event) {
+    importRecipeModal.on('hidden.bs.modal', function () {
       expect(importRecipeModal[0]).not.toBeVisible();
       done();
     });
-    importRecipeModal.on('shown.bs.modal', function (event) {
+    importRecipeModal.on('shown.bs.modal', function () {
       expect(importRecipeModal[0]).toBeVisible();
       dismissImportModal.click();
     });
@@ -624,11 +624,11 @@ describe('AddRecipesController test suite', function () {
   });
 
   it('should import recipe correctly', function (done) {
-    importRecipeModal.on('hidden.bs.modal', function (event) {
+    importRecipeModal.on('hidden.bs.modal', function () {
       expect(importRecipeModal[0]).not.toBeVisible();
       done();
     });
-    importRecipeModal.on('shown.bs.modal', function (event) {
+    importRecipeModal.on('shown.bs.modal', function () {
       expect(importRecipeModal[0]).toBeVisible();
       const url = 'https://recipes.com/fetacheeseburgers';
       importUrl.val(url);
