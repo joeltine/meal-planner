@@ -6,6 +6,7 @@ To run the app locally:
 
 ```
 export SPRING_DATASOURCE_PASSWORD=MYSQL_PW
+export ZESTFUL_API_KEY=KEY
 mvn spring-boot:run
 ```
 
