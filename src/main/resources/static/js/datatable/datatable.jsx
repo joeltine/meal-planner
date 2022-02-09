@@ -366,7 +366,7 @@ export class DataTable extends React.Component {
                   `Attempting to delete row${failures.size > 1 ? 's'
                       : ''} (${Array.from(failures).join(
                       ', ')}) not found in table `
-                  + `data. This shouldn\'t happen unless there\'s a race `
+                  + `data. This shouldn't happen unless there's a race `
                   + `condition.`, {autohide: false});
             }
 

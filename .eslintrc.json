@@ -32,6 +32,7 @@
   "globals": {
     "CSRF_HEADER_NAME": "readonly",
     "CSRF_TOKEN": "readonly",
-    "GAPI_CLIENT_READY": "readonly"
+    "GAPI_CLIENT_READY": "readonly",
+    "gapi": "readonly"
   }
 }

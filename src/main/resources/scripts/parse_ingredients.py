@@ -1,7 +1,9 @@
-# Library to parse raw ingredient text and return structured data. Uses
-# Zestful data API for parsing ingredients: https://zestfuldata.com/docs.
-# The API key for zestful must be present in environment variable
-# ZESTFUL_API_KEY or the script will raise an exception.
+"""Library to parse raw ingredient text and return structured data.
+
+Uses Zestful data API for parsing ingredients: https://zestfuldata.com/docs.
+The API key for zestful must be present in environment variable
+ZESTFUL_API_KEY or the script will raise an exception.
+"""
 
 import http.client
 import json
