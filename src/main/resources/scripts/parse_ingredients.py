@@ -10,7 +10,6 @@ import os
 HEADERS = {
   'content-type': 'application/json',
   'x-rapidapi-host': 'zestful.p.rapidapi.com',
-  # TODO: Hide this API key.
   'x-rapidapi-key': os.environ['ZESTFUL_API_KEY']
 }
 
