@@ -84,3 +84,4 @@ node/
 
 # Python
 __pycache__
+.virtualenv/
