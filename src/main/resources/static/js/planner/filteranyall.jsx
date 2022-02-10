@@ -17,10 +17,10 @@ export class FilterAnyAll extends React.Component {
           Filter on
           <select id="inputAnyAll"
                   ref={this.selectRef}
-                  defaultValue={this.props.defaultValue || "OR"}
+                  defaultValue={this.props.defaultValue || "AND"}
                   className="form-control mr-2 ml-2">
-            <option value="OR">Any</option>
             <option value="AND">All</option>
+            <option value="OR">Any</option>
           </select>
           of the following conditions:
         </div>
