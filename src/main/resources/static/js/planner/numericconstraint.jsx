@@ -16,9 +16,9 @@ export class NumericConstraint extends React.Component {
         <select name="inputConstraint"
                 className="form-control"
                 ref={this.constraintRef}
-                defaultValue={this.props.defaultValue || '<'}>
-          <option value="<">Less Than</option>
-          <option value=">">Greater Than</option>
+                defaultValue={this.props.defaultValue || '<='}>
+          <option value="<=">Less Than or Equal To</option>
+          <option value=">=">Greater Than or Equal To</option>
           <option value="=">Is Equal To</option>
         </select>
     );

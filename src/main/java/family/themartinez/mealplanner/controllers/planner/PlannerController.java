@@ -47,8 +47,8 @@ public class PlannerController {
       ImmutableMap.of(
           "includes", "=",
           "doesNotInclude", "!=",
-          ">", ">",
-          "<", "<",
+          ">=", ">=",
+          "<=", "<=",
           "=", "=");
 
   private final ImmutableMap<String, String> operatorToSql =
