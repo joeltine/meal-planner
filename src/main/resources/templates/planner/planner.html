@@ -5,7 +5,7 @@
 <head>
   <title>Meal Planner</title>
 
-  <link rel="stylesheet" href="/css/planner/mealplanner.css">
+  <link rel="stylesheet" th:href="@{/css/planner/mealplanner.css}">
 </head>
 <body>
 
@@ -36,7 +36,7 @@
       });
     });
   </script>
-  <script src="/js/planner/planner.bundle.js"></script>
+  <script th:src="@{/js/planner/planner.bundle.js}"></script>
 </th:block>
 
 </body>

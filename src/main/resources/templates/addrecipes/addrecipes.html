@@ -5,7 +5,7 @@
 <head>
   <title>Add New Recipes</title>
 
-  <link rel="stylesheet" href="/css/addrecipes/addrecipes.css">
+  <link rel="stylesheet" th:href="@{/css/addrecipes/addrecipes.css}">
 </head>
 <body>
 
@@ -202,7 +202,7 @@
 </main>
 
 <th:block layout:fragment="scripts">
-  <script src="/js/addrecipes/addrecipes.bundle.js"></script>
+  <script th:src="@{/js/addrecipes/addrecipes.bundle.js}"></script>
 </th:block>
 
 </body>

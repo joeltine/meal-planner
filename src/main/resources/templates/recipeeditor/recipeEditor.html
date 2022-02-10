@@ -5,7 +5,7 @@
 <head>
   <title>Recipe Editor</title>
 
-  <link rel="stylesheet" href="/css/datatable/datatable.css">
+  <link rel="stylesheet" th:href="@{/css/datatable/datatable.css}">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 </main>
 
 <th:block layout:fragment="scripts">
-  <script src="/js/recipeeditor/recipeeditor.bundle.js"></script>
+  <script th:src="@{/js/recipeeditor/recipeeditor.bundle.js}"></script>
 </th:block>
 
 </body>

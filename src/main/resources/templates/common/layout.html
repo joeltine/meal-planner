@@ -7,9 +7,9 @@
   <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Meal Planner</title>
 
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="/css/third-party/bootstrap.4.6.1.min.css">
+  <link rel="stylesheet" th:href="@{/css/third-party/bootstrap.4.6.1.min.css}" type="text/css">
   <!-- Core site CSS -->
-  <link rel="stylesheet" href="/css/common/main.css">
+  <link rel="stylesheet" th:href="@{/css/common/main.css}" type="text/css">
 </head>
 <body>
 
@@ -217,7 +217,7 @@
 <script th:if="${isDevelopment}" src="http://localhost:35729/livereload.js"></script>
 
 <!-- Core Third Party JS Libs -->
-<script src="/js/third-party/third-party.bundle.js"></script>
+<script th:src="@{/js/third-party/third-party.bundle.js}"></script>
 
 <!-- Optional Section, e.g., for page-level scripts -->
 <th:block layout:fragment="scripts"/>
