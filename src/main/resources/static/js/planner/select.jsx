@@ -35,7 +35,7 @@ export class Select extends React.Component {
 }
 
 Select.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.object).isRequired,
+  options: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   onSelectChange: PropTypes.func,
   defaultValue: PropTypes.oneOfType([

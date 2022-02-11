@@ -277,5 +277,5 @@ export class FilterRow extends React.Component {
 FilterRow.propTypes = {
   addRowClick: PropTypes.func.isRequired,
   removeRowClick: PropTypes.func.isRequired,
-  identifier: PropTypes.string.isRequired
+  identifier: PropTypes.number.isRequired
 };
