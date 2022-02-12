@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
 export class PlanButton extends React.Component {
   constructor(props) {

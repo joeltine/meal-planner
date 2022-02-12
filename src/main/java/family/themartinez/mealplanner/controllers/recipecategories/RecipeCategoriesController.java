@@ -21,7 +21,7 @@ public class RecipeCategoriesController {
 
   @GetMapping("/recipeCategories")
   public ImmutableList<RecipeCategory> getRecipeCategories() {
-    return ImmutableList.copyOf(recipeCategoryRepository.findAll());
+    return ImmutableList.copyOf(recipeCategoryRepository.findAllOrderByNameAsciiAsc());
   }
 
   @DeleteMapping("/recipeCategories")

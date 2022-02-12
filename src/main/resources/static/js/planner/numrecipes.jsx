@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
 export class NumRecipes extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export class NumRecipes extends React.Component {
             How many recipes do you need?
           </label>
           <input type="number"
-                 className="form-control ml-2"
+                 className="form-control ms-2"
                  ref={this.inputRef}
                  name="inputNumRecipes"
                  min="1" max="30"

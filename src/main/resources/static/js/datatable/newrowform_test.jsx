@@ -1,9 +1,10 @@
-import React from "react";
-import {fireEvent, render} from '@testing-library/react'
 import JasmineDOM from '@testing-library/jasmine-dom';
-import {NewRowForm} from "./newrowform";
+import {fireEvent, render} from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
+import React from "react";
+
 import {Types} from "../common/utils";
+import {NewRowForm} from "./newrowform";
 
 describe('NewRowForm test suite', function () {
   beforeAll(() => {
@@ -17,7 +18,7 @@ describe('NewRowForm test suite', function () {
           'bar': Types.NUMBER,
           'foo': Types.STRING,
           'baz': Types.PLAIN_OBJECT
-        }}/>)
+        }}/>);
     expect(queryAllByRole('textbox')).toHaveSize(4);
     expect(getByPlaceholderText('id')).toBeDisabled();
     expect(getByPlaceholderText('bar')).toHaveValue('');
@@ -37,7 +38,7 @@ describe('NewRowForm test suite', function () {
               'bar': Types.NUMBER,
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT
-            }} onCancelClick={cancelSpy}/>)
+            }} onCancelClick={cancelSpy}/>);
     expect(getByRole('button', {name: 'Cancel'})).toBeVisible();
     fireEvent.click(getByRole('button', {name: 'Cancel'}));
     expect(cancelSpy).toHaveBeenCalledTimes(1);
@@ -52,7 +53,7 @@ describe('NewRowForm test suite', function () {
               'bar': Types.NUMBER,
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     expect(getByRole('button', {name: 'Save'})).toBeVisible();
     fireEvent.click(getByRole('button', {name: 'Save'}));
     expect(getByPlaceholderText('id')).toBeDisabled();
@@ -72,7 +73,7 @@ describe('NewRowForm test suite', function () {
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     expect(saveButton).toBeVisible();
     fireEvent.click(saveButton);
@@ -110,7 +111,7 @@ describe('NewRowForm test suite', function () {
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     expect(saveButton).toBeVisible();
     fireEvent.click(saveButton);
@@ -147,7 +148,7 @@ describe('NewRowForm test suite', function () {
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     expect(saveButton).toBeVisible();
     fireEvent.click(saveButton);
@@ -191,7 +192,7 @@ describe('NewRowForm test suite', function () {
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     expect(saveButton).toBeVisible();
     fireEvent.click(saveButton);
@@ -238,7 +239,7 @@ describe('NewRowForm test suite', function () {
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY,
               'dat': Types.DATE
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     expect(saveButton).toBeVisible();
     fireEvent.click(saveButton);
@@ -281,7 +282,7 @@ describe('NewRowForm test suite', function () {
               'foo': Types.STRING,
               'baz': Types.PLAIN_OBJECT,
               'bat': Types.ARRAY
-            }} onSaveClick={saveSpy}/>)
+            }} onSaveClick={saveSpy}/>);
     const saveButton = getByRole('button', {name: 'Save'});
     const barInput = getByPlaceholderText('bar');
     await userEvent.type(barInput, '32');

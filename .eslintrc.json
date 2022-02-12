@@ -24,10 +24,11 @@
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "simple-import-sort"
   ],
   "ignorePatterns": [
-    "**/third-party/*.js"
+    "target/*"
   ],
   "globals": {
     "CSRF_HEADER_NAME": "readonly",
@@ -37,7 +38,15 @@
   },
   "overrides": [
     {
-      "files": ["*.jsx", "*.js"]
+      "files": [
+        "*.jsx",
+        "*.js"
+      ]
     }
-  ]
+  ],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "eol-last": "error",
+    "semi": "error"
+  }
 }

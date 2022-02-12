@@ -12,9 +12,6 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'css/third-party/bootstrap.4.6.1.min.css',
-      'css/common/main.css',
-      'js/third-party/third-party.js',
       '**/*test.js',
       '**/*test.jsx',
       '**/*test.html',
@@ -33,7 +30,6 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://www.npmjs.com/search?q=keywords:karma-preprocessor
     preprocessors: {
-      'js/third-party/third-party.js': ['webpack'],
       '**/*test.js': ['webpack'],
       '**/*test.jsx': ['webpack'],
       '**/*test.html': ['html2js']
@@ -95,4 +91,4 @@ module.exports = function (config) {
     // how many browser instances should be started simultaneously
     concurrency: 5
   });
-}
+};

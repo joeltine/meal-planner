@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from "prop-types";
+import React from 'react';
 
 export class SearchBox extends React.Component {
   render() {
@@ -8,7 +8,7 @@ export class SearchBox extends React.Component {
           <input type="text" className="form-control"
                  placeholder="Search..."
                  onChange={(e) => {
-                   this.props.onSearchChange(e.target.value)
+                   this.props.onSearchChange(e.target.value);
                  }}/>
         </div>
     );

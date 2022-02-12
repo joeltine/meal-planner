@@ -1,9 +1,9 @@
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
+import {renderToString} from 'react-dom/server';
 
-import {Toast} from "../toasts/toast";
-import {GoogleDriveUploader} from "./googledriveuploader";
-import {renderToString} from "react-dom/server";
-import PropTypes from "prop-types";
+import {Toast} from '../toasts/toast';
+import {GoogleDriveUploader} from './googledriveuploader';
 
 export class PlannerResults extends React.Component {
   constructor(props) {
@@ -221,11 +221,11 @@ export class PlannerResults extends React.Component {
   getExportButton() {
     return this.state.isSignedIn ?
         <button
-            className="btn btn-primary ml-2"
+            className="btn btn-primary ms-2"
             onClick={this.exportToDocs}>
           Export to Google Docs
         </button> :
-        <button className="btn btn-warning ml-2"
+        <button className="btn btn-warning ms-2"
                 onClick={this.authenticateToGoogle}>
           Sign-in to Export to Google Docs
         </button>;

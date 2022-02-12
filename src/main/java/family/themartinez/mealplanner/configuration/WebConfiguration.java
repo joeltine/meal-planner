@@ -1,5 +1,7 @@
 package family.themartinez.mealplanner.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,6 +15,10 @@ public class WebConfiguration implements WebMvcConfigurer {
     "classpath:/static/", "classpath:/public/"
   };
 
+  @Autowired
+  @Qualifier("devMode")
+  private boolean isDevelopment;
+
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
     // Adds a resource handler for everything under /resources/, /static/, /public/ to be served at
@@ -23,7 +29,8 @@ public class WebConfiguration implements WebMvcConfigurer {
     registry
         .addResourceHandler("/**")
         .addResourceLocations(CLASSPATH_RESOURCE_LOCATIONS)
-        .resourceChain(true)
+        // Don't cache resource chain in dev.
+        .resourceChain(!isDevelopment)
         .addResolver(new VersionResourceResolver().addContentVersionStrategy("/**"));
   }
 }

@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
 export class Select extends React.Component {
   constructor(props) {
@@ -13,7 +13,7 @@ export class Select extends React.Component {
 
   buildOptions() {
     return Object.entries(this.props.options).map(([val, text]) => {
-      return <option value={val} key={val}>{text}</option>
+      return <option value={val} key={val}>{text}</option>;
     });
   }
 

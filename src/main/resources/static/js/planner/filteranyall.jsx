@@ -1,5 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
 export class FilterAnyAll extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export class FilterAnyAll extends React.Component {
           <select id="inputAnyAll"
                   ref={this.selectRef}
                   defaultValue={this.props.defaultValue || "AND"}
-                  className="form-control mr-2 ml-2">
+                  className="form-control me-2 ms-2">
             <option value="AND">All</option>
             <option value="OR">Any</option>
           </select>

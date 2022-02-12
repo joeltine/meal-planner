@@ -4,7 +4,16 @@
  * TODO: Make this initialization on every page automatic w/o manual import.
  */
 
-import {Toast} from "../toasts/toast";
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+// Global import of bootstrap CSS.
+import 'bootstrap/dist/css/bootstrap.min.css';
+// Import site-wide css.
+import '../../css/common/main.css';
+
+import {Toast} from '../toasts/toast';
 
 export class CommonController {
   constructor() {
@@ -18,7 +27,7 @@ export class CommonController {
           `Message: ${message}, source: ${source}, line: ${lineno}`,
           {autohide: false});
       return false;
-    }
+    };
   }
 
   setCurrentNavItem() {
@@ -26,7 +35,11 @@ export class CommonController {
     if (pathName == '/') {
       pathName = '/planner';
     }
-    $(`a.nav-link[href="${pathName}"]`).addClass('active');
+    $(`.navbar a[href="${pathName}"]`).addClass('active');
+    if (pathName.endsWith('Editor')) {
+      document.getElementById('editorDropdown').classList.add('active');
+    }
+
   }
 
   getCurrentPathname() {

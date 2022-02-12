@@ -65,6 +65,12 @@ public class ScrapeRecipeController {
           "baby spinach",
           "spinach leaves");
 
+  // Map of units that should be mapped to something else. Typically, used when the unit given is
+  // too specific to have an entry of its own in the DB. E.g., instead of adding the unit "cloves"
+  // to the DB, we just say the unit is "whole" and the ingredient is "garlic cloves".
+  private final ImmutableMap<String, String> unitNameConversions =
+      ImmutableMap.of("clove", "whole", "cloves", "whole");
+
   ScrapeRecipeController(ExternalRecipeScraper scraper) {
     this.scraper = scraper;
   }
@@ -142,8 +148,16 @@ public class ScrapeRecipeController {
     List<Unit> units;
     Unit foundUnit = null;
     if (ingredientParsed.getUnit() != null) {
-      logger.info("Mapping parsed unit \"{}\" to database equivalent.", ingredientParsed.getUnit());
-      units = unitRepository.findByNameStartingWith(ingredientParsed.getUnit());
+      String lookupUnit = ingredientParsed.getUnit();
+      if (unitNameConversions.containsKey(ingredientParsed.getUnit())) {
+        lookupUnit = unitNameConversions.get(ingredientParsed.getUnit());
+        logger.info(
+            "Found unit name conversion for \"{}\", mapping to \"{}\".",
+            ingredientParsed.getUnit(),
+            lookupUnit);
+      }
+      logger.info("Mapping parsed unit \"{}\" to database equivalent.", lookupUnit);
+      units = unitRepository.findByNameStartingWith(lookupUnit);
     } else {
       logger.info("No unit parsed from ingredient line, assuming \"whole\".");
       units = unitRepository.findByNameStartingWith("whole");

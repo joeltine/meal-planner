@@ -1,6 +1,8 @@
 import 'jasmine-ajax';
-import {AddRecipesController} from './addrecipescontroller';
+
 import JasmineDOM from "@testing-library/jasmine-dom";
+
+import {AddRecipesController} from './addrecipescontroller';
 
 const fetaBurgersJson = {
   "title": "Spinach and Feta Turkey Burgers",
@@ -106,7 +108,7 @@ const fetaBurgersJson = {
   "meal_types": [1, 3],
 };
 
-describe('AddRecipesController test suite', function () {
+describe('Addrecipescontroller test suite', function () {
   let controller;
   let recipeForm;
   let inputRecipeName;
@@ -141,8 +143,8 @@ describe('AddRecipesController test suite', function () {
   });
 
   beforeEach(function () {
-    const html = window.__html__['js/addrecipes/addrecipescontroller_test.html'];
-    uiContainer.append(html);
+    //const html = window.__html__['js/addrecipes/addrecipescontroller_test.html'];
+    //uiContainer.append(html);
     recipeForm = $('#recipeForm');
     inputRecipeName = $('#inputRecipeName');
     inputDescription = $('#inputDescription');

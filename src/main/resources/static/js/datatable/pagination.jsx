@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from "prop-types";
+import React from 'react';
 
 // Max number of boxes shown in pagination widget. This number includes "..."
 // separators as well.

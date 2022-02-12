@@ -1,6 +1,7 @@
-import React from "react";
-import {fireEvent, render} from '@testing-library/react'
 import JasmineDOM from '@testing-library/jasmine-dom';
+import {fireEvent, render} from '@testing-library/react';
+import React from "react";
+
 import {Pagination} from "./pagination";
 
 describe('Pagination test suite', function () {
@@ -274,7 +275,7 @@ describe('Pagination test suite', function () {
                     activePage={activePage}
                     onPageNavigate={navigateSpy}/>
     );
-    const page12 = getByText('12')
+    const page12 = getByText('12');
     fireEvent.click(page12);
     expect(navigateSpy).toHaveBeenCalledOnceWith(12);
   });

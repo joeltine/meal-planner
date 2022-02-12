@@ -3,6 +3,10 @@
  * the page along with bootstrap JS and jquery.
  */
 
+import '../../css/toasts/toast.css';
+
+import {Toast as BootstrapToast} from 'bootstrap';
+
 const STATE_CLASS_MAP = {
   ERROR: {
     header: {
@@ -42,44 +46,41 @@ export class Toast {
     this.state = state;
     this.toastOptions = toastOptions;
     this.time = new Date().toLocaleString();
-    this.toast = this.getNewToast();
-  }
-
-  show() {
-    this.toast.appendTo('#toastContainer');
-    this.toast.toast('show');
-    this.toast.on('hidden.bs.toast', () => {
-      this.toast.toast('dispose');
-      this.toast.remove();
-    });
-  }
-
-  getNewToast() {
+    this.toastEl = this.getNewToastEl();
     const defaultOptions = {
       animation: true,
       autohide: true,
       delay: 3000
     };
-    const styles = STATE_CLASS_MAP[this.state];
     const mergedOptions = $.extend(defaultOptions, this.toastOptions);
-    const toast = $(`
+    this.toast = new BootstrapToast(this.toastEl[0], mergedOptions);
+  }
+
+  show() {
+    this.toastEl.appendTo('#toastContainer');
+    this.toast.show();
+    this.toastEl.on('hidden.bs.toast', () => {
+      this.toast.dispose();
+      this.toastEl.remove();
+    });
+  }
+
+  getNewToastEl() {
+    const styles = STATE_CLASS_MAP[this.state];
+    return $(`
       <div class="toast ${styles.container.stateClass}" role="alert">
         <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
-          <svg class="feather mr-2" viewBox="0 0 24 24">
+          <svg class="feather me-2" viewBox="0 0 24 24">
             <use href="#icon-alert-circle"/>
           </svg>
-          <strong class="mr-auto toast-header-text">${this.header}</strong>
-          <small class="toast-time ml-2">${this.time}</small>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
-            <span>&times;</span>
-          </button>
+          <strong class="me-auto toast-header-text">${this.header}</strong>
+          <small class="toast-time ms-2">${this.time}</small>
+          <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
           ${this.body}
         </div>
       </div>`);
-    toast.toast(mergedOptions);
-    return toast;
   }
 
   static showNewInfoToast(header, body, toastOptions) {

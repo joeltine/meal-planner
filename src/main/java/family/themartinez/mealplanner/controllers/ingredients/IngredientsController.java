@@ -24,14 +24,14 @@ public class IngredientsController {
   @Autowired private IngredientRepository ingredientRepository;
 
   @GetMapping("/ingredientsAc")
-  public List<Map<String, String>> getIngredientsForAutoComplete(
+  public List<Map<String, Object>> getIngredientsForAutoComplete(
       @RequestParam(name = "q") String query) {
     return ingredientRepository.findTopByNameAutocompleteAlgorithm(query).stream()
         .map(
             e -> {
-              Map<String, String> map = new HashMap<>();
-              map.put("value", e.getId().toString());
-              map.put("text", e.getName());
+              Map<String, Object> map = new HashMap<>();
+              map.put("id", e.getId());
+              map.put("name", e.getName());
               return map;
             })
         .collect(Collectors.toList());

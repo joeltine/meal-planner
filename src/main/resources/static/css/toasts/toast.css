@@ -1,0 +1,19 @@
+/*
+ * Toasts
+ */
+#toastContainer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+.toast {
+  width: 450px !important;
+  /* https://getbootstrap.com/docs/4.6/layout/overview/#z-index */
+  z-index: 1030;
+}
+
+.toast-body {
+  max-height: 150px;
+  overflow: auto;
+}

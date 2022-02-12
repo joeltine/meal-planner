@@ -1,11 +1,9 @@
+import '../../css/datatable/datatable.css';
+
+import PropTypes from 'prop-types';
 import React from 'react';
-import {SearchBox} from './searchbox';
-import {AddButton} from './addbutton';
-import {DeleteButton} from './deletebutton';
-import {Table} from "./table";
-import {Toast} from "../toasts/toast";
-import {Pagination} from "./pagination";
-import {SORT_TYPES} from "./sorttypes";
+
+import {sendAjax} from '../common/ajax';
 import {
   arrayContainsSubstring,
   debounce,
@@ -13,10 +11,15 @@ import {
   isValidDate,
   tryToConvertStringToType,
   Types
-} from "../common/utils";
-import {sendAjax} from "../common/ajax";
-import {NewRowForm} from "./newrowform";
-import PropTypes from "prop-types";
+} from '../common/utils';
+import {Toast} from '../toasts/toast';
+import {AddButton} from './addbutton';
+import {DeleteButton} from './deletebutton';
+import {NewRowForm} from './newrowform';
+import {Pagination} from './pagination';
+import {SearchBox} from './searchbox';
+import {SORT_TYPES} from './sorttypes';
+import {Table} from './table';
 
 const MAX_ROWS_PER_PAGE = 10;
 
@@ -294,11 +297,11 @@ export class DataTable extends React.Component {
   }
 
   navigateToPreviousPage() {
-    this.navigateToPage(this.state.currentPage - 1)
+    this.navigateToPage(this.state.currentPage - 1);
   }
 
   navigateToNextPage() {
-    this.navigateToPage(this.state.currentPage + 1)
+    this.navigateToPage(this.state.currentPage + 1);
   }
 
   refreshCurrentPage() {

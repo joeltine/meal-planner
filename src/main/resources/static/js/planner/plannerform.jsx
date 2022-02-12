@@ -1,10 +1,11 @@
+import PropTypes from "prop-types";
 import React from "react";
-import {NumRecipes} from "./numrecipes";
+
+import {sendAjax} from "../common/ajax";
 import {FilterAnyAll} from "./filteranyall";
 import {FilterRow} from "./filterrow";
+import {NumRecipes} from "./numrecipes";
 import {PlanButton} from "./planbutton";
-import {sendAjax} from "../common/ajax";
-import PropTypes from "prop-types";
 
 let FILTER_ROW_ID = 0;
 
@@ -45,7 +46,7 @@ export class PlannerForm extends React.Component {
 
   addFilterRow() {
     const filterRows = this.state.filterRows;
-    filterRows.push(++FILTER_ROW_ID)
+    filterRows.push(++FILTER_ROW_ID);
     this.setState({
       filterRows: filterRows
     });
@@ -92,7 +93,7 @@ export class PlannerForm extends React.Component {
             <NumRecipes ref={this.numRecipeRef}/>
           </div>
           <h5>Constraints</h5>
-          <div className="row border rounded pt-3 mr-0 ml-0">
+          <div className="row border rounded pt-3 pb-3 me-0 ms-0">
             <div className="col-md-12">
               <div className="row">
                 <FilterAnyAll ref={this.filterAnyAllRef}/>

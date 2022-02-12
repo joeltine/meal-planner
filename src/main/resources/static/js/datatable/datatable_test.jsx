@@ -1,9 +1,11 @@
-import React from 'react';
-import JasmineDOM from '@testing-library/jasmine-dom';
 import 'jasmine-ajax';
+
+import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
-import {DataTable} from './datatable';
 import userEvent from "@testing-library/user-event";
+import React from 'react';
+
+import {DataTable} from './datatable';
 
 const DATA_SOURCE = '/foo';
 
@@ -230,7 +232,7 @@ describe('DataTable test suite', function () {
         if (total === 0) {
           done();
         }
-      })
+      });
     });
 
     tableData = null;
@@ -942,7 +944,7 @@ describe('DataTable test suite', function () {
     respondWithAjaxTableData(tableData);
 
     const barIndex = getColIndexForText(
-        getByRole('rowgroup', {name: 'table-header'}), 'bar')
+        getByRole('rowgroup', {name: 'table-header'}), 'bar');
     const rows = getByRole('rowgroup', {name: 'table-body'}).querySelectorAll(
         'tr');
     const id1BarCell = rows[1].querySelectorAll('td')[barIndex];
@@ -982,7 +984,7 @@ describe('DataTable test suite', function () {
         jasmine.clock().tick(500);
 
         const batIndex = getColIndexForText(
-            getByRole('rowgroup', {name: 'table-header'}), 'bat')
+            getByRole('rowgroup', {name: 'table-header'}), 'bat');
         let rows = getByRole('rowgroup',
             {name: 'table-body'}).querySelectorAll(
             'tr');
@@ -1028,7 +1030,7 @@ describe('DataTable test suite', function () {
     respondWithAjaxTableData(tableData);
 
     const barIndex = getColIndexForText(
-        getByRole('rowgroup', {name: 'table-header'}), 'bar')
+        getByRole('rowgroup', {name: 'table-header'}), 'bar');
     const rows = getByRole('rowgroup', {name: 'table-body'}).querySelectorAll(
         'tr');
     const id1BarCell = rows[1].querySelectorAll('td')[barIndex];

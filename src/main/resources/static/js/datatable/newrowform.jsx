@@ -1,6 +1,7 @@
-import React from 'react';
-import {tryToConvertStringToType} from "../common/utils";
 import PropTypes from "prop-types";
+import React from 'react';
+
+import {tryToConvertStringToType} from "../common/utils";
 
 export class NewRowForm extends React.Component {
   constructor(props) {

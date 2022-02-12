@@ -1,10 +1,11 @@
-import React from "react";
-import {NumericConstraint} from "./numericconstraint";
-import {IncludesConstraint} from "./includesconstraint";
-import {Select} from "./select";
-import {sendAjax} from "../common/ajax";
-import {Typeahead} from "react-bootstrap-typeahead";
 import PropTypes from "prop-types";
+import React from "react";
+import {Typeahead} from "react-bootstrap-typeahead";
+
+import {sendAjax} from "../common/ajax";
+import {IncludesConstraint} from "./includesconstraint";
+import {NumericConstraint} from "./numericconstraint";
+import {Select} from "./select";
 
 const FilterTypes = {
   RECIPE_TYPES: 'recipeTypes',
@@ -262,7 +263,7 @@ export class FilterRow extends React.Component {
               </svg>
             </button>
             <button type="button"
-                    className="btn btn-danger ml-1 remove-filter-row"
+                    className="btn btn-danger ms-1 remove-filter-row"
                     onClick={this.removeFilterRowClick}>
               <svg className="feather" viewBox="0 0 24 24">
                 <use href="#icon-minus"/>

@@ -5,11 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Meal Planner</title>
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" th:href="@{/css/third-party/bootstrap.4.6.1.min.css}" type="text/css">
-  <!-- Core site CSS -->
-  <link rel="stylesheet" th:href="@{/css/common/main.css}" type="text/css">
+  <style>
+    /* Prevent FOUC on visited/links in header */
+    .navbar a.nav-link, .navbar a.nav-link:visited {
+      color: rgba(255, 255, 255, .55);
+    }
+  </style>
 </head>
 <body>
 
@@ -101,107 +102,81 @@
     <line x1="12" y1="16" x2="12" y2="12"></line>
     <line x1="12" y1="8" x2="12.01" y2="8"></line>
   </symbol>
+
+  <symbol id="icon-edit">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+  </symbol>
 </svg>
 
-<!-- Main Navigation -->
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Meal Planner</a>
-  <div class="navbar-text w-100" style="padding-left: 10px;" type="text"
-       id="devEnvironmentInfo"
-       th:if="${isDevelopment}"
-       th:text="'DB: ' + ${dbName} + ', Profile: ' + ${activeProfile}"></div>
-  <ul class="navbar-nav px-3">
-    <li class="nav-item text-nowrap">
-      <a class="nav-link" href="#">Sign out</a>
-    </li>
-  </ul>
+<!-- Main nav -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleable" aria-controls="navbarToggleable"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggleable">
+      <a class="navbar-brand" href="#">Meal Planner</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/planner">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-clipboard"></use>
+            </svg>
+            Planner
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/addrecipes">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-plus"></use>
+            </svg>
+            Add Recipes
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="editorDropdown" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-edit"></use>
+            </svg>
+            Editors
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="editorDropdown">
+            <li><a class="dropdown-item" href="/ingredientEditor">Ingredients</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeEditor">Recipes</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeTypeEditor">Recipe Types</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeCategoriesEditor">Recipe Categories</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/mealTypeEditor">Meal Types</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/unitEditor">Units</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="/planner">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-clipboard"/>
-              </svg>
-              Planner
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/addrecipes">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-plus"/>
-              </svg>
-              Add Recipes
-            </a>
-          </li>
-        </ul>
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Data Editors</span>
-        </h6>
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="/ingredientEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-shopping-cart"/>
-              </svg>
-              Ingredient Editor
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/recipeEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-list"/>
-              </svg>
-              Recipe Editor
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/recipeTypeEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-info"/>
-              </svg>
-              Recipe Type Editor
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/recipeCategoriesEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-globe"/>
-              </svg>
-              Recipe Category Editor
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/mealTypeEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-sunrise"/>
-              </svg>
-              Meal Type Editor
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/unitEditor">
-              <svg class="feather" viewBox="0 0 24 24">
-                <use href="#icon-tag"/>
-              </svg>
-              Unit Editor
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <!-- Content Section -->
-    <section layout:fragment="content">
-      <p>This is filled by the content template.</p>
-    </section>
-
-  </div>
-</div>
+<!-- Content Section -->
+<section layout:fragment="content">
+  <p>This is filled by the content template.</p>
+</section>
 
 <!-- Container for global toasts -->
 <div id="toastContainer" class="m-2"></div>
@@ -215,9 +190,6 @@
 
 <!-- LiveReload -->
 <script th:if="${isDevelopment}" src="http://localhost:35729/livereload.js"></script>
-
-<!-- Core Third Party JS Libs -->
-<script th:src="@{/js/third-party/third-party.bundle.js}"></script>
 
 <!-- Optional Section, e.g., for page-level scripts -->
 <th:block layout:fragment="scripts"/>

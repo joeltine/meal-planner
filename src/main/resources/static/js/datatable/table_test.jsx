@@ -1,7 +1,8 @@
 import JasmineDOM from "@testing-library/jasmine-dom";
 import {fireEvent, render} from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import React from "react";
-import {Table} from "./table";
+
 import {
   randomArray,
   randomInt,
@@ -9,7 +10,7 @@ import {
   randomString
 } from "../common/test_utils";
 import {SORT_TYPES} from "./sorttypes";
-import userEvent from "@testing-library/user-event";
+import {Table} from "./table";
 
 function generateTableData(totalRows) {
   const data = [];
@@ -48,7 +49,7 @@ describe('Table test suite', function () {
     const data = [];
     const {getByRole} = render(<Table data={data}/>);
     expect(getByRole('rowgroup', {name: 'table-body'})).toHaveTextContent(
-        'Table is empty')
+        'Table is empty');
   });
 
   it('should render table with some data', function () {

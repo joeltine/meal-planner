@@ -1,8 +1,7 @@
 package family.themartinez.mealplanner.controllers;
 
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,6 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class GlobalControllerAdvice {
   @Autowired private Environment environment;
+
+  @Autowired
+  @Qualifier("devMode")
+  private boolean isDevelopment;
 
   @ModelAttribute("dbName")
   public String dbName() {
@@ -23,7 +26,6 @@ public class GlobalControllerAdvice {
 
   @ModelAttribute("isDevelopment")
   public Boolean isDevelopment() {
-    List<String> profiles = Arrays.asList(environment.getActiveProfiles());
-    return profiles.contains("dev") || profiles.contains("integration");
+    return isDevelopment;
   }
 }
