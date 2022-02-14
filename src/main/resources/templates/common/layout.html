@@ -170,6 +170,10 @@
         </li>
       </ul>
     </div>
+    <div class="navbar-text"
+         id="devEnvironmentInfo"
+         th:if="${isDevelopment}"
+         th:text="'DB: ' + ${dbName} + ', Profile: ' + ${activeProfile}"></div>
   </div>
 </nav>
 
