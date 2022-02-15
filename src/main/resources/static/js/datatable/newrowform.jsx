@@ -1,3 +1,4 @@
+import Button from '@mui/material/Button';
 import PropTypes from "prop-types";
 import React from 'react';
 
@@ -57,12 +58,8 @@ export class NewRowForm extends React.Component {
   buildButtons() {
     return (
         <div className="col-auto" key="formButtons">
-          <button type="button" className="btn btn-link"
-                  onClick={this.onSaveClick}>Save
-          </button>
-          <button type="button" className="btn btn-link"
-                  onClick={this.props.onCancelClick}>Cancel
-          </button>
+          <Button onClick={this.onSaveClick}>Save</Button>
+          <Button onClick={this.props.onCancelClick}>Cancel</Button>
         </div>
     );
   }
@@ -74,7 +71,7 @@ export class NewRowForm extends React.Component {
       // Can't set id as it's auto-generated.
       if (key === 'id') {
         cols.push(
-            <div className="col-1" key={key}>
+            <div className="col-auto" key={key}>
               <input type="text" className="form-control"
                      placeholder={key}
                      size="4"
@@ -85,7 +82,7 @@ export class NewRowForm extends React.Component {
       } else {
         // TODO: Change input type based on type info.
         cols.push(
-            <div className="col" key={key}>
+            <div className="col-auto" key={key}>
               <input type="text" className="form-control"
                      placeholder={key}
                      ref={this.inputRefs[key]}
@@ -105,7 +102,7 @@ export class NewRowForm extends React.Component {
     return (
         <form ref={this.formRef} className={this.state.validationState}
               aria-label="new-row-form">
-          <div className="form-row">
+          <div className="row g-2">
             {cols}
           </div>
         </form>

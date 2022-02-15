@@ -1,16 +1,17 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
 import PropTypes from "prop-types";
 import React from 'react';
 
 export class DeleteButton extends React.Component {
   render() {
     return (
-        <button onClick={this.props.onDeleteClick} type="button"
-                className="btn btn-danger">
-          <svg className="feather me-1" viewBox="0 0 24 24">
-            <use href="#icon-trash"/>
-          </svg>
+        <Button startIcon={<DeleteIcon/>}
+                color="error"
+                variant="contained"
+                onClick={this.props.onDeleteClick}>
           Delete Selected
-        </button>
+        </Button>
     );
   }
 }
