@@ -4,11 +4,11 @@
 
 /**
  * Returns if a given array contains the given substring. Only works for
- * arrays containing only numbers and/or strings.
+ * arrays containing only numbers and/or strings. Case-insensitive.
  */
 export function arrayContainsSubstring(array, string) {
   for (let i = 0; i < array.length; i++) {
-    if (String(array[i]).includes(string)) {
+    if (String(array[i]).toLowerCase().includes(string.toLowerCase())) {
       return true;
     }
   }

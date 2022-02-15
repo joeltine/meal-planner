@@ -169,7 +169,7 @@ export class DataTable extends React.Component {
   rowMatchesQuery(row, query) {
     for (const value of Object.values(row)) {
       if (getType(value) === Types.STRING) {
-        if (value.includes(query)) {
+        if (value.toLowerCase().includes(query.toLowerCase())) {
           return true;
         }
       } else if (getType(value) === Types.NUMBER) {
