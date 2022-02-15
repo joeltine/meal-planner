@@ -1,5 +1,6 @@
-import PropTypes from "prop-types";
-import React from "react";
+import Button from '@mui/material/Button';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export class PlanButton extends React.Component {
   constructor(props) {
@@ -7,8 +8,11 @@ export class PlanButton extends React.Component {
   }
 
   render() {
-    return (<button type="button" className="btn btn-primary"
-                    onClick={this.props.onButtonClick}>Plan</button>);
+    return (
+        <Button variant="contained" onClick={this.props.onButtonClick}>
+          Generate Meal Plan
+        </Button>
+    );
   }
 }
 

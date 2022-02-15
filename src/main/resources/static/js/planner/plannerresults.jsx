@@ -1,3 +1,7 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import LoginIcon from '@mui/icons-material/Login';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
@@ -207,10 +211,10 @@ export class PlannerResults extends React.Component {
               No recipes were found matching your given criteria. Try removing
               some filters or use less restrictive conditions.
             </p>
-            <button className="btn btn-primary btn-lg" role="button"
+            <Button variant="contained" size="large"
                     onClick={this.props.goBackButtonClick}>
               Go Back
-            </button>
+            </Button>
           </div>
         </div>
     );
@@ -218,26 +222,30 @@ export class PlannerResults extends React.Component {
 
   getExportButton() {
     return this.state.isSignedIn ?
-        <button
-            className="btn btn-primary"
-            onClick={this.exportToDocs}>
+        <Button variant="contained"
+                startIcon={<FileUploadIcon/>}
+                onClick={this.exportToDocs}>
           Export to Google Docs
-        </button> :
-        <button className="btn btn-warning"
+        </Button>
+        :
+        <Button variant="contained"
+                color="secondary"
+                startIcon={<LoginIcon/>}
                 onClick={this.authenticateToGoogle}>
           Sign-in to Export to Google Docs
-        </button>;
+        </Button>;
   }
 
   getResultButtons() {
     return (
         <div className="container-fluid" key="buttons">
-          <div className="row">
-            <div className="col-md-auto">
-              <button className="btn btn-danger"
+          <div className="row g-3">
+            <div className="col-md-auto ps-0">
+              <Button variant="contained"
+                      startIcon={<ArrowBackIcon/>}
                       onClick={this.props.goBackButtonClick}>
                 Go Back
-              </button>
+              </Button>
             </div>
             <div className="col-md-auto ps-0">
               {this.getExportButton()}

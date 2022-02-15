@@ -1,3 +1,6 @@
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import {IconButton} from '@mui/material';
 import PropTypes from "prop-types";
 import React from "react";
 import {Typeahead} from "react-bootstrap-typeahead";
@@ -255,20 +258,14 @@ export class FilterRow extends React.Component {
             {this.buildConstraintValues()}
           </div>
 
-          <div className="form-group col-md-auto">
-            <button type="button" className="btn btn-success add-filter-row"
-                    onClick={this.addFilterRowClick}>
-              <svg className="feather" viewBox="0 0 24 24">
-                <use href="#icon-plus"/>
-              </svg>
-            </button>
-            <button type="button"
-                    className="btn btn-danger ms-1 remove-filter-row"
-                    onClick={this.removeFilterRowClick}>
-              <svg className="feather" viewBox="0 0 24 24">
-                <use href="#icon-minus"/>
-              </svg>
-            </button>
+          <div className="col-md-auto">
+            <IconButton aria-label="delete"
+                        onClick={this.removeFilterRowClick}>
+              <RemoveCircleOutlineIcon/>
+            </IconButton>
+            <IconButton aria-label="add" onClick={this.addFilterRowClick}>
+              <AddCircleOutlineIcon/>
+            </IconButton>
           </div>
         </div>
     );
