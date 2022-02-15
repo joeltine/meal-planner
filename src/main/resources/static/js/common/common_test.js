@@ -22,10 +22,10 @@ describe('CommonController test suite', function () {
 
   it('sets nav-link with pathname to active', function () {
     spyOn(CommonController.prototype, 'getCurrentPathname')
-        .and.returnValue('/foo');
+        .and.returnValue('/addrecipes');
     new CommonController();
     expect($('a.nav-link.active').length).toBe(1);
-    expect($('a.nav-link[href="/foo"]').hasClass('active')).toBeTrue();
+    expect($('a.nav-link[href="/addrecipes"]').hasClass('active')).toBeTrue();
   });
 
   it('does nothing when no nav-link matches pathname', function () {
@@ -42,4 +42,13 @@ describe('CommonController test suite', function () {
     expect($('a.nav-link.active').length).toBe(1);
     expect($('a.nav-link[href="/planner"]').hasClass('active')).toBeTrue();
   });
+
+  it('if pathname ends with Editor, sets parent to active', function () {
+    spyOn(CommonController.prototype, 'getCurrentPathname')
+        .and.returnValue('/recipeEditor');
+    new CommonController();
+    expect($('a.nav-link.active').length).toBe(1);
+    expect($('#editorDropdown').hasClass('active')).toBeTrue();
+  });
 });
+

@@ -1,5 +1,8 @@
 // Karma configuration
 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
+
 module.exports = function (config) {
   config.set({
 
@@ -57,8 +60,25 @@ module.exports = function (config) {
               }
             }
           },
+          {
+            test: /\.css$/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader']
+          }
         ]
       },
+
+      plugins: [
+        // Bring in jQuery automatically if a file references $ or jQuery.
+        // TODO: Get rid of jQuery.
+        new webpack.ProvidePlugin({
+          $: 'jquery',
+          jQuery: 'jquery'
+        }),
+        new MiniCssExtractPlugin({
+          // This is relative to output.path.
+          filename: "../css/[name]/[name].bundle.css"
+        })
+      ]
     },
 
     // test results reporter to use

@@ -3,7 +3,10 @@ package family.themartinez.mealplanner.controllers.ingredients;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -200,10 +203,12 @@ public class IngredientsControllerTest {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$", hasSize(2)))
-        .andExpect(jsonPath("$[0].text", equalTo("Potato, raw")))
-        .andExpect(jsonPath("$[0].value", matchesPattern("\\d+")))
-        .andExpect(jsonPath("$[1].text", equalTo("Sour cream and onion potato chips")))
-        .andExpect(jsonPath("$[1].value", matchesPattern("\\d+")));
+        .andExpect(jsonPath("$[0].name", equalTo("Potato, raw")))
+        .andExpect(jsonPath("$[0].id", is(instanceOf(Integer.class))))
+        .andExpect(jsonPath("$[0].id", greaterThan(0)))
+        .andExpect(jsonPath("$[1].name", equalTo("Sour cream and onion potato chips")))
+        .andExpect(jsonPath("$[1].id", is(instanceOf(Integer.class))))
+        .andExpect(jsonPath("$[1].id", greaterThan(0)));
   }
 
   @Test

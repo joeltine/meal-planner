@@ -32,14 +32,13 @@ export class CommonController {
 
   setCurrentNavItem() {
     let pathName = this.getCurrentPathname();
-    if (pathName == '/') {
+    if (pathName === '/') {
       pathName = '/planner';
     }
     $(`.navbar a[href="${pathName}"]`).addClass('active');
     if (pathName.endsWith('Editor')) {
       document.getElementById('editorDropdown').classList.add('active');
     }
-
   }
 
   getCurrentPathname() {

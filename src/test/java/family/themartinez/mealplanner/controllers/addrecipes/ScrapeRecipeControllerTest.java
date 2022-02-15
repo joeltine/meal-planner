@@ -148,8 +148,8 @@ class ScrapeRecipeControllerTest {
     assertEquals("2 cloves garlic, minced", garlic.getIngredientRaw());
     assertNotNull(garlic.getIngredientParsed().getIngredientId());
     assertEquals("garlic cloves", garlic.getIngredientParsed().getName());
-    assertNull(garlic.getIngredientParsed().getUnitId()); // "clove" doesn't match anything in db
-    assertEquals("clove", garlic.getIngredientParsed().getUnit());
+    assertNotNull(garlic.getIngredientParsed().getUnitId());
+    assertEquals("whole", garlic.getIngredientParsed().getUnit());
 
     ScrapedIngredient feta = ingredients.get(2);
     assertEquals("4 ounces feta cheese", feta.getIngredientRaw());

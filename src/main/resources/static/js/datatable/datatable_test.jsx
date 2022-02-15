@@ -3,6 +3,7 @@ import 'jasmine-ajax';
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
+import {Toast} from 'bootstrap';
 import React from 'react';
 
 import {DataTable} from './datatable';
@@ -213,7 +214,7 @@ describe('DataTable test suite', function () {
       {id: 11, foo: "bat", bar: ["innr"], bat: {t: "jill"}}];
   });
 
-  afterEach((done) => {
+  afterEach(() => {
     jasmine.Ajax.uninstall();
     // Clear any toasts on timers hanging around.
     jasmine.clock().tick(5000);
@@ -221,24 +222,11 @@ describe('DataTable test suite', function () {
     // Clear any permanent toasts still on the page.
     const toasts = Array.from(
         document.getElementById('toastContainer').querySelectorAll('.toast'));
-    let total = toasts.length;
     toasts.forEach((toast) => {
-      const $toast = $(toast);
-      $toast.toast('hide');
-      // Hide is async, so we need to only finish the test after all toasts
-      // are gone.
-      $toast.on('hidden.bs.toast', function () {
-        total--;
-        if (total === 0) {
-          done();
-        }
-      });
+      Toast.getInstance(toast).dispose();
+      toast.remove();
     });
-
     tableData = null;
-    if (!total) {
-      done();
-    }
   });
 
   it('should fetch initial data, render, and look like a new datatable app',

@@ -1,22 +1,62 @@
-<ul class="nav flex-column">
-  <li class="nav-item">
-    <a class="nav-link" href="/bar">
-      Bar
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/foo">
-      Foo
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/baz">
-      Baz
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="/planner">
-      Planner
-    </a>
-  </li>
-</ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarToggleable" aria-controls="navbarToggleable"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarToggleable">
+      <a class="navbar-brand" href="#">Meal Planner</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/planner">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-clipboard"></use>
+            </svg>
+            Planner
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/addrecipes">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-plus"></use>
+            </svg>
+            Add Recipes
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="editorDropdown" role="button"
+             data-bs-toggle="dropdown" aria-expanded="false">
+            <svg class="feather" viewBox="0 0 24 24">
+              <use href="#icon-edit"></use>
+            </svg>
+            Editors
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="editorDropdown">
+            <li><a class="dropdown-item" href="/ingredientEditor">Ingredients</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeEditor">Recipes</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeTypeEditor">Recipe Types</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/recipeCategoriesEditor">Recipe Categories</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/mealTypeEditor">Meal Types</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="/unitEditor">Units</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
