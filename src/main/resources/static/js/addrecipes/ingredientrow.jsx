@@ -6,10 +6,24 @@ import React from 'react';
 
 import {IngredientAutoComplete} from './ingredientautocomplete';
 import {OutlinedSelect} from './outlinedselect';
+import {getValidityMessage, ValidityStates} from './validation';
+
+const QUANTITY_ERRORS = {
+  [ValidityStates.PATTERN_MISMATCH]: 'Invalid number!',
+  [ValidityStates.VALUE_MISSING]: 'Missing quantity!'
+};
 
 export class IngredientRow extends React.Component {
+
   constructor(props) {
     super(props);
+    this.state = {quantityError: '', unitError: ''};
+  }
+
+  updateQuantityValidity(event) {
+    this.setState({
+      quantityError: getValidityMessage(QUANTITY_ERRORS, event.target)
+    });
   }
 
   render() {
@@ -24,6 +38,9 @@ export class IngredientRow extends React.Component {
                          variant="outlined"
                          value={this.props.quantity || ''}
                          sx={{width: '15ch'}}
+                         error={!!this.state.quantityError}
+                         helperText={this.state.quantityError}
+                         onInvalid={this.updateQuantityValidity.bind(this)}
                          inputProps={{
                            inputMode: 'numeric',
                            pattern: '^([0-9]+\\.?[0-9]*|\\.[0-9]+)$'
@@ -32,6 +49,7 @@ export class IngredientRow extends React.Component {
                            if (this.props.onQuantityChange) {
                              this.props.onQuantityChange(e.target.value);
                            }
+                           this.updateQuantityValidity(e);
                          }}
                          required/>
             </div>
@@ -40,12 +58,23 @@ export class IngredientRow extends React.Component {
                               options={this.props.unitOptions}
                               id="inputUnits"
                               name="inputUnits"
+                              helperText={this.state.unitError}
+                              onInvalid={() => {
+                                this.setState({
+                                  unitError: 'Missing unit!'
+                                });
+                              }}
                               value={this.props.unit
                                   ? this.props.unit.toString() : ''}
                               onChange={(e) => {
                                 if (this.props.onUnitsChange) {
                                   this.props.onUnitsChange(e.target.value);
                                 }
+                                // If they're setting a value, it inherently
+                                // can't be an error.
+                                this.setState({
+                                  unitError: ''
+                                });
                               }}
                               required={true}/>
             </div>
@@ -98,7 +127,7 @@ export class IngredientRow extends React.Component {
 IngredientRow.propTypes = {
   onAddClick: PropTypes.func.isRequired,
   onDeleteClick: PropTypes.func.isRequired,
-  quantity: PropTypes.number,
+  quantity: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   ingredient: PropTypes.exact({
     id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired

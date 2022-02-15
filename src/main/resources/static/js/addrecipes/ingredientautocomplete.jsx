@@ -2,9 +2,23 @@ import {Autocomplete, TextField} from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {getValidityMessage, ValidityStates} from './validation';
+
+const INGREDIENT_ERRORS = {
+  [ValidityStates.VALUE_MISSING]: 'Missing ingredient!'
+};
+
 export class IngredientAutoComplete extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {ingredientError: ''};
+    this.updateIngredientError = this.updateIngredientError.bind(this);
+  }
+
+  updateIngredientError(event) {
+    this.setState({
+      ingredientError: getValidityMessage(INGREDIENT_ERRORS, event.target)
+    });
   }
 
   render() {
@@ -28,17 +42,17 @@ export class IngredientAutoComplete extends React.Component {
               this.props.onInputChange(newInputValue);
             }}
             renderInput={(params) => {
-              // Hidden input so that FormData can find the value of this input.
               return (
                   <React.Fragment>
                     <TextField {...params}
                                label="Ingredient"
+                               name="inputIngredient"
+                               onBlur={this.updateIngredientError}
+                               onChange={this.updateIngredientError}
+                               onInvalid={this.updateIngredientError}
+                               helperText={this.state.ingredientError}
+                               error={!!this.state.ingredientError}
                                required/>
-                    <input type="hidden"
-                           name="inputIngredient"
-                           value={this.props.selectedIngredient
-                               ? this.props.selectedIngredient.id
-                               : ''}/>
                   </React.Fragment>
               );
             }}

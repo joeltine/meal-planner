@@ -1,3 +1,4 @@
+import {LinearProgress} from '@mui/material';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -30,7 +31,7 @@ export class RecipeForm extends React.Component {
                        this.props.onFormDataValueChange('description',
                            description);
                      }}/>
-          <Ingredients ingredients={formData.ingredients}
+          <Ingredients ingredients={formData.ingredientLists}
                        addIngredientRow={this.props.addIngredientRow}
                        deleteIngredientRow={this.props.deleteIngredientRow}
                        onIngredientInputChange={this.props.onIngredientInputChange}
@@ -40,18 +41,18 @@ export class RecipeForm extends React.Component {
                           this.props.onFormDataValueChange('instructions',
                               newInstructions);
                         }}/>
-          <OtherInfo prepTime={formData.prepTime}
-                     cookTime={formData.cookTime}
+          <OtherInfo prepTime={formData.prepTimeMin}
+                     cookTime={formData.cookTimeMin}
                      externalLink={formData.externalLink}
                      recipeTypes={formData.recipeTypes}
                      mealTypes={formData.mealTypes}
                      recipeCategories={formData.recipeCategories}
                      onPrepTimeChange={(newPrepTime) => {
-                       this.props.onFormDataValueChange('prepTime',
+                       this.props.onFormDataValueChange('prepTimeMin',
                            newPrepTime);
                      }}
                      onCookTimeChange={(newCookTime) => {
-                       this.props.onFormDataValueChange('cookTime',
+                       this.props.onFormDataValueChange('cookTimeMin',
                            newCookTime);
                      }}
                      onRecipeTypesChange={(types) => {
@@ -68,6 +69,11 @@ export class RecipeForm extends React.Component {
                        this.props.onFormDataValueChange('externalLink',
                            newExternalLink);
                      }}/>
+          <div className="row">
+            <div className="col-md-12">
+              {this.props.isSubmitting && <LinearProgress/>}
+            </div>
+          </div>
           <div className="row">
             <div className="col-md-auto">
               <Button id="submit"
@@ -86,15 +92,15 @@ RecipeForm.propTypes = {
   formData: PropTypes.exact({
     name: PropTypes.string,
     description: PropTypes.string,
-    ingredients: PropTypes.arrayOf(PropTypes.exact({
+    ingredientLists: PropTypes.arrayOf(PropTypes.exact({
       uid: PropTypes.number.isRequired,
-      quantity: PropTypes.number,
+      quantity: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       ingredient: PropTypes.exact({
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired
       }),
       unit: PropTypes.number,
-      displayName: PropTypes.string,
+      ingredientDisplayName: PropTypes.string,
       originalName: PropTypes.string,
       ingredientOptions: PropTypes.arrayOf(PropTypes.exact({
         id: PropTypes.number.isRequired,
@@ -102,11 +108,11 @@ RecipeForm.propTypes = {
       }))
     })),
     instructions: PropTypes.string,
-    prepTime: PropTypes.oneOfType([
+    prepTimeMin: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]),
-    cookTime: PropTypes.oneOfType([
+    cookTimeMin: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
     ]),
@@ -120,5 +126,6 @@ RecipeForm.propTypes = {
   onIngredientInputChange: PropTypes.func.isRequired,
   onIngredientRowValueChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onFormDataValueChange: PropTypes.func.isRequired
+  onFormDataValueChange: PropTypes.func.isRequired,
+  isSubmitting: PropTypes.bool
 };

@@ -13,6 +13,12 @@
   z-index: 1030;
 }
 
+@media (max-width: 280px) {
+  .toast {
+    width: 265px !important;
+  }
+}
+
 .toast-body {
   max-height: 150px;
   overflow: auto;

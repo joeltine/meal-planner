@@ -2,9 +2,23 @@ import {TextField} from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {getValidityMessage, ValidityStates} from './validation';
+
+const NAME_ERRORS = {
+  [ValidityStates.VALUE_MISSING]: 'Missing recipe name!'
+};
+
 export class BasicInfo extends React.Component {
+
   constructor(props) {
     super(props);
+    this.state = {nameError: ''};
+  }
+
+  updateNameError(event) {
+    this.setState({
+      nameError: getValidityMessage(NAME_ERRORS, event.target)
+    });
   }
 
   render() {
@@ -24,12 +38,16 @@ export class BasicInfo extends React.Component {
                          variant="outlined"
                          value={this.props.name || ''}
                          inputProps={{maxLength: 255}}
+                         required
+                         onInvalid={this.updateNameError.bind(this)}
+                         helperText={this.state.nameError}
+                         error={!!this.state.nameError}
                          onChange={(e) => {
                            if (this.props.onRecipeNameChange) {
                              this.props.onRecipeNameChange(e.target.value);
                            }
-                         }}
-                         required/>
+                           this.updateNameError(e);
+                         }}/>
             </div>
           </div>
 

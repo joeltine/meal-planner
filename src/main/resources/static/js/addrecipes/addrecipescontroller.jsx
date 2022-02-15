@@ -4,6 +4,7 @@ import React from 'react';
 
 import {sendAjax} from '../common/ajax';
 import {debounce} from '../common/utils';
+import {Toast} from "../toasts/toast";
 import {HeaderButtons} from './headerbuttons';
 import {ImportRecipeDialog} from './importrecipedialog';
 import {RecipeForm} from './recipeform';
@@ -15,20 +16,20 @@ let INGREDIENT_ROW_UID = 1;
 const DEFAULT_FORM_DATA = {
   name: '',
   description: '',
-  ingredients: [
+  ingredientLists: [
     {
       uid: INGREDIENT_ROW_UID,
       quantity: null,
       ingredient: null, // {id: num, name: string}
       unit: null,
-      displayName: '',
+      ingredientDisplayName: '',
       originalName: '',
       ingredientOptions: null // [{id: num, name: string}, ...]
     }
   ],
   instructions: '',
-  prepTime: null,
-  cookTime: null,
+  prepTimeMin: null,
+  cookTimeMin: null,
   recipeTypes: [],
   mealTypes: [],
   recipeCategories: [],
@@ -40,6 +41,7 @@ const DEFAULT_FORM_DATA = {
 //       Likely need to flatten formData into state and mark components as
 //       PureComponents where possible (i.e., components that only work with
 //       simple flattened properties).
+//       https://github.com/joeltine/meal-planner/issues/89
 
 export class AddRecipesController extends React.Component {
   constructor(props) {
@@ -47,6 +49,7 @@ export class AddRecipesController extends React.Component {
 
     this.state = {
       isDialogOpen: false,
+      isSubmitting: false,
       formUID: FORM_UID,
       importingRecipe: false,
       // Make copy of DEFAULT_FORM_DATA, so we don't modify it directly and
@@ -72,7 +75,7 @@ export class AddRecipesController extends React.Component {
   }
 
   updateIngredientRowValue(rowKey, uid, newVal) {
-    const ingredientRow = this.state.formData.ingredients[
+    const ingredientRow = this.state.formData.ingredientLists[
         this.getIngredientRowIndexForUid(uid)];
     ingredientRow[rowKey] = newVal;
     this.setState({
@@ -91,7 +94,7 @@ export class AddRecipesController extends React.Component {
         q: query
       }
     }).then((newOptions) => {
-      const ingredientRow = this.state.formData.ingredients[
+      const ingredientRow = this.state.formData.ingredientLists[
           this.getIngredientRowIndexForUid(rowUid)];
       ingredientRow.ingredientOptions = newOptions;
       this.setState({
@@ -101,14 +104,14 @@ export class AddRecipesController extends React.Component {
   }
 
   getIngredientRowIndexForUid(uid) {
-    return this.state.formData.ingredients.findIndex(
+    return this.state.formData.ingredientLists.findIndex(
         (ingredient) => ingredient.uid === uid);
   }
 
   deleteIngredientRow(uid) {
-    const ingredients = this.state.formData.ingredients;
-    if (ingredients.length > 1) {
-      ingredients.splice(this.getIngredientRowIndexForUid(uid), 1);
+    const ingredientLists = this.state.formData.ingredientLists;
+    if (ingredientLists.length > 1) {
+      ingredientLists.splice(this.getIngredientRowIndexForUid(uid), 1);
       this.setState({
         formData: this.state.formData
       });
@@ -116,12 +119,12 @@ export class AddRecipesController extends React.Component {
   }
 
   addIngredientRow() {
-    this.state.formData.ingredients.push({
+    this.state.formData.ingredientLists.push({
       uid: ++INGREDIENT_ROW_UID,
       quantity: null,
       ingredient: null,
       unit: null,
-      displayName: '',
+      ingredientDisplayName: '',
       originalName: ''
     });
     this.setState({
@@ -173,7 +176,7 @@ export class AddRecipesController extends React.Component {
         quantity: this.truncatePrecision(parsedIngredient['quantity']),
         ingredient: selectedIngredient,
         unit: parsedIngredient['unitId'] || null,
-        displayName: this.getIngredientDisplayName(parsedIngredient),
+        ingredientDisplayName: this.getIngredientDisplayName(parsedIngredient),
         originalName: ingredient['ingredientRaw'],
         ingredientOptions: selectedIngredient !== null ? [selectedIngredient]
             : null
@@ -187,10 +190,10 @@ export class AddRecipesController extends React.Component {
     formData.name = scrapedRecipe['title'];
     formData.description = ''; // Scraped recipes never contain a description.
     formData.instructions = scrapedRecipe['instructions'];
-    formData.ingredients = this.buildIngredientsData(
+    formData.ingredientLists = this.buildIngredientsData(
         scrapedRecipe['ingredients']);
-    formData.prepTime = scrapedRecipe['prep_time'];
-    formData.cookTime = scrapedRecipe['cook_time'];
+    formData.prepTimeMin = scrapedRecipe['prep_time'];
+    formData.cookTimeMin = scrapedRecipe['cook_time'];
     formData.recipeTypes = scrapedRecipe['recipe_types'];
     formData.mealTypes = scrapedRecipe['meal_types'];
     formData.recipeCategories = scrapedRecipe['recipe_categories'];
@@ -229,29 +232,85 @@ export class AddRecipesController extends React.Component {
     });
   }
 
+  buildNestedTypeObj(idList, keyStr) {
+    const things = [];
+    for (let id of idList) {
+      things.push({[keyStr]: {id: Number(id)}});
+    }
+    return things;
+  }
+
+  buildRecipeCategoriesObj(categoryIds) {
+    return this.buildNestedTypeObj(categoryIds, "recipeCategory");
+  }
+
+  buildMealTypesObj(mealTypeIds) {
+    return this.buildNestedTypeObj(mealTypeIds, "mealType");
+  }
+
+  buildRecipeTypesObj(recipeTypeIds) {
+    return this.buildNestedTypeObj(recipeTypeIds, "recipeType");
+  }
+
+  /**
+   * Massage formData into what the server expects.
+   */
+  buildObjectToSubmit() {
+    const toSubmit = this.cloneObject(this.state.formData);
+    toSubmit.prepTimeMin = Number(toSubmit.prepTimeMin);
+    toSubmit.cookTimeMin = Number(toSubmit.cookTimeMin);
+    toSubmit.ingredientLists = toSubmit.ingredientLists.map((list) => {
+      // Delete stuff that was used just for react state rendering.
+      delete list.uid;
+      delete list.originalName;
+      delete list.ingredientOptions;
+      // Tweak unit id to match server obj.
+      list.unit = {id: list.unit};
+      return list;
+    });
+    // For each "buildObj" call, converts from list of ids, to list of objects
+    // like [{recipeCategory: {id: 17}, ...] to match server schema.
+    toSubmit.recipeCategories = this.buildRecipeCategoriesObj(
+        toSubmit.recipeCategories);
+    toSubmit.recipeTypes = this.buildRecipeTypesObj(toSubmit.recipeTypes);
+    toSubmit.mealTypes = this.buildMealTypesObj(toSubmit.mealTypes);
+    return toSubmit;
+  }
+
   handleSubmit(e) {
     e.preventDefault();
 
     const form = e.target;
-    const formData = new FormData(form);
-
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
+    if (!form.checkValidity()) {
+      Toast.showNewErrorToast('Invalid inputs!',
+          'At least one of the form inputs is invalid. Fix all '
+          + 'elements highlighted in red before submitting.',
+          {delay: 6000});
+      return;
     }
 
-    /*
-    // TODO: show loading indicator and disable form while loading.
-    // TODO: disable inputs
+    this.setState({
+      isSubmitting: true
+    });
+
+    const toSubmit = this.buildObjectToSubmit();
+
     sendAjax('/recipes', {
-      data: JSON.stringify(data),
+      data: JSON.stringify(toSubmit),
       contentType: 'application/json',
       method: 'POST',
       processData: false
     })
         .done(() => {
-
+          Toast.showNewSuccessToast('Recipe added!',
+              `Successfully added ${toSubmit.name}!`);
+          this.resetForm();
+        })
+        .always(() => {
+          this.setState({
+            isSubmitting: false
+          });
         });
-     */
   }
 
   updateFormDataValue(formDataKey, value) {
@@ -277,7 +336,8 @@ export class AddRecipesController extends React.Component {
                       onIngredientInputChange={this.onIngredientInputChange}
                       onIngredientRowValueChange={this.updateIngredientRowValue}
                       onFormDataValueChange={this.updateFormDataValue}
-                      onSubmit={this.handleSubmit}/>
+                      onSubmit={this.handleSubmit}
+                      isSubmitting={this.state.isSubmitting}/>
           <ImportRecipeDialog open={this.state.isDialogOpen}
                               disabled={this.state.importingRecipe}
                               inProgress={this.state.importingRecipe}

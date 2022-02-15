@@ -1,4 +1,4 @@
-import {InputLabel, MenuItem, Select} from '@mui/material';
+import {FormHelperText, InputLabel, MenuItem, Select} from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -21,7 +21,9 @@ export class OutlinedSelect extends React.Component {
 
   render() {
     return (
-        <FormControl fullWidth size="small" required={this.props.required}>
+        <FormControl fullWidth size="small"
+                     required={this.props.required}
+                     error={!!this.props.helperText}>
           <InputLabel
               id={`${this.props.id}Label`}>{this.props.label}</InputLabel>
           <Select
@@ -30,12 +32,17 @@ export class OutlinedSelect extends React.Component {
               name={this.props.name}
               defaultValue=""
               sx={{minWidth: 140}}
-              onChange={this.props.onChange || (() => {
-              })}
+              onInvalid={this.props.onInvalid}
+              onChange={(e) => {
+                if (this.props.onChange) {
+                  this.props.onChange(e);
+                }
+              }}
               value={this.props.value || ''}
               label={this.props.label}>
             {this.buildMenuItems()}
           </Select>
+          <FormHelperText>{this.props.helperText}</FormHelperText>
         </FormControl>
     );
   }
@@ -51,5 +58,7 @@ OutlinedSelect.propTypes = {
   id: PropTypes.string.isRequired,
   value: PropTypes.string,
   name: PropTypes.string.isRequired,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  onInvalid: PropTypes.func.isRequired,
+  helperText: PropTypes.string.isRequired
 };

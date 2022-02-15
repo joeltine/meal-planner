@@ -42,7 +42,7 @@ export class Ingredients extends React.Component {
                             ingredient={row.ingredient}
                             unit={row.unit}
                             unitOptions={this.state.unitOptions}
-                            displayName={row.displayName}
+                            displayName={row.ingredientDisplayName}
                             originalName={row.originalName}
                             ingredientOptions={row.ingredientOptions}
                             onAddClick={this.props.addIngredientRow}
@@ -59,7 +59,8 @@ export class Ingredients extends React.Component {
                             }}
                             onDisplayNameChange={(newDisplayName) => {
                               this.props.onIngredientRowValueChange(
-                                  'displayName', row.uid, newDisplayName);
+                                  'ingredientDisplayName', row.uid,
+                                  newDisplayName);
                             }}
                             onQuantityChange={(newQuantity) => {
                               this.props.onIngredientRowValueChange(
@@ -87,13 +88,13 @@ export class Ingredients extends React.Component {
 Ingredients.propTypes = {
   ingredients: PropTypes.arrayOf(PropTypes.exact({
     uid: PropTypes.number.isRequired,
-    quantity: PropTypes.number,
+    quantity: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     ingredient: PropTypes.exact({
       id: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired
     }),
     unit: PropTypes.number,
-    displayName: PropTypes.string,
+    ingredientDisplayName: PropTypes.string,
     originalName: PropTypes.string,
     ingredientOptions: PropTypes.arrayOf(PropTypes.exact({
       id: PropTypes.number.isRequired,

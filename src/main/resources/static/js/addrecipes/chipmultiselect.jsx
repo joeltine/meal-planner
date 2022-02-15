@@ -1,6 +1,7 @@
 import {
   Box,
   Chip,
+  FormHelperText,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -60,7 +61,9 @@ export class ChipMultiSelect extends React.Component {
 
   render() {
     return (
-        <FormControl fullWidth size="small" required={this.props.required}>
+        <FormControl fullWidth size="small"
+                     required={this.props.required}
+                     error={!!this.props.helperText}>
           <InputLabel
               id={`${this.props.id}Label`}>
             {this.props.label}
@@ -72,9 +75,9 @@ export class ChipMultiSelect extends React.Component {
               multiple
               label={this.props.label}
               value={this.props.values || []}
-              onChange={(e) => {
-                this.props.onChange(e.target.value);
-              }}
+              onInvalid={this.props.onInvalid || (() => {
+              })}
+              onChange={this.props.onChange}
               input={<OutlinedInput id={`${this.props.id}Chip`}
                                     label={this.props.label}/>}
               renderValue={(selected) => {
@@ -87,6 +90,7 @@ export class ChipMultiSelect extends React.Component {
               MenuProps={MenuProps}>
             {this.buildMenuItems()}
           </Select>
+          <FormHelperText>{this.props.helperText}</FormHelperText>
         </FormControl>
     );
   }
@@ -101,6 +105,8 @@ ChipMultiSelect.propTypes = {
   required: PropTypes.bool,
   id: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(PropTypes.number),
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  onInvalid: PropTypes.func,
+  helperText: PropTypes.string
 };
 

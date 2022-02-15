@@ -4,11 +4,54 @@ import React from 'react';
 
 import {sendAjax} from '../common/ajax';
 import {ChipMultiSelect} from './chipmultiselect';
+import {getValidityMessage, ValidityStates} from './validation';
+
+const PREP_TIME_ERRORS = {
+  [ValidityStates.PATTERN_MISMATCH]: 'Invalid integer!',
+  [ValidityStates.VALUE_MISSING]: 'Missing prep time!'
+};
+
+const COOK_TIME_ERRORS = {
+  [ValidityStates.PATTERN_MISMATCH]: 'Invalid integer!',
+  [ValidityStates.VALUE_MISSING]: 'Missing cook time!'
+};
 
 export class OtherInfo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {recipeTypes: [], mealTypes: [], recipeCategories: []};
+    this.state = {
+      recipeTypes: [],
+      mealTypes: [],
+      recipeCategories: [],
+      prepTimeError: '',
+      cookTimeError: '',
+      recipeTypeError: '',
+      mealTypeError: ''
+    };
+  }
+
+  updatePrepTimeValidity(event) {
+    this.setState({
+      prepTimeError: getValidityMessage(PREP_TIME_ERRORS, event.target)
+    });
+  }
+
+  updateCookTimeValidity(event) {
+    this.setState({
+      cookTimeError: getValidityMessage(COOK_TIME_ERRORS, event.target)
+    });
+  }
+
+  updateRecipeTypeValidity(values) {
+    this.setState({
+      recipeTypeError: values.length ? '' : 'Missing recipe type!'
+    });
+  }
+
+  updateMealTypeValidity(values) {
+    this.setState({
+      mealTypeError: values.length ? '' : 'Missing meal type!'
+    });
   }
 
   componentDidMount() {
@@ -48,10 +91,14 @@ export class OtherInfo extends React.Component {
                   size="small"
                   required
                   value={this.props.prepTime || ''}
+                  error={!!this.state.prepTimeError}
+                  helperText={this.state.prepTimeError}
+                  onInvalid={this.updatePrepTimeValidity.bind(this)}
                   onChange={(e) => {
                     if (this.props.onPrepTimeChange) {
                       this.props.onPrepTimeChange(e.target.value);
                     }
+                    this.updatePrepTimeValidity(e);
                   }}
                   inputProps={{
                     inputMode: 'numeric',
@@ -71,10 +118,14 @@ export class OtherInfo extends React.Component {
                   size="small"
                   required
                   value={this.props.cookTime || ''}
+                  error={!!this.state.cookTimeError}
+                  helperText={this.state.cookTimeError}
+                  onInvalid={this.updateCookTimeValidity.bind(this)}
                   onChange={(e) => {
                     if (this.props.onCookTimeChange) {
                       this.props.onCookTimeChange(e.target.value);
                     }
+                    this.updateCookTimeValidity(e);
                   }}
                   inputProps={{
                     inputMode: 'numeric',
@@ -92,24 +143,41 @@ export class OtherInfo extends React.Component {
               <ChipMultiSelect id="inputRecipeType"
                                label="Recipe types"
                                required={true}
+                               helperText={this.state.recipeTypeError}
+                               onInvalid={() => {
+                                 this.updateRecipeTypeValidity([]);
+                               }}
                                values={this.props.recipeTypes || []}
                                options={this.state.recipeTypes}
-                               onChange={this.props.onRecipeTypesChange}/>
+                               onChange={(e) => {
+                                 this.props.onRecipeTypesChange(e.target.value);
+                                 this.updateRecipeTypeValidity(e.target.value);
+                               }}/>
             </div>
             <div className="col-md-4">
               <ChipMultiSelect id="inputMealType"
                                label="Meal types"
                                required={true}
+                               helperText={this.state.mealTypeError}
+                               onInvalid={() => {
+                                 this.updateMealTypeValidity([]);
+                               }}
                                values={this.props.mealTypes || []}
                                options={this.state.mealTypes}
-                               onChange={this.props.onMealTypesChange}/>
+                               onChange={(e) => {
+                                 this.props.onMealTypesChange(e.target.value);
+                                 this.updateMealTypeValidity(e.target.value);
+                               }}/>
             </div>
             <div className="col-md-4">
               <ChipMultiSelect id="inputRecipeCategories"
                                label="Other categories"
                                values={this.props.recipeCategories || []}
                                options={this.state.recipeCategories}
-                               onChange={this.props.onRecipeCategoriesChange}/>
+                               onChange={(e) => {
+                                 this.props.onRecipeCategoriesChange(
+                                     e.target.value);
+                               }}/>
             </div>
           </div>
 
