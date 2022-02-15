@@ -439,7 +439,7 @@ export class DataTable extends React.Component {
   render() {
     return (
         <div className="container-fluid">
-          <div className="row pb-3">
+          <div className="row pb-3 g-3">
             <div className="col">
               <SearchBox onSearchChange={this.searchTableDebounced}/>
             </div>
@@ -461,14 +461,12 @@ export class DataTable extends React.Component {
             </div>
           </div>
           <div className="row">
-            <div className="col">
-              <Pagination totalItems={this.state.totalItems}
-                          itemsPerPage={MAX_ROWS_PER_PAGE}
-                          activePage={this.state.currentPage}
-                          onPreviousClick={this.navigateToPreviousPage}
-                          onNextClick={this.navigateToNextPage}
-                          onPageNavigate={this.navigateToPage}/>
-            </div>
+            <Pagination totalItems={this.state.totalItems}
+                        itemsPerPage={MAX_ROWS_PER_PAGE}
+                        activePage={this.state.currentPage}
+                        onPreviousClick={this.navigateToPreviousPage}
+                        onNextClick={this.navigateToNextPage}
+                        onPageNavigate={this.navigateToPage}/>
           </div>
         </div>
     );

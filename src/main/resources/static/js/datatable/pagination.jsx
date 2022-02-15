@@ -116,14 +116,15 @@ export class Pagination extends React.Component {
     //       "(filtered from 57 total entries)"
 
     return (
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col pl-0 page-summary">
+        <React.Fragment>
+          <div className="d-flex g-3">
+            <div className="flex-grow-1 ps-0 page-summary">
               Showing {showingStartRange} to {showingEndRange} of {this.props.totalItems} entries
             </div>
-            <div className="col pr-0">
-              <nav className="float-right">
-                <ul className="pagination" aria-label="pagination">
+            <div className="ps-0">
+              <nav>
+                <ul className="pagination"
+                    aria-label="pagination">
                   <li aria-label="prev-button"
                       className={`page-item ${prevActiveState}`}
                       onClick={this.handlePrevClick}>
@@ -139,7 +140,7 @@ export class Pagination extends React.Component {
               </nav>
             </div>
           </div>
-        </div>
+        </React.Fragment>
     );
   }
 }

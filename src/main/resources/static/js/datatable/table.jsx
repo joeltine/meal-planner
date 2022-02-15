@@ -129,13 +129,13 @@ export class Table extends React.Component {
     return (
         <table className="table table-bordered table-hover datatable"
                ref={this.tableRef}>
-          <thead className="thead-dark" aria-label="table-header">
+          <thead className="table-dark" aria-label="table-header">
           <tr>{columnHeaders}</tr>
           </thead>
           <tbody aria-label="table-body">
           {rows}
           </tbody>
-          <tfoot className="thead-dark" aria-label="table-footer">
+          <tfoot className="table-dark" aria-label="table-footer">
           <tr>{columnFooters}</tr>
           </tfoot>
         </table>
