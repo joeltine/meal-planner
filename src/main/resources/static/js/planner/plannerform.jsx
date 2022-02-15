@@ -1,11 +1,11 @@
-import PropTypes from "prop-types";
-import React from "react";
+import PropTypes from 'prop-types';
+import React from 'react';
 
-import {sendAjax} from "../common/ajax";
-import {FilterAnyAll} from "./filteranyall";
-import {FilterRow} from "./filterrow";
-import {NumRecipes} from "./numrecipes";
-import {PlanButton} from "./planbutton";
+import {sendAjax} from '../common/ajax';
+import {FilterAnyAll} from './filteranyall';
+import {FilterRow} from './filterrow';
+import {NumRecipes} from './numrecipes';
+import {PlanButton} from './planbutton';
 
 let FILTER_ROW_ID = 0;
 
@@ -89,19 +89,19 @@ export class PlannerForm extends React.Component {
     return (
         <form ref={this.formRef} className="container-fluid p-0">
           <h5>Number of recipes</h5>
-          <div className="row">
+          <div className="row pb-3">
             <NumRecipes ref={this.numRecipeRef}/>
           </div>
           <h5>Constraints</h5>
-          <div className="row border rounded pt-3 pb-3 me-0 ms-0">
+          <div className="row border rounded pt-3 me-0 ms-0">
             <div className="col-md-12">
-              <div className="row">
+              <div className="row pb-3">
                 <FilterAnyAll ref={this.filterAnyAllRef}/>
               </div>
               {this.renderFilterRows()}
             </div>
           </div>
-          <div className="row pt-2">
+          <div className="row pt-3">
             <div className="col-md-12">
               <PlanButton onButtonClick={this.onPlanButtonClick}/>
             </div>

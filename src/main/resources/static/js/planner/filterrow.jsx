@@ -242,7 +242,7 @@ export class FilterRow extends React.Component {
 
   render() {
     return (
-        <div className="row">
+        <div className="row pb-3 g-3">
           <div className="form-group col-md-auto">
             {this.buildFilterTypeSelect()}
           </div>

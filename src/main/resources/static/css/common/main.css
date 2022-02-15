@@ -26,3 +26,11 @@ svg.feather {
 .btn-link {
   text-decoration: none;
 }
+
+
+/* Dev info wraps and pushes content down on smalls screens, so we hide below a certain width */
+@media (max-width: 600px) {
+  #devEnvironmentInfo {
+    display: none;
+  }
+}

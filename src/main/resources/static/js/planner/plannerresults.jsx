@@ -200,20 +200,18 @@ export class PlannerResults extends React.Component {
 
   getEmptyResultOutput() {
     return (
-        <div className="jumbotron mt-3" key="emptyOutput">
-          <h1 className="display-5">No recipes found!</h1>
-          <p className="lead">
-            No recipes were found matching your given criteria. Try removing
-            some filters or use less restrictive conditions.
-          </p>
-          <hr className="my-4"/>
-          <p>
-            Try again:
-          </p>
-          <button className="btn btn-primary btn-lg" role="button"
-                  onClick={this.props.goBackButtonClick}>
-            Go Back
-          </button>
+        <div className="p-5 mb-4 bg-light rounded-3">
+          <div className="container-fluid py-5">
+            <h1 className="display-5 fw-bold">No recipes found!</h1>
+            <p className="col-md-8 fs-4">
+              No recipes were found matching your given criteria. Try removing
+              some filters or use less restrictive conditions.
+            </p>
+            <button className="btn btn-primary btn-lg" role="button"
+                    onClick={this.props.goBackButtonClick}>
+              Go Back
+            </button>
+          </div>
         </div>
     );
   }
@@ -221,11 +219,11 @@ export class PlannerResults extends React.Component {
   getExportButton() {
     return this.state.isSignedIn ?
         <button
-            className="btn btn-primary ms-2"
+            className="btn btn-primary"
             onClick={this.exportToDocs}>
           Export to Google Docs
         </button> :
-        <button className="btn btn-warning ms-2"
+        <button className="btn btn-warning"
                 onClick={this.authenticateToGoogle}>
           Sign-in to Export to Google Docs
         </button>;
@@ -235,11 +233,15 @@ export class PlannerResults extends React.Component {
     return (
         <div className="container-fluid" key="buttons">
           <div className="row">
-            <button className="btn btn-danger"
-                    onClick={this.props.goBackButtonClick}>
-              Go Back
-            </button>
-            {this.getExportButton()}
+            <div className="col-md-auto">
+              <button className="btn btn-danger"
+                      onClick={this.props.goBackButtonClick}>
+                Go Back
+              </button>
+            </div>
+            <div className="col-md-auto ps-0">
+              {this.getExportButton()}
+            </div>
           </div>
         </div>
     );

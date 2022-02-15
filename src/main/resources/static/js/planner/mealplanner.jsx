@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import {PlannerForm} from "./plannerform";
-import {PlannerResults} from "./plannerresults";
+import {PlannerForm} from './plannerform';
+import {PlannerResults} from './plannerresults';
 
 const RenderModes = {
   FORM: 'FORM',

@@ -13,6 +13,7 @@ export class HeaderButtons extends React.Component {
     return (
         <React.Fragment>
           <Button id="resetForm"
+                  className="ms-1"
                   startIcon={<RestartAltIcon/>}
                   variant="contained"
                   color="error"

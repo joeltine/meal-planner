@@ -13,17 +13,23 @@ export class FilterAnyAll extends React.Component {
 
   render() {
     return (
-        <div className="form-group col-md-12 form-inline">
-          Filter on
-          <select id="inputAnyAll"
-                  ref={this.selectRef}
-                  defaultValue={this.props.defaultValue || "AND"}
-                  className="form-control me-2 ms-2">
-            <option value="AND">All</option>
-            <option value="OR">Any</option>
-          </select>
-          of the following conditions:
-        </div>
+        <React.Fragment>
+          <div className="col-md-auto align-self-center">
+            <span>Filter on</span>
+          </div>
+          <div className="col-md-auto ps-1 pe-1">
+            <select id="inputAnyAll"
+                    ref={this.selectRef}
+                    defaultValue={this.props.defaultValue || "AND"}
+                    className="form-control">
+              <option value="AND">All</option>
+              <option value="OR">Any</option>
+            </select>
+          </div>
+          <div className="col-md-auto align-self-center">
+            <span>of the following conditions:</span>
+          </div>
+        </React.Fragment>
     );
   }
 }
