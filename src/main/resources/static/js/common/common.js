@@ -1,7 +1,6 @@
 /**
  * Common functionality for all pages. Should be imported and constructed on
  * every page in the app.
- * TODO: Make this initialization on every page automatic w/o manual import.
  */
 
 import '@fontsource/roboto/300.css';
@@ -35,7 +34,10 @@ export class CommonController {
     if (pathName === '/') {
       pathName = '/planner';
     }
-    $(`.navbar a[href="${pathName}"]`).addClass('active');
+    const activeLink = document.querySelector(`.navbar a[href="${pathName}"]`);
+    if (activeLink) {
+      activeLink.classList.add('active');
+    }
     if (pathName.endsWith('Editor')) {
       document.getElementById('editorDropdown').classList.add('active');
     }
