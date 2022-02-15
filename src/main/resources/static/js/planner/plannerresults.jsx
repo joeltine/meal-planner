@@ -1,6 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import LoginIcon from '@mui/icons-material/Login';
+import {LinearProgress} from '@mui/material';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -12,7 +13,7 @@ import {GoogleDriveUploader} from './googledriveuploader';
 export class PlannerResults extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isSignedIn: false};
+    this.state = {isSignedIn: false, isExportingDoc: false};
     this.exportToDocs = this.exportToDocs.bind(this);
     this.authenticateToGoogle = this.authenticateToGoogle.bind(this);
   }
@@ -129,6 +130,9 @@ export class PlannerResults extends React.Component {
   }
 
   exportToDocs() {
+    this.setState({
+      isExportingDoc: true
+    });
     GAPI_CLIENT_READY.then(() => {
       const uploader = new GoogleDriveUploader({
         file: new Blob([this.buildSimplifiedResultHtmlForGoogleDocs()],
@@ -144,11 +148,17 @@ export class PlannerResults extends React.Component {
               `Successfully uploaded <a target="_blank" href="${this.buildGoogleDocUrl(
                   docInfo.id)}">${docInfo.name}</a> to Google Docs.`,
               {delay: 20000});
+          this.setState({
+            isExportingDoc: false
+          });
         },
         onError: (error) => {
           Toast.showNewErrorToast(
               `Failed to create Google Doc!', 'Request to upload file to Google Drive/Docs failed: ${JSON.stringify(
                   error)}}`, {autohide: false});
+          this.setState({
+            isExportingDoc: false
+          });
         }
       });
       uploader.upload();
@@ -224,7 +234,8 @@ export class PlannerResults extends React.Component {
     return this.state.isSignedIn ?
         <Button variant="contained"
                 startIcon={<FileUploadIcon/>}
-                onClick={this.exportToDocs}>
+                onClick={this.exportToDocs}
+                disabled={this.state.isExportingDoc}>
           Export to Google Docs
         </Button>
         :
@@ -239,10 +250,16 @@ export class PlannerResults extends React.Component {
   getResultButtons() {
     return (
         <div className="container-fluid" key="buttons">
+          <div className="row">
+            <div className="col-md-12 pb-3">
+              {this.state.isExportingDoc && <LinearProgress/>}
+            </div>
+          </div>
           <div className="row g-3">
             <div className="col-md-auto ps-0">
               <Button variant="contained"
                       startIcon={<ArrowBackIcon/>}
+                      disabled={this.state.isExportingDoc}
                       onClick={this.props.goBackButtonClick}>
                 Go Back
               </Button>
