@@ -18,7 +18,7 @@ export class RecipeForm extends React.Component {
     return (
         <form id="recipeForm" onSubmit={this.props.onSubmit}
               onKeyDown={(event) => {
-                if (event.key === 'Enter') {
+                if (event.key === 'Enter' && event.target.type !== 'textarea') {
                   event.preventDefault();
                 }
               }} noValidate>
