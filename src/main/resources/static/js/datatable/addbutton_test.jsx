@@ -1,8 +1,8 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render, screen} from '@testing-library/react';
-import React from "react";
+import React from 'react';
 
-import {AddButton} from "./addbutton";
+import {AddButton} from './addbutton';
 
 describe('AddButton test suite', function () {
   beforeAll(() => {

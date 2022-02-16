@@ -96,7 +96,7 @@ GoogleDriveUploader.prototype.sendFile_ = function () {
   xhr.open('PUT', this.url, true);
   xhr.setRequestHeader('Content-Type', this.contentType);
   xhr.setRequestHeader('Content-Range',
-      "bytes " + this.offset + "-" + (end - 1) + "/" + this.file.size);
+      'bytes ' + this.offset + '-' + (end - 1) + '/' + this.file.size);
   xhr.setRequestHeader('X-Upload-Content-Type', this.file.type);
   if (xhr.upload) {
     xhr.upload.addEventListener('progress', this.onProgress);
@@ -114,7 +114,7 @@ GoogleDriveUploader.prototype.sendFile_ = function () {
 GoogleDriveUploader.prototype.resume_ = function () {
   const xhr = new XMLHttpRequest();
   xhr.open('PUT', this.url, true);
-  xhr.setRequestHeader('Content-Range', "bytes */" + this.file.size);
+  xhr.setRequestHeader('Content-Range', 'bytes */' + this.file.size);
   xhr.setRequestHeader('X-Upload-Content-Type', this.file.type);
   if (xhr.upload) {
     xhr.upload.addEventListener('progress', this.onProgress);

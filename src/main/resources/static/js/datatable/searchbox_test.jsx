@@ -1,9 +1,9 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {render} from '@testing-library/react';
-import userEvent from "@testing-library/user-event";
-import React from "react";
+import userEvent from '@testing-library/user-event';
+import React from 'react';
 
-import {SearchBox} from "./searchbox";
+import {SearchBox} from './searchbox';
 
 describe('SearchBox test suite', function () {
 

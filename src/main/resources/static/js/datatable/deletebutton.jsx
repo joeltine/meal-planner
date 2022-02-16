@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export class DeleteButton extends React.Component {

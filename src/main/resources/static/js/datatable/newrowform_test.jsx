@@ -1,10 +1,10 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
-import userEvent from "@testing-library/user-event";
-import React from "react";
+import userEvent from '@testing-library/user-event';
+import React from 'react';
 
-import {Types} from "../common/utils";
-import {NewRowForm} from "./newrowform";
+import {Types} from '../common/utils';
+import {NewRowForm} from './newrowform';
 
 describe('NewRowForm test suite', function () {
   beforeAll(() => {

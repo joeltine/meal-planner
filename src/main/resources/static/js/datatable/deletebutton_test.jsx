@@ -1,8 +1,8 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render, screen} from '@testing-library/react';
-import React from "react";
+import React from 'react';
 
-import {DeleteButton} from "./deletebutton";
+import {DeleteButton} from './deletebutton';
 
 describe('DeleteButton test suite', function () {
   beforeAll(() => {

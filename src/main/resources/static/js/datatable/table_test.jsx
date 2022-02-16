@@ -1,16 +1,16 @@
-import JasmineDOM from "@testing-library/jasmine-dom";
-import {fireEvent, render} from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import React from "react";
+import JasmineDOM from '@testing-library/jasmine-dom';
+import {fireEvent, render} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import React from 'react';
 
 import {
   randomArray,
   randomInt,
   randomObject,
   randomString
-} from "../common/test_utils";
-import {SORT_TYPES} from "./sorttypes";
-import {Table} from "./table";
+} from '../common/test_utils';
+import {SORT_TYPES} from './sorttypes';
+import {Table} from './table';
 
 function generateTableData(totalRows) {
   const data = [];

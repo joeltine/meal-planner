@@ -45,7 +45,7 @@ export class ImportRecipeDialog extends React.Component {
                 onChange={this.onUrlChange}
                 placeholder="https://..."
                 inputProps={{
-                  pattern: "https?://.*"
+                  pattern: 'https?://.*'
                 }}
                 label="URL"
             />

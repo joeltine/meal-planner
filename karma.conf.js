@@ -39,7 +39,7 @@ module.exports = function (config) {
     },
 
     webpack: {
-      "mode": "development",
+      'mode': 'development',
 
       resolve: {
         // Which extensions Webpack will resolve. "..." means to include the
@@ -53,7 +53,7 @@ module.exports = function (config) {
             test: /\.?jsx$/,
             exclude: /node_modules/,
             use: {
-              loader: "babel-loader",
+              loader: 'babel-loader',
               options: {
                 presets: ['@babel/preset-react'],
                 cacheDirectory: true
@@ -76,7 +76,7 @@ module.exports = function (config) {
         }),
         new MiniCssExtractPlugin({
           // This is relative to output.path.
-          filename: "../css/[name]/[name].bundle.css"
+          filename: '../css/[name]/[name].bundle.css'
         })
       ]
     },

@@ -47,6 +47,14 @@
   "rules": {
     "simple-import-sort/imports": "error",
     "eol-last": "error",
-    "semi": "error"
+    "semi": "error",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true,
+        "avoidEscape": true
+      }
+    ]
   }
 }

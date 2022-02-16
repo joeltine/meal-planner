@@ -1,8 +1,8 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
-import React from "react";
+import React from 'react';
 
-import {Pagination} from "./pagination";
+import {Pagination} from './pagination';
 
 describe('Pagination test suite', function () {
 

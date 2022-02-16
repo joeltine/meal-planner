@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import React from 'react';
 
-import {SORT_TYPES} from "./sorttypes";
-import {Td} from "./td";
+import {SORT_TYPES} from './sorttypes';
+import {Td} from './td';
 
 export class Table extends React.Component {
   constructor(props) {

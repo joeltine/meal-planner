@@ -110,11 +110,11 @@ export class PlannerResults extends React.Component {
             <h2>Ingredients</h2>
             {this.buildIngredientsList(recipe.ingredientLists)}
             <h2>Instructions</h2>
-            <pre style={{fontFamily: "Arial"}}>{recipe.instructions}</pre>
+            <pre style={{fontFamily: 'Arial'}}>{recipe.instructions}</pre>
             {recipe.description &&
                 <React.Fragment>
                   <h2>Description</h2>
-                  <pre style={{fontFamily: "Arial"}}>{recipe.description}</pre>
+                  <pre style={{fontFamily: 'Arial'}}>{recipe.description}</pre>
                 </React.Fragment>}
             <hr/>
           </section>
@@ -136,7 +136,7 @@ export class PlannerResults extends React.Component {
     GAPI_CLIENT_READY.then(() => {
       const uploader = new GoogleDriveUploader({
         file: new Blob([this.buildSimplifiedResultHtmlForGoogleDocs()],
-            {"type": "text/html"}),
+            {'type': 'text/html'}),
         metadata: {
           name: `Meal Plan for ${new Date().toLocaleDateString()}`,
           mimeType: 'application/vnd.google-apps.document'

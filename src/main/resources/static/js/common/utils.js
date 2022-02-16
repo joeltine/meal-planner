@@ -19,7 +19,7 @@ export function arrayContainsSubstring(array, string) {
  * Returns if passed object is a valid Date object.
  */
 export function isValidDate(d) {
-  if (Object.prototype.toString.call(d) === "[object Date]") {
+  if (Object.prototype.toString.call(d) === '[object Date]') {
     if (Number.isNaN(d.getTime())) {
       return false;
     } else {
@@ -52,7 +52,7 @@ export function getType(value) {
     return Types.ARRAY;
   } else if ($.isPlainObject(value)) {
     return Types.PLAIN_OBJECT;
-  } else if (Object.prototype.toString.call(value) === "[object Date]") {
+  } else if (Object.prototype.toString.call(value) === '[object Date]') {
     return Types.DATE;
   } else {
     return typeof value;

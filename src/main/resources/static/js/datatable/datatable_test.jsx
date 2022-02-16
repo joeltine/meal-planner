@@ -2,7 +2,7 @@ import 'jasmine-ajax';
 
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
-import userEvent from "@testing-library/user-event";
+import userEvent from '@testing-library/user-event';
 import {Toast} from 'bootstrap';
 import React from 'react';
 
@@ -200,18 +200,18 @@ describe('DataTable test suite', function () {
     jasmine.Ajax.install();
     jasmine.clock().install();
     tableData = [
-      {id: 0, foo: "bar", bar: ["inner", "2nd"], bat: {b: "charizard"}},
-      {id: 1, foo: "bat", bar: ["inner"], bat: {z: "pikachu"}},
-      {id: 2, foo: "some stuff", bar: ["inner"], bat: {c: "henry"}},
-      {id: 3, foo: "other stuff", bar: ["outer"], bat: {d: "123"}},
-      {id: 4, foo: "hypno toad", bar: ["inner"], bat: {bee: "mo"}},
-      {id: 5, foo: "dude", bar: ["inner"], bat: {happ: "poignant"}},
-      {id: 6, foo: "what", bar: ["loopy"], bat: {ino: "number"}},
-      {id: 7, foo: "are", bar: ["js"], bat: {abba: "missisi"}},
-      {id: 8, foo: "you about", bar: ["sinner"], bat: {b: "love"}},
-      {id: 9, foo: "some 123 nums", bar: ["inner"], bat: {bc: "stuffed"}},
-      {id: 10, foo: "fake here", bar: ["inner"], bat: {bo: "hot"}},
-      {id: 11, foo: "bat", bar: ["innr"], bat: {t: "jill"}}];
+      {id: 0, foo: 'bar', bar: ['inner', '2nd'], bat: {b: 'charizard'}},
+      {id: 1, foo: 'bat', bar: ['inner'], bat: {z: 'pikachu'}},
+      {id: 2, foo: 'some stuff', bar: ['inner'], bat: {c: 'henry'}},
+      {id: 3, foo: 'other stuff', bar: ['outer'], bat: {d: '123'}},
+      {id: 4, foo: 'hypno toad', bar: ['inner'], bat: {bee: 'mo'}},
+      {id: 5, foo: 'dude', bar: ['inner'], bat: {happ: 'poignant'}},
+      {id: 6, foo: 'what', bar: ['loopy'], bat: {ino: 'number'}},
+      {id: 7, foo: 'are', bar: ['js'], bat: {abba: 'missisi'}},
+      {id: 8, foo: 'you about', bar: ['sinner'], bat: {b: 'love'}},
+      {id: 9, foo: 'some 123 nums', bar: ['inner'], bat: {bc: 'stuffed'}},
+      {id: 10, foo: 'fake here', bar: ['inner'], bat: {bo: 'hot'}},
+      {id: 11, foo: 'bat', bar: ['innr'], bat: {t: 'jill'}}];
   });
 
   afterEach(() => {
@@ -239,7 +239,7 @@ describe('DataTable test suite', function () {
         let request = requests.mostRecent();
         expect(request.url).toBe(DATA_SOURCE);
         expect(request.method).toBe('GET');
-        const tableData = [{id: 0, foo: "bar"}, {id: 1, foo: "bat"}];
+        const tableData = [{id: 0, foo: 'bar'}, {id: 1, foo: 'bat'}];
         request.respondWith({
           'status': 200,
           'contentType': 'application/json',

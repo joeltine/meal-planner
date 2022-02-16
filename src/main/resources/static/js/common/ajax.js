@@ -2,7 +2,7 @@
  * Central AJAX library.
  */
 
-import {Toast} from "../toasts/toast";
+import {Toast} from '../toasts/toast';
 
 // TODO: Write unit tests.
 export function sendAjax(endpoint, extraOptions) {

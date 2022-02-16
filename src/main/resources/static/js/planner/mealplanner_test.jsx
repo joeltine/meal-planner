@@ -1,4 +1,4 @@
-import JasmineDOM from "@testing-library/jasmine-dom";
+import JasmineDOM from '@testing-library/jasmine-dom';
 
 describe('MealPlanner test suite', function () {
   beforeAll(() => {

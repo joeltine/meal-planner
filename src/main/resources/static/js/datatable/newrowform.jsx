@@ -1,8 +1,8 @@
 import Button from '@mui/material/Button';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import React from 'react';
 
-import {tryToConvertStringToType} from "../common/utils";
+import {tryToConvertStringToType} from '../common/utils';
 
 export class NewRowForm extends React.Component {
   constructor(props) {

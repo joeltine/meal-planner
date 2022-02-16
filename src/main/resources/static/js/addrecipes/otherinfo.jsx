@@ -190,7 +190,7 @@ export class OtherInfo extends React.Component {
                          fullWidth
                          type="url"
                          inputProps={{
-                           pattern: "https?://.*"
+                           pattern: 'https?://.*'
                          }}
                          value={this.props.externalLink || ''}
                          onChange={(e) => {

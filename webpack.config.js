@@ -76,7 +76,7 @@ const config = {
     }),
     new MiniCssExtractPlugin({
       // This is relative to output.path.
-      filename: "../css/[name]/[name].bundle.css"
+      filename: '../css/[name]/[name].bundle.css'
     })
   ]
 };

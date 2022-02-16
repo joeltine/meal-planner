@@ -1,9 +1,9 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 import {fireEvent, render} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React from "react";
+import React from 'react';
 
-import {Td} from "./td";
+import {Td} from './td';
 
 describe('Td test suite', function () {
   let tr = null;

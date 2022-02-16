@@ -4,7 +4,7 @@ import React from 'react';
 
 import {sendAjax} from '../common/ajax';
 import {debounce} from '../common/utils';
-import {Toast} from "../toasts/toast";
+import {Toast} from '../toasts/toast';
 import {HeaderButtons} from './headerbuttons';
 import {ImportRecipeDialog} from './importrecipedialog';
 import {RecipeForm} from './recipeform';
@@ -145,7 +145,7 @@ export class AddRecipesController extends React.Component {
     }
     if (num % 1 !== 0) {
       // If it's a decimal with more than 2 decimals, truncate precision.
-      const numDecimals = num.toString().split(".")[1].length;
+      const numDecimals = num.toString().split('.')[1].length;
       num = numDecimals > 2 ? Number(num.toFixed(2)) : num;
     }
     return num;
@@ -241,15 +241,15 @@ export class AddRecipesController extends React.Component {
   }
 
   buildRecipeCategoriesObj(categoryIds) {
-    return this.buildNestedTypeObj(categoryIds, "recipeCategory");
+    return this.buildNestedTypeObj(categoryIds, 'recipeCategory');
   }
 
   buildMealTypesObj(mealTypeIds) {
-    return this.buildNestedTypeObj(mealTypeIds, "mealType");
+    return this.buildNestedTypeObj(mealTypeIds, 'mealType');
   }
 
   buildRecipeTypesObj(recipeTypeIds) {
-    return this.buildNestedTypeObj(recipeTypeIds, "recipeType");
+    return this.buildNestedTypeObj(recipeTypeIds, 'recipeType');
   }
 
   /**

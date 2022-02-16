@@ -1,14 +1,14 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {IconButton} from '@mui/material';
-import PropTypes from "prop-types";
-import React from "react";
-import {Typeahead} from "react-bootstrap-typeahead";
+import PropTypes from 'prop-types';
+import React from 'react';
+import {Typeahead} from 'react-bootstrap-typeahead';
 
-import {sendAjax} from "../common/ajax";
-import {IncludesConstraint} from "./includesconstraint";
-import {NumericConstraint} from "./numericconstraint";
-import {Select} from "./select";
+import {sendAjax} from '../common/ajax';
+import {IncludesConstraint} from './includesconstraint';
+import {NumericConstraint} from './numericconstraint';
+import {Select} from './select';
 
 const FilterTypes = {
   RECIPE_TYPES: 'recipeTypes',
