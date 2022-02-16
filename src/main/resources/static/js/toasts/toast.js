@@ -74,11 +74,11 @@ export class Toast {
   getNewToastEl() {
     const styles = STATE_CLASS_MAP[this.state];
     this.toastId = `toast-${++UID}`;
+    const toastStyles = `${styles.header.bgColor} ${styles.header.textColor}`;
     const toastHtml = `
       <div class="toast ${styles.container.stateClass}" id="${this.toastId}"
            role="alert">
-        <div class="toast-header ${styles.header.bgColor} 
-                    ${styles.header.textColor}">
+        <div class="toast-header ${toastStyles}">
           <svg class="feather me-2" viewBox="0 0 24 24">
             <use href="#icon-alert-circle"/>
           </svg>
