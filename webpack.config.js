@@ -3,6 +3,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+/* eslint-disable max-len */
+
 const config = {
   entry: {
     addrecipes: './src/main/resources/static/js/addrecipes/addrecipes.jsx',
@@ -18,13 +20,13 @@ const config = {
   resolve: {
     // Which extensions Webpack will resolve. '...' means to include the
     // defaults (e.g., 'js', etc.) in addition to the extra entries.
-    extensions: ['.jsx', '...'],
+    extensions: ['.jsx', '...']
   },
 
   output: {
     filename: '[name]/[name].bundle.js',
     // eslint-disable-next-line no-undef
-    path: path.resolve(__dirname, 'target/classes/static/js/'),
+    path: path.resolve(__dirname, 'target/classes/static/js/')
   },
 
   module: {
@@ -49,21 +51,23 @@ const config = {
 
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({
-      extractComments: true,
-      parallel: true,
-      terserOptions: {
-        module: true,
-        compress: {
-          ecma: 6,
-          drop_console: true,
-          unsafe_methods: true
-        },
-        mangle: {
-          module: true
+    minimizer: [
+      new TerserPlugin({
+        extractComments: true,
+        parallel: true,
+        terserOptions: {
+          module: true,
+          compress: {
+            ecma: 6,
+            drop_console: true,
+            unsafe_methods: true
+          },
+          mangle: {
+            module: true
+          }
         }
-      }
-    })],
+      })
+    ]
   },
 
   plugins: [

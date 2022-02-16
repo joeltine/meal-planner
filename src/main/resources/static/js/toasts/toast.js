@@ -75,14 +75,17 @@ export class Toast {
     const styles = STATE_CLASS_MAP[this.state];
     this.toastId = `toast-${++UID}`;
     const toastHtml = `
-      <div class="toast ${styles.container.stateClass}" id="${this.toastId}" role="alert">
-        <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
+      <div class="toast ${styles.container.stateClass}" id="${this.toastId}"
+           role="alert">
+        <div class="toast-header ${styles.header.bgColor} 
+                    ${styles.header.textColor}">
           <svg class="feather me-2" viewBox="0 0 24 24">
             <use href="#icon-alert-circle"/>
           </svg>
           <strong class="me-auto toast-header-text">${this.header}</strong>
           <small class="toast-time ms-2">${new Date().toLocaleString()}</small>
-          <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
+          <button type="button" class="btn-close ms-2 mb-1" 
+                  data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
           ${this.body}

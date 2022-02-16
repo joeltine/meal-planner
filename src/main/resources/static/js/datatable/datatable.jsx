@@ -127,18 +127,18 @@ export class DataTable extends React.Component {
     const index = this.fullData.indexOf(row);
     if (index === -1) {
       Toast.showNewErrorToast('Failed to update cell!',
-          `In attempting to update row id ${row.id} column ${key}, we `
-          + 'failed to find the row in the known dataset.', {autohide: false});
+          `In attempting to update row id ${row.id} column ${key}, we ` +
+          'failed to find the row in the known dataset.', {autohide: false});
       return;
     }
 
     const colType = this.state.columnTypeInfo[key];
-    let convertedVal = tryToConvertStringToType(val, colType);
+    const convertedVal = tryToConvertStringToType(val, colType);
 
     if (convertedVal === null) {
       Toast.showNewErrorToast('Failed to Update Cell!',
-          `Attempting to convert "${val}" to ${colType} failed. `
-          + `Is it a valid ${colType}?`, {delay: 7000});
+          `Attempting to convert "${val}" to ${colType} failed. ` +
+          `Is it a valid ${colType}?`, {delay: 7000});
       return;
     }
 
@@ -359,18 +359,18 @@ export class DataTable extends React.Component {
 
             if (successes.size) {
               Toast.showNewSuccessToast('Delete successful!',
-                  `Successfully deleted row${successes.size > 1 ? 's'
-                      : ''} with id${successes.size > 1 ? 's'
-                      : ''}: ${Array.from(successes).join(', ')}.`);
+                  `Successfully deleted row${successes.size > 1 ? 's' :
+                      ''} with id${successes.size > 1 ? 's' :
+                      ''}: ${Array.from(successes).join(', ')}.`);
             }
 
             if (failures.size) {
               Toast.showNewErrorToast('Delete failed!',
-                  `Attempting to delete row${failures.size > 1 ? 's'
-                      : ''} (${Array.from(failures).join(
-                      ', ')}) not found in table `
-                  + `data. This shouldn't happen unless there's a race `
-                  + `condition.`, {autohide: false});
+                  `Attempting to delete row${failures.size > 1 ? 's' :
+                      ''} (${Array.from(failures).join(
+                      ', ')}) not found in table ` +
+                  `data. This shouldn't happen unless there's a race ` +
+                  `condition.`, {autohide: false});
             }
 
             this.refreshCurrentPage();

@@ -32,27 +32,26 @@ function assertRowGroup(rowGroup) {
   expect(headers.length).toEqual(5);
 
   const headerText = [];
-  for (let header of headers) {
+  for (const header of headers) {
     headerText.push(header.textContent);
   }
   expect(headerText).toEqual(jasmine.arrayWithExactContents(
       ['id', 'stringCol', 'intCol', 'arrCol', 'objCol']));
 }
 
-describe('Table test suite', function () {
-
+describe('Table test suite', function() {
   beforeAll(() => {
     jasmine.getEnv().addMatchers(JasmineDOM);
   });
 
-  it('should render empty table with no data', function () {
+  it('should render empty table with no data', function() {
     const data = [];
     const {getByRole} = render(<Table data={data}/>);
     expect(getByRole('rowgroup', {name: 'table-body'})).toHaveTextContent(
         'Table is empty');
   });
 
-  it('should render table with some data', function () {
+  it('should render table with some data', function() {
     const totalRows = 12;
     const data = generateTableData(totalRows);
     const {getByRole} = render(<Table data={data}/>);
@@ -76,7 +75,7 @@ describe('Table test suite', function () {
     }
   });
 
-  it('should select/unselect rows on click', function () {
+  it('should select/unselect rows on click', function() {
     const data = generateTableData(10);
     const tableRef = React.createRef();
     const {getByRole} = render(<Table ref={tableRef} data={data}/>);
@@ -100,7 +99,7 @@ describe('Table test suite', function () {
     expect(selectedRows[1].id).toEqual(2);
   });
 
-  it('should clear row selection on component update', function () {
+  it('should clear row selection on component update', function() {
     let data = generateTableData(10);
     const tableRef = React.createRef();
     const {getByRole, rerender} = render(<Table ref={tableRef} data={data}/>);
@@ -129,8 +128,8 @@ describe('Table test suite', function () {
     expect(selectedRows).toHaveSize(1);
   });
 
-  it('should respond to column header click events', function () {
-    let data = generateTableData(10);
+  it('should respond to column header click events', function() {
+    const data = generateTableData(10);
     const colHeaderClickSpy = jasmine.createSpy();
     const {getByRole} = render(
         <Table data={data}
@@ -139,19 +138,19 @@ describe('Table test suite', function () {
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = Array.from(thead.querySelectorAll('th'));
 
-    for (let h of headers) {
+    for (const h of headers) {
       fireEvent.click(h);
       expect(colHeaderClickSpy).toHaveBeenCalledWith(h.textContent);
     }
   });
 
-  it('should toggle sort indicator on sortCol update', function () {
-    let data = generateTableData(10);
-    let sortColInfo = {};
+  it('should toggle sort indicator on sortCol update', function() {
+    const data = generateTableData(10);
+    const sortColInfo = {};
     const colHeaderClickSpy = jasmine.createSpy().and.callFake((colName) => {
       if (sortColInfo['colName'] === colName) {
-        sortColInfo['sort'] = sortColInfo['sort'] === SORT_TYPES.descending
-            ? SORT_TYPES.ascending : SORT_TYPES.descending;
+        sortColInfo['sort'] = sortColInfo['sort'] === SORT_TYPES.descending ?
+            SORT_TYPES.ascending : SORT_TYPES.descending;
       } else {
         sortColInfo['colName'] = colName;
         sortColInfo['sort'] = SORT_TYPES.descending;
@@ -167,7 +166,7 @@ describe('Table test suite', function () {
     );
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = Array.from(thead.querySelectorAll('th'));
-    for (let h of headers) {
+    for (const h of headers) {
       expect(h.querySelector('use').getAttribute('href')).toEqual(
           '#icon-chevron-up-down');
     }
@@ -197,12 +196,13 @@ describe('Table test suite', function () {
   });
 
   it('should trigger onColumnValueUpdate when td cell changes',
-      async function () {
+      async function() {
         const totalRows = 12;
         const data = generateTableData(totalRows);
         const columnUpdateSpy = jasmine.createSpy();
-        const {getByRole} = render(<Table data={data}
-                                          onColumnValueUpdate={columnUpdateSpy}/>);
+        const {getByRole} = render(
+            <Table data={data}
+                   onColumnValueUpdate={columnUpdateSpy}/>);
         const tbody = getByRole('rowgroup', {name: 'table-body'});
         const thead = getByRole('rowgroup', {name: 'table-header'});
         const rows = Array.from(tbody.querySelectorAll('tr'));

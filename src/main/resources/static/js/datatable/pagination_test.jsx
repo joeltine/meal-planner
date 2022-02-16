@@ -4,13 +4,12 @@ import React from 'react';
 
 import {Pagination} from './pagination';
 
-describe('Pagination test suite', function () {
-
+describe('Pagination test suite', function() {
   beforeAll(() => {
     jasmine.getEnv().addMatchers(JasmineDOM);
   });
 
-  it('should render all pages less than max pages', function () {
+  it('should render all pages less than max pages', function() {
     const activePage = 1;
     const {getByRole, getAllByRole} = render(
         <Pagination totalItems={35}
@@ -35,7 +34,7 @@ describe('Pagination test suite', function () {
     }
   });
 
-  it('should render first pages when active page is early', function () {
+  it('should render first pages when active page is early', function() {
     const activePage = 2;
     const {getByRole, getAllByRole} = render(
         <Pagination totalItems={255}
@@ -63,7 +62,7 @@ describe('Pagination test suite', function () {
     expect(pageItems[i + 1]).toHaveTextContent(String(26));
   });
 
-  it('should render last pages when active page is late', function () {
+  it('should render last pages when active page is late', function() {
     const activePage = 24;
     const totalItems = 255;
     const itemsPerPage = 10;
@@ -108,7 +107,7 @@ describe('Pagination test suite', function () {
     }
   });
 
-  it('should disable prev button when active page is first', function () {
+  it('should disable prev button when active page is first', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const activePage = 1;
@@ -127,7 +126,7 @@ describe('Pagination test suite', function () {
     expect(pageItems.indexOf(nextButton)).toEqual(pageItems.length - 1);
   });
 
-  it('should disable next button when active page is last', function () {
+  it('should disable next button when active page is last', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -147,7 +146,7 @@ describe('Pagination test suite', function () {
     expect(pageItems.indexOf(nextButton)).toEqual(pageItems.length - 1);
   });
 
-  it('should render middle nav when active page is in the middle', function () {
+  it('should render middle nav when active page is in the middle', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -192,7 +191,7 @@ describe('Pagination test suite', function () {
     }
   });
 
-  it('should handle prev click when prev button is enabled', function () {
+  it('should handle prev click when prev button is enabled', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -210,7 +209,7 @@ describe('Pagination test suite', function () {
     expect(prevClickSpy).toHaveBeenCalledOnceWith();
   });
 
-  it('should NOT handle prev click when prev button is disabled', function () {
+  it('should NOT handle prev click when prev button is disabled', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const activePage = 1;
@@ -227,7 +226,7 @@ describe('Pagination test suite', function () {
     expect(prevClickSpy).not.toHaveBeenCalled();
   });
 
-  it('should handle next click when next button is enabled', function () {
+  it('should handle next click when next button is enabled', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -245,7 +244,7 @@ describe('Pagination test suite', function () {
     expect(nextClickSpy).toHaveBeenCalledOnceWith();
   });
 
-  it('should NOT handle next click when next button is disabled', function () {
+  it('should NOT handle next click when next button is disabled', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -263,7 +262,7 @@ describe('Pagination test suite', function () {
     expect(nextClickSpy).not.toHaveBeenCalled();
   });
 
-  it('should do page navigation when clicking non-active page', function () {
+  it('should do page navigation when clicking non-active page', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -280,7 +279,7 @@ describe('Pagination test suite', function () {
     expect(navigateSpy).toHaveBeenCalledOnceWith(12);
   });
 
-  it('should NOT do page navigation when clicking active page', function () {
+  it('should NOT do page navigation when clicking active page', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const activePage = 12;
@@ -296,7 +295,7 @@ describe('Pagination test suite', function () {
     expect(navigateSpy).not.toHaveBeenCalled();
   });
 
-  it('should render page summary correctly', function () {
+  it('should render page summary correctly', function() {
     const totalItems = 255;
     const itemsPerPage = 10;
     const activePage = 12;

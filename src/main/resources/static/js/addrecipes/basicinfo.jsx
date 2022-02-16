@@ -9,7 +9,6 @@ const NAME_ERRORS = {
 };
 
 export class BasicInfo extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {nameError: ''};

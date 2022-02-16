@@ -26,15 +26,15 @@ function getColIndexForText(thead, text) {
 }
 
 function respondWithAjaxTableData(tableData) {
-  let requests = jasmine.Ajax.requests;
+  const requests = jasmine.Ajax.requests;
   expect(requests.count()).toBe(1);
-  let request = requests.mostRecent();
+  const request = requests.mostRecent();
   expect(request.url).toBe(DATA_SOURCE);
   expect(request.method).toBe('GET');
   request.respondWith({
     'status': 200,
     'contentType': 'application/json',
-    'responseText': JSON.stringify(tableData),
+    'responseText': JSON.stringify(tableData)
   });
 }
 
@@ -131,11 +131,11 @@ function assertRowInTableTimes(getByRole, rowToFind, times) {
   let found = 0;
   while (pages >= 1) {
     const rows = tbody.querySelectorAll('tr');
-    for (let row of rows) {
+    for (const row of rows) {
       const cells = row.querySelectorAll('td');
       if (cells[idIndex].textContent === rowToFind[0]) {
         const cellValues = [];
-        for (let cell of cells) {
+        for (const cell of cells) {
           cellValues.push(cell.textContent);
         }
         expect(cellValues).toEqual(
@@ -152,7 +152,7 @@ function assertRowInTableTimes(getByRole, rowToFind, times) {
 
 function assertRowInDataTimes(data, rowToFind, times) {
   let found = 0;
-  for (let row of data) {
+  for (const row of data) {
     if (row.id === rowToFind.id) {
       expect(row).toEqual(rowToFind);
       found++;
@@ -179,7 +179,7 @@ function assertErrorToast(expectedText) {
       expectedText);
 }
 
-describe('DataTable test suite', function () {
+describe('DataTable test suite', function() {
   let tableData;
   let toastContainer;
 
@@ -211,7 +211,8 @@ describe('DataTable test suite', function () {
       {id: 8, foo: 'you about', bar: ['sinner'], bat: {b: 'love'}},
       {id: 9, foo: 'some 123 nums', bar: ['inner'], bat: {bc: 'stuffed'}},
       {id: 10, foo: 'fake here', bar: ['inner'], bat: {bo: 'hot'}},
-      {id: 11, foo: 'bat', bar: ['innr'], bat: {t: 'jill'}}];
+      {id: 11, foo: 'bat', bar: ['innr'], bat: {t: 'jill'}}
+    ];
   });
 
   afterEach(() => {
@@ -230,20 +231,20 @@ describe('DataTable test suite', function () {
   });
 
   it('should fetch initial data, render, and look like a new datatable app',
-      function () {
+      function() {
         // Render the table and return AJAX init data.
         const {getByRole, getByText} = render(<DataTable
             dataSource={DATA_SOURCE}/>);
-        let requests = jasmine.Ajax.requests;
+        const requests = jasmine.Ajax.requests;
         expect(requests.count()).toBe(1);
-        let request = requests.mostRecent();
+        const request = requests.mostRecent();
         expect(request.url).toBe(DATA_SOURCE);
         expect(request.method).toBe('GET');
         const tableData = [{id: 0, foo: 'bar'}, {id: 1, foo: 'bat'}];
         request.respondWith({
           'status': 200,
           'contentType': 'application/json',
-          'responseText': JSON.stringify(tableData),
+          'responseText': JSON.stringify(tableData)
         });
 
         // Verify searchbox and two buttons.
@@ -277,14 +278,14 @@ describe('DataTable test suite', function () {
         expect(getByText('Showing 1 to 2 of 2 entries')).toBeVisible();
       });
 
-  it('should filter when searchbox input is entered', async function () {
+  it('should filter when searchbox input is entered', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
 
     respondWithAjaxTableData(tableData);
 
-    let searchbox = getByRole('textbox');
+    const searchbox = getByRole('textbox');
 
     // White space only does nothing.
     expect(dataTableRef.current.getFullData().length).toEqual(12);
@@ -328,19 +329,19 @@ describe('DataTable test suite', function () {
     expect(dataTableRef.current.getFullData().length).toEqual(3);
   });
 
-  it('should preserve sort order when filtering', async function () {
+  it('should preserve sort order when filtering', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
 
     respondWithAjaxTableData(tableData);
 
-    let searchbox = getByRole('textbox');
+    const searchbox = getByRole('textbox');
 
     // Sort the id column.
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let idIndex = getColIndexForText(thead, 'id');
+    const idIndex = getColIndexForText(thead, 'id');
 
     // Sort id descending
     fireEvent.click(headers[idIndex]);
@@ -379,14 +380,14 @@ describe('DataTable test suite', function () {
         idIndex);
   });
 
-  it('should reset page to 1 on filter', async function () {
+  it('should reset page to 1 on filter', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
 
     respondWithAjaxTableData(tableData);
 
-    let searchbox = getByRole('textbox');
+    const searchbox = getByRole('textbox');
     const pagination = getByRole('list', {name: 'pagination'});
     let pages = pagination.querySelectorAll('li');
     expect(pages.length).toEqual(4);
@@ -407,7 +408,7 @@ describe('DataTable test suite', function () {
     expect(pagination.querySelector('li.active').textContent).toEqual('1');
   });
 
-  it('should sort number-based column', function () {
+  it('should sort number-based column', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -416,7 +417,7 @@ describe('DataTable test suite', function () {
 
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let idIndex = getColIndexForText(thead, 'id');
+    const idIndex = getColIndexForText(thead, 'id');
 
     // Sort id descending
     fireEvent.click(headers[idIndex]);
@@ -460,7 +461,7 @@ describe('DataTable test suite', function () {
         idIndex);
   });
 
-  it('should sort string-based column', function () {
+  it('should sort string-based column', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -469,7 +470,7 @@ describe('DataTable test suite', function () {
 
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let fooIndex = getColIndexForText(thead, 'foo');
+    const fooIndex = getColIndexForText(thead, 'foo');
 
     // Sort foo descending
     fireEvent.click(headers[fooIndex]);
@@ -519,7 +520,7 @@ describe('DataTable test suite', function () {
         fooIndex);
   });
 
-  it('should sort array-based column', function () {
+  it('should sort array-based column', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -528,7 +529,7 @@ describe('DataTable test suite', function () {
 
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let barIndex = getColIndexForText(thead, 'bar');
+    const barIndex = getColIndexForText(thead, 'bar');
 
     // Sort bar descending
     fireEvent.click(headers[barIndex]);
@@ -578,7 +579,7 @@ describe('DataTable test suite', function () {
         barIndex);
   });
 
-  it('should sort object-based column', function () {
+  it('should sort object-based column', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -587,7 +588,7 @@ describe('DataTable test suite', function () {
 
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let batIndex = getColIndexForText(thead, 'bat');
+    const batIndex = getColIndexForText(thead, 'bat');
 
     // Sort bat descending
     fireEvent.click(headers[batIndex]);
@@ -640,7 +641,7 @@ describe('DataTable test suite', function () {
         batIndex);
   });
 
-  it('should add new row to table', async function () {
+  it('should add new row to table', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -650,19 +651,20 @@ describe('DataTable test suite', function () {
     await addNewRowToTable(getByRole,
         {foo: 'holy moly', bar: '[["awesome"]', bat: '{{"igadi": "muscles"}'});
 
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(DATA_SOURCE);
     expect(request.method).toBe('POST');
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], ' +
+          '"bat": {"igadi": "muscles"}}'
     });
 
     assertSuccessToast('Added new row with id: 69');
 
-    let fullData = dataTableRef.current.getFullData();
+    const fullData = dataTableRef.current.getFullData();
     assertRowInDataTimes(fullData,
         {id: 69, foo: 'holy moly', bar: ['awesome'], bat: {igadi: 'muscles'}},
         1);
@@ -670,7 +672,7 @@ describe('DataTable test suite', function () {
         ['69', 'holy moly', '["awesome"]', '{"igadi":"muscles"}'], 1);
   });
 
-  it('should add new row to table while filtered', async function () {
+  it('should add new row to table while filtered', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -684,14 +686,15 @@ describe('DataTable test suite', function () {
     await addNewRowToTable(getByRole,
         {foo: 'holy moly', bar: '[["awesome"]', bat: '{{"igadi": "muscles"}'});
 
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(DATA_SOURCE);
     expect(request.method).toBe('POST');
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], ' +
+          '"bat": {"igadi": "muscles"}}'
     });
 
     // Not in table or fulldata, until we clear filter.
@@ -713,7 +716,7 @@ describe('DataTable test suite', function () {
         ['69', 'holy moly', '["awesome"]', '{"igadi":"muscles"}'], 1);
   });
 
-  it('should add new row to table and preserve sorting', async function () {
+  it('should add new row to table and preserve sorting', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -723,7 +726,7 @@ describe('DataTable test suite', function () {
     // Sort the id column.
     const thead = getByRole('rowgroup', {name: 'table-header'});
     const headers = thead.querySelectorAll('th');
-    let idIndex = getColIndexForText(thead, 'id');
+    const idIndex = getColIndexForText(thead, 'id');
 
     // Sort id ascending
     fireEvent.click(headers[idIndex]);
@@ -736,14 +739,15 @@ describe('DataTable test suite', function () {
     await addNewRowToTable(getByRole,
         {foo: 'holy moly', bar: '[["awesome"]', bat: '{{"igadi": "muscles"}'});
 
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(DATA_SOURCE);
     expect(request.method).toBe('POST');
     request.respondWith({
       'status': 200,
       'contentType': 'application/json',
-      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], "bat": {"igadi": "muscles"}}'
+      'responseText': '{"id": 69, "foo": "holy moly", "bar": ["awesome"], ' +
+          '"bat": {"igadi": "muscles"}}'
     });
 
     // Should be visible with current filter
@@ -773,7 +777,7 @@ describe('DataTable test suite', function () {
         idIndex);
   });
 
-  it('should delete selected rows', function () {
+  it('should delete selected rows', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -813,8 +817,8 @@ describe('DataTable test suite', function () {
     assertSuccessToast('Successfully deleted rows with ids: 0, 3, 7');
 
     fullData = dataTableRef.current.getFullData();
-    let deletedIds = [0, 3, 7];
-    for (let row of fullData) {
+    const deletedIds = [0, 3, 7];
+    for (const row of fullData) {
       expect(deletedIds.indexOf(row.id)).withContext(
           `row.id=${row.id}`).toEqual(-1);
     }
@@ -825,7 +829,7 @@ describe('DataTable test suite', function () {
     assertRowInTableTimes(getByRole, row7, 0);
   });
 
-  it('should delete selected rows while table is filtered', async function () {
+  it('should delete selected rows while table is filtered', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -836,7 +840,7 @@ describe('DataTable test suite', function () {
     let fullData = dataTableRef.current.getFullData();
     const row3 = Object.assign({}, fullData[3]);
     const row9 = Object.assign({}, fullData[9]);
-    let searchbox = getByRole('textbox');
+    const searchbox = getByRole('textbox');
 
     // Filter table.
     await userEvent.type(searchbox, 'stuff');
@@ -848,8 +852,8 @@ describe('DataTable test suite', function () {
     fireEvent.click(rows[1]); // id=3, foo: "other stuff"
     fireEvent.click(rows[2]); // id=9, bat: {bc: "stuffed"}
     fireEvent.click(deleteButton);
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(DATA_SOURCE);
     expect(request.method).toBe('DELETE');
     request.respondWith({
@@ -861,8 +865,8 @@ describe('DataTable test suite', function () {
     assertSuccessToast('Successfully deleted rows with ids: 3, 9');
 
     fullData = dataTableRef.current.getFullData();
-    let deletedIds = [3, 9];
-    for (let row of fullData) {
+    const deletedIds = [3, 9];
+    for (const row of fullData) {
       expect(deletedIds.indexOf(row.id)).withContext(
           `row.id=${row.id}`).toEqual(-1);
     }
@@ -874,7 +878,7 @@ describe('DataTable test suite', function () {
     await userEvent.clear(searchbox);
     jasmine.clock().tick(500);
     fullData = dataTableRef.current.getFullData();
-    for (let row of fullData) {
+    for (const row of fullData) {
       expect(deletedIds.indexOf(row.id)).withContext(
           `row.id=${row.id}`).toEqual(-1);
     }
@@ -883,7 +887,7 @@ describe('DataTable test suite', function () {
     assertRowInTableTimes(getByRole, row9, 0);
   });
 
-  it('should page through table', function () {
+  it('should page through table', function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -891,7 +895,7 @@ describe('DataTable test suite', function () {
     respondWithAjaxTableData(tableData);
 
     const pagination = getByRole('list', {name: 'pagination'});
-    let pages = pagination.querySelectorAll('li');
+    const pages = pagination.querySelectorAll('li');
     expect(pages.length).toEqual(4);
     const prevButton = pages[0];
     const page1 = pages[1];
@@ -924,7 +928,7 @@ describe('DataTable test suite', function () {
     expect(rows.length).toEqual(2);
   });
 
-  it('should update data when cell is edited', async function () {
+  it('should update data when cell is edited', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -944,8 +948,8 @@ describe('DataTable test suite', function () {
     expect(barInput).toHaveValue('["inner", "new"]');
 
     await userEvent.type(barInput, '[Enter]');
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(`${DATA_SOURCE}/1`);
     expect(request.method).toBe('PUT');
     request.respondWith({
@@ -960,7 +964,7 @@ describe('DataTable test suite', function () {
   });
 
   it('should update data when cell is edited while table is filtered',
-      async function () {
+      async function() {
         const dataTableRef = React.createRef();
         const {getByRole} = render(
             <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -985,8 +989,8 @@ describe('DataTable test suite', function () {
         expect(batInput).toHaveValue('{"z":"pikachu", "new": "thing"}');
 
         await userEvent.type(batInput, '[Enter]');
-        let requests = jasmine.Ajax.requests;
-        let request = requests.mostRecent();
+        const requests = jasmine.Ajax.requests;
+        const request = requests.mostRecent();
         expect(request.url).toBe(`${DATA_SOURCE}/1`);
         expect(request.method).toBe('PUT');
         request.respondWith({
@@ -1010,7 +1014,7 @@ describe('DataTable test suite', function () {
             '{"z":"pikachu","new":"thing"}');
       });
 
-  it('should not update cell when server errors', async function () {
+  it('should not update cell when server errors', async function() {
     const dataTableRef = React.createRef();
     const {getByRole} = render(
         <DataTable ref={dataTableRef} dataSource={DATA_SOURCE}/>);
@@ -1030,8 +1034,8 @@ describe('DataTable test suite', function () {
     expect(barInput).toHaveValue('["inner", "new"]');
 
     await userEvent.type(barInput, '[Enter]');
-    let requests = jasmine.Ajax.requests;
-    let request = requests.mostRecent();
+    const requests = jasmine.Ajax.requests;
+    const request = requests.mostRecent();
     expect(request.url).toBe(`${DATA_SOURCE}/1`);
     expect(request.method).toBe('PUT');
     request.respondWith({
@@ -1043,12 +1047,12 @@ describe('DataTable test suite', function () {
     expect(id1BarCell).toHaveTextContent('["inner"]');
   });
 
-  it('should show error toast on failed initial fetch', function () {
+  it('should show error toast on failed initial fetch', function() {
     // Render the table and return AJAX init data.
     render(<DataTable dataSource={DATA_SOURCE}/>);
-    let requests = jasmine.Ajax.requests;
+    const requests = jasmine.Ajax.requests;
     expect(requests.count()).toBe(1);
-    let request = requests.mostRecent();
+    const request = requests.mostRecent();
     expect(request.url).toBe(DATA_SOURCE);
     expect(request.method).toBe('GET');
     request.respondWith({

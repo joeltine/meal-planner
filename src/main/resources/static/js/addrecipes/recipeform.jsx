@@ -34,8 +34,10 @@ export class RecipeForm extends React.Component {
           <Ingredients ingredients={formData.ingredientLists}
                        addIngredientRow={this.props.addIngredientRow}
                        deleteIngredientRow={this.props.deleteIngredientRow}
-                       onIngredientInputChange={this.props.onIngredientInputChange}
-                       onIngredientRowValueChange={this.props.onIngredientRowValueChange}/>
+                       onIngredientInputChange={
+                         this.props.onIngredientInputChange}
+                       onIngredientRowValueChange={
+                         this.props.onIngredientRowValueChange}/>
           <Instructions instructions={formData.instructions}
                         onInstructionsChange={(newInstructions) => {
                           this.props.onFormDataValueChange('instructions',
@@ -110,11 +112,11 @@ RecipeForm.propTypes = {
     instructions: PropTypes.string,
     prepTimeMin: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.number,
+      PropTypes.number
     ]),
     cookTimeMin: PropTypes.oneOfType([
       PropTypes.string,
-      PropTypes.number,
+      PropTypes.number
     ]),
     recipeTypes: PropTypes.arrayOf(PropTypes.number),
     mealTypes: PropTypes.arrayOf(PropTypes.number),

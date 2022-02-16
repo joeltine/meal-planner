@@ -119,7 +119,7 @@ export class NewRowForm extends React.Component {
 
   initInputRefs() {
     const refs = {};
-    for (let key in this.props.typeInfo) {
+    for (const key in this.props.typeInfo) {
       refs[key] = React.createRef();
     }
     return refs;

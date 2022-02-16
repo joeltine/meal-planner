@@ -31,9 +31,9 @@ export class ChipMultiSelect extends React.Component {
   getStyles(newValue, values) {
     return {
       fontWeight:
-          values.indexOf(newValue) === -1
-              ? 'normal'
-              : 'bold'
+          values.indexOf(newValue) === -1 ?
+              'normal' :
+              'bold'
     };
   }
 
@@ -50,7 +50,7 @@ export class ChipMultiSelect extends React.Component {
   }
 
   findNameForId(value) {
-    return this.props.options.find(el => el.id === value).name;
+    return this.props.options.find((el) => el.id === value).name;
   }
 
   getChips(selected) {

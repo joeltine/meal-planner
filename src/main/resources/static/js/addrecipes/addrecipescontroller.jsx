@@ -158,8 +158,8 @@ export class AddRecipesController extends React.Component {
     } else if (parsedIngredient['ingredientId']) {
       displayProduct = parsedIngredient['name'];
     }
-    const prepNotes = parsedIngredient['preparationNotes']
-        ? `, ${parsedIngredient['preparationNotes']}` : '';
+    const prepNotes = parsedIngredient['preparationNotes'] ?
+        `, ${parsedIngredient['preparationNotes']}` : '';
     return `${displayProduct}${prepNotes}`;
   }
 
@@ -178,8 +178,8 @@ export class AddRecipesController extends React.Component {
         unit: parsedIngredient['unitId'] || null,
         ingredientDisplayName: this.getIngredientDisplayName(parsedIngredient),
         originalName: ingredient['ingredientRaw'],
-        ingredientOptions: selectedIngredient !== null ? [selectedIngredient]
-            : null
+        ingredientOptions: selectedIngredient !== null ? [selectedIngredient] :
+            null
       });
     }
     return ingredients;
@@ -234,7 +234,7 @@ export class AddRecipesController extends React.Component {
 
   buildNestedTypeObj(idList, keyStr) {
     const things = [];
-    for (let id of idList) {
+    for (const id of idList) {
       things.push({[keyStr]: {id: Number(id)}});
     }
     return things;
@@ -283,8 +283,8 @@ export class AddRecipesController extends React.Component {
     const form = e.target;
     if (!form.checkValidity()) {
       Toast.showNewErrorToast('Invalid inputs!',
-          'At least one of the form inputs is invalid. Fix all '
-          + 'elements highlighted in red before submitting.',
+          'At least one of the form inputs is invalid. Fix all ' +
+          'elements highlighted in red before submitting.',
           {delay: 6000});
       return;
     }

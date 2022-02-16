@@ -5,7 +5,7 @@ import React from 'react';
 
 import {Td} from './td';
 
-describe('Td test suite', function () {
+describe('Td test suite', function() {
   let tr = null;
   let table = null;
 
@@ -24,13 +24,13 @@ describe('Td test suite', function () {
     table.remove();
   });
 
-  it('should render passed value', function () {
+  it('should render passed value', function() {
     const {getByText} = render(<Td value="Hi mom"/>, {container: tr});
     expect(getByText('Hi mom')).toBeInTheDocument();
   });
 
   it('should not turn into an input on double click when not editable',
-      function () {
+      function() {
         const {queryByRole, getByText} = render(<Td value="Hi mom"/>,
             {container: tr});
         expect(getByText('Hi mom')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('Td test suite', function () {
       });
 
   it('should turn into an input on double click when editable',
-      async function () {
+      async function() {
         const onValueUpdateSpy = jasmine.createSpy();
         const {getByRole, getByText, queryByRole} = render(
             <Td value="Hi mom"
@@ -60,7 +60,7 @@ describe('Td test suite', function () {
       });
 
   it('should not fire onUpdateValue when user presses escape',
-      async function () {
+      async function() {
         const onValueUpdateSpy = jasmine.createSpy();
         const {getByRole, getByText, queryByRole} = render(
             <Td value="Hi mom"

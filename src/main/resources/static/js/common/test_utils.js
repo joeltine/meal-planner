@@ -18,7 +18,8 @@ export function randomInt(range) {
  */
 export function randomString(length) {
   let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' +
+      '0123456789';
   for (let i = 0; i < length; i++) {
     result += characters.charAt(randomInt(characters.length));
   }

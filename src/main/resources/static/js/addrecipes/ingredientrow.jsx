@@ -14,7 +14,6 @@ const QUANTITY_ERRORS = {
 };
 
 export class IngredientRow extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {quantityError: '', unitError: ''};
@@ -64,8 +63,8 @@ export class IngredientRow extends React.Component {
                                   unitError: 'Missing unit!'
                                 });
                               }}
-                              value={this.props.unit
-                                  ? this.props.unit.toString() : ''}
+                              value={this.props.unit ?
+                                  this.props.unit.toString() : ''}
                               onChange={(e) => {
                                 if (this.props.onUnitsChange) {
                                   this.props.onUnitsChange(e.target.value);

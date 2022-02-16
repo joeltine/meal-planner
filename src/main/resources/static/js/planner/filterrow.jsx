@@ -60,7 +60,7 @@ const FilterTypesToValueInput = {
   [FilterTypes.INGREDIENTS]: ConstraintValueInputs.TYPEAHEAD,
   [FilterTypes.TOTAL_TIME]: ConstraintValueInputs.NUMERIC,
   [FilterTypes.COOK_TIME]: ConstraintValueInputs.NUMERIC,
-  [FilterTypes.PREP_TIME]: ConstraintValueInputs.NUMERIC,
+  [FilterTypes.PREP_TIME]: ConstraintValueInputs.NUMERIC
 };
 
 const DATA_CACHE = {};
@@ -178,7 +178,8 @@ export class FilterRow extends React.Component {
   }
 
   buildConstraint() {
-    const ConstraintComponent = FilterTypesToConstraint[this.state.filterTypeValue];
+    const ConstraintComponent =
+        FilterTypesToConstraint[this.state.filterTypeValue];
     return <ConstraintComponent ref={this.constraintRef}/>;
   }
 
@@ -231,16 +232,16 @@ export class FilterRow extends React.Component {
         val = Number(this.constraintValueRef.current.value);
         break;
       case ConstraintValueInputs.TYPEAHEAD:
-        val = this.constraintValueRef.current.state.selected[0].id
-            || 0;
+        val = this.constraintValueRef.current.state.selected[0].id ||
+            0;
         break;
     }
     return val;
   }
 
   getValueInputColumnWidth() {
-    return FilterTypesToValueInput[this.state.filterTypeValue]
-    === ConstraintValueInputs.TYPEAHEAD ? 'col-md w-100' : 'col-md-auto';
+    return FilterTypesToValueInput[this.state.filterTypeValue] ===
+    ConstraintValueInputs.TYPEAHEAD ? 'col-md w-100' : 'col-md-auto';
   }
 
   render() {

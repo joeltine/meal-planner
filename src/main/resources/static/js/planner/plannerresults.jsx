@@ -21,7 +21,8 @@ export class PlannerResults extends React.Component {
   componentDidMount() {
     if (!GAPI_CLIENT_READY) {
       Toast.showNewErrorToast('The gapi client wasn\'t initialized!',
-          'The gapi client wasn\'t initialized before trying to use the Meal Planner result page.',
+          'The gapi client wasn\'t initialized before trying to use ' +
+          'the Meal Planner result page.',
           {autohide: false});
       return;
     }
@@ -41,13 +42,16 @@ export class PlannerResults extends React.Component {
   authenticateToGoogle() {
     GAPI_CLIENT_READY.then(() => {
       gapi.auth2.getAuthInstance().signIn().then(() => {
-        const profile = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
+        const profile = gapi.auth2.getAuthInstance().currentUser.get()
+            .getBasicProfile();
         Toast.showNewSuccessToast('Authentication Successful!',
-            `Successfully authenticated ${profile.getName()} using account ${profile.getEmail()}.`);
+            `Successfully authenticated ${profile.getName()} using ` +
+            `account ${profile.getEmail()}.`);
       }).catch((err) => {
         Toast.showNewErrorToast(
-            `Failed to authenticate!', 'Failed to sign-in to Google: ${JSON.stringify(
-                err)}`, {delay: 10000});
+            'Failed to authenticate!',
+            `Failed to sign-in to Google: ${JSON.stringify(err)}`,
+            {delay: 10000});
       });
     });
   }
@@ -145,8 +149,9 @@ export class PlannerResults extends React.Component {
         onComplete: (response) => {
           const docInfo = JSON.parse(response);
           Toast.showNewSuccessToast('Google Doc Successfully Created!',
-              `Successfully uploaded <a target="_blank" href="${this.buildGoogleDocUrl(
-                  docInfo.id)}">${docInfo.name}</a> to Google Docs.`,
+              'Successfully uploaded <a target="_blank" ' +
+              `href="${this.buildGoogleDocUrl(docInfo.id)}">${docInfo.name}` +
+              '</a> to Google Docs.',
               {delay: 20000});
           this.setState({
             isExportingDoc: false
@@ -154,8 +159,9 @@ export class PlannerResults extends React.Component {
         },
         onError: (error) => {
           Toast.showNewErrorToast(
-              `Failed to create Google Doc!', 'Request to upload file to Google Drive/Docs failed: ${JSON.stringify(
-                  error)}}`, {autohide: false});
+              'Failed to create Google Doc!',
+              'Request to upload file to Google Drive/Docs failed: ' +
+              `${JSON.stringify(error)}}`, {autohide: false});
           this.setState({
             isExportingDoc: false
           });
@@ -184,8 +190,8 @@ export class PlannerResults extends React.Component {
 
       listItems.push(
           <li key={`${ingredient.id}-${ingredientListItem.id}`}>
-            {`${ingredientListItem.quantity} ${unit} ${ingredient.displayName
-            || ingredient.name}`}
+            {`${ingredientListItem.quantity} ${unit} ${ingredient.displayName ||
+            ingredient.name}`}
           </li>
       );
     }
@@ -237,8 +243,7 @@ export class PlannerResults extends React.Component {
                 onClick={this.exportToDocs}
                 disabled={this.state.isExportingDoc}>
           Export to Google Docs
-        </Button>
-        :
+        </Button> :
         <Button variant="contained"
                 color="secondary"
                 startIcon={<LoginIcon/>}

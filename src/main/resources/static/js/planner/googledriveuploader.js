@@ -18,18 +18,20 @@
  * @param {blob} options.file Blob-like item to upload
  * @param {string} [options.fileId] ID of file if replacing
  * @param {object} [options.params] Additional query parameters
- * @param {string} [options.contentType] Content-type, if overriding the type of the blob.
+ * @param {string} [options.contentType] Content-type, if overriding the type
+ *    of the blob.
  * @param {object} [options.metadata] File metadata
  * @param {function} [options.onComplete] Callback for when upload is complete
- * @param {function} [options.onProgress] Callback for status for the in-progress upload
+ * @param {function} [options.onProgress] Callback for status for the
+ *    in-progress upload
  * @param {function} [options.onError] Callback if upload fails
  */
-export const GoogleDriveUploader = function (options) {
-  const noop = function () {
+export const GoogleDriveUploader = function(options) {
+  const noop = function() {
   };
   this.file = options.file;
-  this.contentType = options.contentType || this.file.type
-      || 'application/octet-stream';
+  this.contentType = options.contentType || this.file.type ||
+      'application/octet-stream';
   this.metadata = options.metadata || {
     'name': this.file.name,
     'mimeType': this.contentType
@@ -54,7 +56,7 @@ export const GoogleDriveUploader = function (options) {
 /**
  * Initiate the upload.
  */
-GoogleDriveUploader.prototype.upload = function () {
+GoogleDriveUploader.prototype.upload = function() {
   const xhr = new XMLHttpRequest();
 
   xhr.open(this.httpMethod, this.url, true);
@@ -63,7 +65,7 @@ GoogleDriveUploader.prototype.upload = function () {
   xhr.setRequestHeader('X-Upload-Content-Length', this.file.size);
   xhr.setRequestHeader('X-Upload-Content-Type', this.contentType);
 
-  xhr.onload = function (e) {
+  xhr.onload = function(e) {
     if (e.target.status < 400) {
       this.url = e.target.getResponseHeader('Location');
       this.sendFile_();
@@ -80,12 +82,13 @@ GoogleDriveUploader.prototype.upload = function () {
  *
  * @private
  */
-GoogleDriveUploader.prototype.sendFile_ = function () {
+GoogleDriveUploader.prototype.sendFile_ = function() {
   let content = this.file;
   let end = this.file.size;
 
   if (this.offset || this.chunkSize) {
-    // Only bother to slice the file if we're either resuming or uploading in chunks
+    // Only bother to slice the file if we're either resuming or uploading in
+    // chunks
     if (this.chunkSize) {
       end = Math.min(this.offset + this.chunkSize, this.file.size);
     }
@@ -111,7 +114,7 @@ GoogleDriveUploader.prototype.sendFile_ = function () {
  *
  * @private
  */
-GoogleDriveUploader.prototype.resume_ = function () {
+GoogleDriveUploader.prototype.resume_ = function() {
   const xhr = new XMLHttpRequest();
   xhr.open('PUT', this.url, true);
   xhr.setRequestHeader('Content-Range', 'bytes */' + this.file.size);
@@ -129,7 +132,7 @@ GoogleDriveUploader.prototype.resume_ = function () {
  *
  * @param {XMLHttpRequest} xhr Request object
  */
-GoogleDriveUploader.prototype.extractRange_ = function (xhr) {
+GoogleDriveUploader.prototype.extractRange_ = function(xhr) {
   const range = xhr.getResponseHeader('Range');
   if (range) {
     this.offset = parseInt(range.match(/\d+/g).pop(), 10) + 1;
@@ -144,7 +147,7 @@ GoogleDriveUploader.prototype.extractRange_ = function (xhr) {
  * @private
  * @param {object} e XHR event
  */
-GoogleDriveUploader.prototype.onContentUploadSuccess_ = function (e) {
+GoogleDriveUploader.prototype.onContentUploadSuccess_ = function(e) {
   if (e.target.status === 200 || e.target.status === 201) {
     this.onComplete(e.target.response);
   } else if (e.target.status === 308) {
@@ -163,7 +166,7 @@ GoogleDriveUploader.prototype.onContentUploadSuccess_ = function (e) {
  * @private
  * @param {object} e XHR event
  */
-GoogleDriveUploader.prototype.onContentUploadError_ = function (e) {
+GoogleDriveUploader.prototype.onContentUploadError_ = function(e) {
   if (e.target.status && e.target.status < 500) {
     this.onError(e.target.response);
   } else {
@@ -177,7 +180,7 @@ GoogleDriveUploader.prototype.onContentUploadError_ = function (e) {
  * @private
  * @param {object} e XHR event
  */
-GoogleDriveUploader.prototype.onUploadError_ = function (e) {
+GoogleDriveUploader.prototype.onUploadError_ = function(e) {
   this.onError(e.target.response); // TODO - Retries for initial upload
 };
 
@@ -188,9 +191,9 @@ GoogleDriveUploader.prototype.onUploadError_ = function (e) {
  * @param {object} [params] Key/value pairs for query string
  * @return {string} query string
  */
-GoogleDriveUploader.prototype.buildQuery_ = function (params) {
+GoogleDriveUploader.prototype.buildQuery_ = function(params) {
   params = params || {};
-  return Object.keys(params).map(function (key) {
+  return Object.keys(params).map(function(key) {
     return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
   }).join('&');
 };
@@ -204,7 +207,7 @@ GoogleDriveUploader.prototype.buildQuery_ = function (params) {
  * @param {string} [baseUrl] Optional base URL to use for request
  * @return {string} URL
  */
-GoogleDriveUploader.prototype.buildUrl_ = function (id, params, baseUrl) {
+GoogleDriveUploader.prototype.buildUrl_ = function(id, params, baseUrl) {
   let url = baseUrl || 'https://www.googleapis.com/upload/drive/v3/files/';
   if (id) {
     url += id;
@@ -222,7 +225,7 @@ GoogleDriveUploader.prototype.buildUrl_ = function (id, params, baseUrl) {
  *
  * @constructor
  */
-const RetryHandler = function () {
+const RetryHandler = function() {
   this.interval = 1000; // Start at one second
   this.maxInterval = 60 * 1000; // Don't wait longer than a minute
 };
@@ -232,7 +235,7 @@ const RetryHandler = function () {
  *
  * @param {function} fn Function to invoke
  */
-RetryHandler.prototype.retry = function (fn) {
+RetryHandler.prototype.retry = function(fn) {
   setTimeout(fn, this.interval);
   this.interval = this.nextInterval_();
 };
@@ -240,7 +243,7 @@ RetryHandler.prototype.retry = function (fn) {
 /**
  * Reset the counter (e.g. after successful request.)
  */
-RetryHandler.prototype.reset = function () {
+RetryHandler.prototype.reset = function() {
   this.interval = 1000;
 };
 
@@ -250,18 +253,19 @@ RetryHandler.prototype.reset = function () {
  *
  * @private
  */
-RetryHandler.prototype.nextInterval_ = function () {
+RetryHandler.prototype.nextInterval_ = function() {
   const interval = this.interval * 2 + this.getRandomInt_(0, 1000);
   return Math.min(interval, this.maxInterval);
 };
 
 /**
- * Get a random int in the range of min to max. Used to add jitter to wait times.
+ * Get a random int in the range of min to max. Used to add jitter to wait
+ * times.
  *
  * @param {number} min Lower bounds
  * @param {number} max Upper bounds
  * @private
  */
-RetryHandler.prototype.getRandomInt_ = function (min, max) {
+RetryHandler.prototype.getRandomInt_ = function(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };

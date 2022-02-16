@@ -1,6 +1,6 @@
 import JasmineDOM from '@testing-library/jasmine-dom';
 
-describe('MealPlanner test suite', function () {
+describe('MealPlanner test suite', function() {
   beforeAll(() => {
     jasmine.getEnv().addMatchers(JasmineDOM);
     window.CSRF_HEADER_NAME = '_csrf';
@@ -16,8 +16,8 @@ describe('MealPlanner test suite', function () {
   afterEach(() => {
   });
 
-  it('should do things with stuff', function () {
-    //const {getByRole, getByText} = render(<MealPlanner/>);
+  it('should do things with stuff', function() {
+    // const {getByRole, getByText} = render(<MealPlanner/>);
 
   });
 });

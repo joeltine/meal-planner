@@ -36,8 +36,8 @@ export class MealPlanner extends React.Component {
               <PlannerResults
                   results={this.state.resultData}
                   goBackButtonClick={this.goToForm}/>}
-          <div className={this.state.renderMode === RenderModes.FORM ? ''
-              : 'd-none'}>
+          <div className={this.state.renderMode === RenderModes.FORM ? '' :
+              'd-none'}>
             <PlannerForm onResultUpdate={this.onResultUpdate}/>
           </div>
         </React.Fragment>

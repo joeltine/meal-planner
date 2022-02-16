@@ -5,18 +5,17 @@ import React from 'react';
 
 import {SearchBox} from './searchbox';
 
-describe('SearchBox test suite', function () {
-
+describe('SearchBox test suite', function() {
   beforeAll(() => {
     jasmine.getEnv().addMatchers(JasmineDOM);
   });
 
-  it('should render search input', function () {
+  it('should render search input', function() {
     const {getByRole} = render(<SearchBox/>);
     expect(getByRole('textbox')).toHaveValue('');
   });
 
-  it('should trigger onSearchChange on text input', async function () {
+  it('should trigger onSearchChange on text input', async function() {
     const searchChangeSpy = jasmine.createSpy();
     const {getByRole} = render(<SearchBox onSearchChange={searchChangeSpy}/>);
     const searchInput = getByRole('textbox');

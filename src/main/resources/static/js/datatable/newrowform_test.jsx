@@ -6,12 +6,12 @@ import React from 'react';
 import {Types} from '../common/utils';
 import {NewRowForm} from './newrowform';
 
-describe('NewRowForm test suite', function () {
+describe('NewRowForm test suite', function() {
   beforeAll(() => {
     jasmine.getEnv().addMatchers(JasmineDOM);
   });
 
-  it('should render all fields and buttons for type info', function () {
+  it('should render all fields and buttons for type info', function() {
     const {getByPlaceholderText, getByRole, queryAllByRole} = render(<NewRowForm
         typeInfo={{
           'id': Types.NUMBER,
@@ -29,7 +29,7 @@ describe('NewRowForm test suite', function () {
     expect(getByRole('button', {name: 'Cancel'})).toBeVisible();
   });
 
-  it('should respond to cancel click', function () {
+  it('should respond to cancel click', function() {
     const cancelSpy = jasmine.createSpy();
     const {getByRole} = render(
         <NewRowForm
@@ -44,7 +44,7 @@ describe('NewRowForm test suite', function () {
     expect(cancelSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('should not save on empty form', function () {
+  it('should not save on empty form', function() {
     const saveSpy = jasmine.createSpy();
     const {getByRole, getByPlaceholderText} = render(
         <NewRowForm
@@ -63,7 +63,7 @@ describe('NewRowForm test suite', function () {
     expect(saveSpy).toHaveBeenCalledTimes(0);
   });
 
-  it('should invalidate bad number input', async function () {
+  it('should invalidate bad number input', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm
@@ -85,7 +85,7 @@ describe('NewRowForm test suite', function () {
       'Infinity', 'null'];
     const validInputs = ['74653', '0x3', '-15', '3.14', '.5', '0.123'];
 
-    for (let invalid of invalidInputs) {
+    for (const invalid of invalidInputs) {
       await userEvent.clear(numberInput);
       await userEvent.type(numberInput, invalid);
       fireEvent.click(saveButton);
@@ -93,7 +93,7 @@ describe('NewRowForm test suite', function () {
       expect(saveSpy).toHaveBeenCalledTimes(0);
     }
 
-    for (let valid of validInputs) {
+    for (const valid of validInputs) {
       await userEvent.clear(numberInput);
       await userEvent.type(numberInput, valid);
       fireEvent.click(saveButton);
@@ -101,7 +101,7 @@ describe('NewRowForm test suite', function () {
     }
   });
 
-  it('should invalidate bad string input', async function () {
+  it('should invalidate bad string input', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm
@@ -123,14 +123,14 @@ describe('NewRowForm test suite', function () {
       '<div>YO</div>', '    test    ', '0 '];
     const invalidInputs = ['    ', '\t\n'];
 
-    for (let invalid of invalidInputs) {
+    for (const invalid of invalidInputs) {
       await userEvent.clear(stringInput);
       await userEvent.type(stringInput, invalid);
       fireEvent.click(saveButton);
       expect(stringInput).withContext(`input="${invalid}"`).toBeInvalid();
     }
 
-    for (let valid of validInputs) {
+    for (const valid of validInputs) {
       await userEvent.clear(stringInput);
       await userEvent.type(stringInput, valid);
       fireEvent.click(saveButton);
@@ -138,7 +138,7 @@ describe('NewRowForm test suite', function () {
     }
   });
 
-  it('should invalidate bad array input', async function () {
+  it('should invalidate bad array input', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm
@@ -166,7 +166,7 @@ describe('NewRowForm test suite', function () {
     const invalidInputs = ['0', 'hi', '    ', '\t\n', '[[', '[[,]', '{{}',
       '{{]]', '[[\'invalid due to single quotes\']'];
 
-    for (let invalid of invalidInputs) {
+    for (const invalid of invalidInputs) {
       await userEvent.clear(arrayInput);
       await userEvent.type(arrayInput, invalid);
       fireEvent.click(saveButton);
@@ -174,7 +174,7 @@ describe('NewRowForm test suite', function () {
           `input="${arrayInput.value}"`).toBeInvalid();
     }
 
-    for (let valid of validInputs) {
+    for (const valid of validInputs) {
       await userEvent.clear(arrayInput);
       await userEvent.type(arrayInput, valid);
       fireEvent.click(saveButton);
@@ -182,7 +182,7 @@ describe('NewRowForm test suite', function () {
     }
   });
 
-  it('should invalidate bad plain object input', async function () {
+  it('should invalidate bad plain object input', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm
@@ -211,7 +211,7 @@ describe('NewRowForm test suite', function () {
       '{{\'quote\': "bad"}', '{{]]', '[[\'invalid due to single quotes\']',
       '[[]', '[[1,2,3] ', '[["test", "me"]'];
 
-    for (let invalid of invalidInputs) {
+    for (const invalid of invalidInputs) {
       await userEvent.clear(objectInput);
       await userEvent.type(objectInput, invalid);
       fireEvent.click(saveButton);
@@ -219,7 +219,7 @@ describe('NewRowForm test suite', function () {
           `input="${objectInput.value}"`).toBeInvalid();
     }
 
-    for (let valid of validInputs) {
+    for (const valid of validInputs) {
       await userEvent.clear(objectInput);
       await userEvent.type(objectInput, valid);
       fireEvent.click(saveButton);
@@ -228,7 +228,7 @@ describe('NewRowForm test suite', function () {
     }
   });
 
-  it('should invalidate bad date input', async function () {
+  it('should invalidate bad date input', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm
@@ -255,7 +255,7 @@ describe('NewRowForm test suite', function () {
       '2/22/1975', '1/22/2022, 4:30:32 PM'];
     const invalidInputs = ['test', '1642894122977', '20220102'];
 
-    for (let invalid of invalidInputs) {
+    for (const invalid of invalidInputs) {
       await userEvent.clear(dateInput);
       await userEvent.type(dateInput, invalid);
       fireEvent.click(saveButton);
@@ -263,7 +263,7 @@ describe('NewRowForm test suite', function () {
           `input="${dateInput.value}"`).toBeInvalid();
     }
 
-    for (let valid of validInputs) {
+    for (const valid of validInputs) {
       await userEvent.clear(dateInput);
       await userEvent.type(dateInput, valid);
       fireEvent.click(saveButton);
@@ -272,7 +272,7 @@ describe('NewRowForm test suite', function () {
     }
   });
 
-  it('should call onSaveClick when form is valid', async function () {
+  it('should call onSaveClick when form is valid', async function() {
     const saveSpy = jasmine.createSpy();
     const {getByPlaceholderText, getByRole} = render(
         <NewRowForm

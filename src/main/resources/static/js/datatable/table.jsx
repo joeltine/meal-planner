@@ -32,8 +32,8 @@ export class Table extends React.Component {
     Object.keys(columnIndicator).forEach((colName) => {
       let sortSvg = 'icon-chevron-up-down';
       if (sortCol['colName'] && sortCol['colName'] === colName) {
-        sortSvg = sortCol['sort'] === SORT_TYPES.ascending ? 'icon-chevron-up'
-            : 'icon-chevron-down';
+        sortSvg = sortCol['sort'] === SORT_TYPES.ascending ? 'icon-chevron-up' :
+            'icon-chevron-down';
       }
 
       columnHeaders.push(
@@ -92,7 +92,7 @@ export class Table extends React.Component {
   }
 
   getTableRows(data) {
-    let rows = [];
+    const rows = [];
     if (!data.length) {
       data = [{'empty': 'Table is empty.'}];
     }

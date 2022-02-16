@@ -41,7 +41,8 @@ export const Types = {
 /**
  * Tries to determine type of passed value. Returns simple string indicator of
  * detected type.
- * @returns {"undefined"|"plainObject"|"object"|"boolean"|"number"|"string"|"function"|"symbol"|"bigint"|"date"}
+ * @returns {"undefined"|"plainObject"|"object"|"boolean"|"number"|"string"|
+ *           "function"|"symbol"|"bigint"|"date"}
  */
 export function getType(value) {
   if (Object.prototype.toString.call(value) === '[object String]') {

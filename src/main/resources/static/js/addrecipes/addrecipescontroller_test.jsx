@@ -76,7 +76,8 @@ const FETA_BURGERS_JSON = {
         'unit': 'box',
         'usdaInfo': null
       },
-      'ingredientRaw': '1 (10 ounce) box frozen chopped spinach, thawed and squeezed dry'
+      'ingredientRaw': '1 (10 ounce) box frozen chopped spinach, thawed and ' +
+          'squeezed dry'
     },
     {
       'confidence': 0.9139855,
@@ -105,22 +106,21 @@ const FETA_BURGERS_JSON = {
   'meal_types': [1, 3],
 };
 
-describe('AddRecipesController test suite', function () {
-
-  beforeAll(function () {
+describe('AddRecipesController test suite', function() {
+  beforeAll(function() {
     window.CSRF_HEADER_NAME = 'csrf-header-name';
     window.CSRF_TOKEN = 'csrf-token';
   });
 
-  beforeEach(function () {
+  beforeEach(function() {
 
   });
 
-  afterEach(function () {
+  afterEach(function() {
 
   });
 
-  it('does stuff and things', function () {
+  it('does stuff and things', function() {
 
   });
 });

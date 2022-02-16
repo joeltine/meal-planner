@@ -32,8 +32,8 @@ export class Pagination extends React.Component {
   }
 
   getPageListItem(page) {
-    const itemClass = `page-item ${page === this.props.activePage ? 'active'
-        : ''}`;
+    const itemClass = `page-item ${page === this.props.activePage ? 'active' :
+        ''}`;
     return (
         <li className={itemClass} key={page} onClick={() => {
           this.handlePageNavigationClick(page);
@@ -101,8 +101,8 @@ export class Pagination extends React.Component {
   render() {
     const totalPages = Math.ceil(
         this.props.totalItems / this.props.itemsPerPage);
-    const showingStartRange = this.props.totalItems === 0 ? 0
-        : ((this.props.activePage - 1) * this.props.itemsPerPage) + 1;
+    const showingStartRange = this.props.totalItems === 0 ? 0 :
+        ((this.props.activePage - 1) * this.props.itemsPerPage) + 1;
     let showingEndRange = showingStartRange + (this.props.itemsPerPage - 1);
     if (showingEndRange >= this.props.totalItems) {
       showingEndRange = this.props.totalItems;
@@ -119,7 +119,8 @@ export class Pagination extends React.Component {
         <React.Fragment>
           <div className="d-flex g-3">
             <div className="flex-grow-1 ps-0 page-summary">
-              Showing {showingStartRange} to {showingEndRange} of {this.props.totalItems} entries
+              Showing {showingStartRange} to {showingEndRange} of&nbsp;
+              {this.props.totalItems} entries
             </div>
             <div className="ps-0">
               <nav>
