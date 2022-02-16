@@ -17,14 +17,7 @@ module.exports = function(config) {
     files: [
       '**/*test.js',
       '**/*test.jsx',
-      '**/*test.html',
-      {
-        pattern: '**/*.map',
-        included: false,
-        served: true,
-        watched: false,
-        nocache: true
-      }
+      '**/*test.html'
     ],
 
     // list of files / patterns to exclude
@@ -44,7 +37,7 @@ module.exports = function(config) {
       resolve: {
         // Which extensions Webpack will resolve. "..." means to include the
         // defaults (e.g., "js", etc.) in addition to the extra entries.
-        extensions: ['.jsx', '...'],
+        extensions: ['.jsx', '...']
       },
 
       module: {
@@ -95,7 +88,7 @@ module.exports = function(config) {
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
     // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_ERROR,
 
     // enable / disable watching file and executing tests whenever any file
     // changes
