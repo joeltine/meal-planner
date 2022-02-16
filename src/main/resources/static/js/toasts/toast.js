@@ -1,6 +1,6 @@
 /**
  * Toast implementation. Relies on a container named #toastContainer being on
- * the page along with bootstrap JS and jquery.
+ * the page along with bootstrap JS + CSS for styling.
  */
 
 import '../../css/toasts/toast.css';
@@ -37,6 +37,8 @@ const STATE_CLASS_MAP = {
   }
 };
 
+let UID = 0;
+
 // TODO: Write unit tests.
 export class Toast {
   constructor(header = 'Default Header', body = 'Default Body', state = 'INFO',
@@ -45,42 +47,51 @@ export class Toast {
     this.body = body;
     this.state = state;
     this.toastOptions = toastOptions;
-    this.time = new Date().toLocaleString();
+    this.toastId = '';
     this.toastEl = this.getNewToastEl();
     const defaultOptions = {
       animation: true,
       autohide: true,
       delay: 3000
     };
-    const mergedOptions = $.extend(defaultOptions, this.toastOptions);
-    this.toast = new BootstrapToast(this.toastEl[0], mergedOptions);
+    const mergedOptions = Object.assign(defaultOptions, this.toastOptions);
+    this.toast = new BootstrapToast(this.toastEl, mergedOptions);
   }
 
   show() {
-    this.toastEl.appendTo('#toastContainer');
     this.toast.show();
-    this.toastEl.on('hidden.bs.toast', () => {
+    // Event when hidden after animation is complete.
+    this.toastEl.addEventListener('hidden.bs.toast', () => {
       this.toast.dispose();
-      this.toastEl.remove();
+      // We look up the DOM element as sometimes this.toastEl does not point
+      // to the real toast element in the DOM. Bootstrap is probably replacing
+      // the element.
+      document.getElementById(this.toastId).remove();
+      delete this.toastEl;
     });
   }
 
   getNewToastEl() {
     const styles = STATE_CLASS_MAP[this.state];
-    return $(`
-      <div class="toast ${styles.container.stateClass}" role="alert">
+    this.toastId = `toast-${++UID}`;
+    const toastHtml = `
+      <div class="toast ${styles.container.stateClass}" id="${this.toastId}" role="alert">
         <div class="toast-header ${styles.header.bgColor} ${styles.header.textColor}">
           <svg class="feather me-2" viewBox="0 0 24 24">
             <use href="#icon-alert-circle"/>
           </svg>
           <strong class="me-auto toast-header-text">${this.header}</strong>
-          <small class="toast-time ms-2">${this.time}</small>
+          <small class="toast-time ms-2">${new Date().toLocaleString()}</small>
           <button type="button" class="btn-close ms-2 mb-1" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
           ${this.body}
         </div>
-      </div>`);
+      </div>`;
+    // TODO: This isn't safe as user-supplied input is included in the toast.
+    //       Sanitize this HTML for XSS.
+    document.getElementById('toastContainer').innerHTML += toastHtml;
+    return document.getElementById(this.toastId);
   }
 
   static showNewInfoToast(header, body, toastOptions) {
