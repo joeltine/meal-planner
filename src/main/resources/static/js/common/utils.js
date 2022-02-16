@@ -48,7 +48,7 @@ export function getType(value) {
     return Types.STRING;
   } else if (Object.prototype.toString.call(value) === '[object Number]') {
     return Types.NUMBER;
-  } else if ($.isArray(value)) {
+  } else if (Array.isArray(value)) {
     return Types.ARRAY;
   } else if ($.isPlainObject(value)) {
     return Types.PLAIN_OBJECT;

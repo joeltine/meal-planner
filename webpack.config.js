@@ -69,6 +69,7 @@ const config = {
   plugins: [
     // Bring in jQuery automatically if a file references $ or jQuery.
     // TODO: Get rid of jQuery.
+    //       https://github.com/joeltine/meal-planner/issues/87
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'

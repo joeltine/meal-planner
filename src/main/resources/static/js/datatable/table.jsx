@@ -102,7 +102,7 @@ export class Table extends React.Component {
       const rowKey = row.id != null ? row.id : rowIndex;
       Object.entries(row).forEach(([key, val], colIndex) => {
         let colVal = val;
-        if ($.isArray(val) || $.isPlainObject(val)) {
+        if (Array.isArray(val) || $.isPlainObject(val)) {
           colVal = JSON.stringify(colVal);
         }
         // TODO: Make the "editable" check more generic than just looking for
