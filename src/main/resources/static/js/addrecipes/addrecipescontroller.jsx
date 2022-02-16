@@ -40,7 +40,9 @@ const DEFAULT_FORM_DATA = {
 //       stroke of an input field re-renders everything that looks at formData.
 //       Likely need to flatten formData into state and mark components as
 //       PureComponents where possible (i.e., components that only work with
-//       simple flattened properties).
+//       simple flattened properties). Additionally, any inline event handlers
+//       are considered new every time a component is rendered. Just pass a
+//       static func reference.
 //       https://github.com/joeltine/meal-planner/issues/89
 
 export class AddRecipesController extends React.Component {
