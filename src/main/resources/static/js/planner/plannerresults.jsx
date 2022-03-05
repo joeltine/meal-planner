@@ -1,7 +1,8 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import LoginIcon from '@mui/icons-material/Login';
-import {LinearProgress} from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import {IconButton, LinearProgress} from '@mui/material';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -285,7 +286,16 @@ export class PlannerResults extends React.Component {
           <div key={recipe.id}
                className="container-fluid mb-4 mt-4">
             <div className="row">
-              <h4>{recipe.name}</h4>
+              <h4>
+                {recipe.name}
+                <IconButton aria-label="replace recipe"
+                            title="Replace this recipe"
+                            onClick={() => {
+                              this.props.replaceSingleRecipe(recipe.id);
+                            }}>
+                  <RefreshIcon/>
+                </IconButton>
+              </h4>
             </div>
             <div className="row mb-2">
               <a target="_blank"
@@ -347,5 +357,6 @@ export class PlannerResults extends React.Component {
 
 PlannerResults.propTypes = {
   results: PropTypes.arrayOf(PropTypes.object).isRequired,
-  goBackButtonClick: PropTypes.func.isRequired
+  goBackButtonClick: PropTypes.func.isRequired,
+  replaceSingleRecipe: PropTypes.func.isRequired
 };

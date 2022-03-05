@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {sendAjax} from '../common/ajax';
 import {FilterAnyAll} from './filteranyall';
 import {FilterRow} from './filterrow';
 import {NumRecipes} from './numrecipes';
@@ -32,15 +31,7 @@ export class PlannerForm extends React.Component {
       Object.values(this.rowRefs).forEach((ref) => {
         planObj.filters.push(ref.getRowData());
       });
-
-      sendAjax('/getMealPlan', {
-        method: 'POST',
-        data: JSON.stringify(planObj),
-        processData: false,
-        contentType: 'application/json'
-      }).done((results) => {
-        this.props.onResultUpdate(results);
-      });
+      this.props.onPlanButtonClick(planObj);
     }
   }
 
@@ -112,5 +103,5 @@ export class PlannerForm extends React.Component {
 }
 
 PlannerForm.propTypes = {
-  onResultUpdate: PropTypes.func.isRequired
+  onPlanButtonClick: PropTypes.func.isRequired
 };

@@ -115,3 +115,11 @@ export function debounce(func, timeout = 300) {
     }, timeout);
   };
 }
+
+/**
+ * Deep clones the passed obj and returns the clone. Does not work for objects
+ * with non-primitive JSON types like Date, functions, undefined, RegExps, etc.
+ */
+export function cloneObject(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}

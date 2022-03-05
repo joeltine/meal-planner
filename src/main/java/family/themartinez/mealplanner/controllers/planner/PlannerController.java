@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -62,7 +63,9 @@ public class PlannerController {
   }
 
   @PostMapping({"/getMealPlan"})
-  public @ResponseBody ImmutableList<Recipe> getMealPlan(@RequestBody MealPlanRequest request) {
+  public @ResponseBody ImmutableList<Recipe> getMealPlan(
+      @RequestBody MealPlanRequest request,
+      @RequestParam(required = false) List<String> excludeRecipes) {
     StringJoiner query = new StringJoiner(" ");
     query.add("SELECT r.id");
     query.add("FROM recipes r");
@@ -74,7 +77,7 @@ public class PlannerController {
     query.add("INNER JOIN recipe_types rt on rta.recipe_type_id = rt.id");
     query.add("INNER JOIN ingredient_lists il on r.id = il.recipe_id");
     query.add("INNER JOIN ingredients i on il.ingredient_id = i.id");
-    query.add(buildWhereClause(request));
+    query.add(buildWhereClause(request, excludeRecipes));
     query.add("GROUP BY r.id");
     // TODO: Is there a better way to return recipes besides randomly?
     query.add("ORDER BY RAND()");
@@ -86,11 +89,10 @@ public class PlannerController {
 
     List<Integer> recipeIds =
         jdbcTemplate.queryForList(query.toString(), Integer.class, values.toArray());
-
     return ImmutableList.copyOf(recipeRepository.findAllById(recipeIds));
   }
 
-  private String buildWhereClause(MealPlanRequest request) {
+  private String buildWhereClause(MealPlanRequest request, List<String> excludeRecipes) {
     String operator = request.getFilterLogicalOperator();
     if (!operatorToSql.containsKey(operator)) {
       throw new NoSuchElementException(
@@ -134,6 +136,11 @@ public class PlannerController {
       if (filters.hasNext()) {
         whereClause.add(operatorSql);
       }
+    }
+
+    if (excludeRecipes != null && excludeRecipes.size() > 0) {
+      whereClause.add(operatorToSql.get("AND"));
+      whereClause.add("r.id NOT IN (" + String.join(",", excludeRecipes) + ")");
     }
 
     return whereClause.toString();
