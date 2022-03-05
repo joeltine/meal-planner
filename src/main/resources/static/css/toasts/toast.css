@@ -13,6 +13,12 @@
   z-index: 1030;
 }
 
+@media (max-width: 450px) {
+  .toast {
+    width: 360px !important;
+  }
+}
+
 @media (max-width: 280px) {
   .toast {
     width: 265px !important;
