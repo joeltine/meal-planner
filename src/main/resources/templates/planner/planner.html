@@ -17,24 +17,7 @@
 </main>
 
 <th:block layout:fragment="scripts">
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    const GAPI_CLIENT_READY = new Promise(function (resolve, reject) {
-      // Load gapi client/auth2 libraries.
-      gapi.load('client:auth2', {
-        callback: () => {
-          // Load Google Drive client API and prep gapi.auth2 OAuth library.
-          gapi.client.init({
-            clientId: '104092167699-bhdgbdqd0ntudhhhqt8qq06l601v9dvj.apps.googleusercontent.com',
-            scope: 'https://www.googleapis.com/auth/drive'
-          }).then(() => {
-            resolve();
-          }).catch(reject);
-        },
-        onerror: reject
-      });
-    });
-  </script>
+  <script src="https://accounts.google.com/gsi/client"></script>
   <script th:src="@{/js/planner/planner.bundle.js}"></script>
 </th:block>
 

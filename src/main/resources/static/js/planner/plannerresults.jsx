@@ -1,6 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import LoginIcon from '@mui/icons-material/Login';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {IconButton, LinearProgress} from '@mui/material';
 import Button from '@mui/material/Button';
@@ -11,50 +10,51 @@ import {renderToString} from 'react-dom/server';
 import {Toast} from '../toasts/toast';
 import {GoogleDriveUploader} from './googledriveuploader';
 
+const CLIENT_ID = '104092167699-bhdgbdqd0ntudhhhqt8qq06l601v9dvj.apps' +
+    '.googleusercontent.com';
+const TOKEN_LOCAL_STORAGE_KEY = 'googleAccessToken';
+
 export class PlannerResults extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {isSignedIn: false, isExportingDoc: false};
+    this.state = {isExportingDoc: false};
     this.exportToDocs = this.exportToDocs.bind(this);
-    this.authenticateToGoogle = this.authenticateToGoogle.bind(this);
+    this.accessTokenObj = null;
+    const localTokenObj = localStorage.getItem(TOKEN_LOCAL_STORAGE_KEY);
+    if (localTokenObj) {
+      this.accessTokenObj = JSON.parse(localTokenObj);
+    }
   }
 
-  componentDidMount() {
-    if (!GAPI_CLIENT_READY) {
-      Toast.showNewErrorToast('The gapi client wasn\'t initialized!',
-          'The gapi client wasn\'t initialized before trying to use ' +
-          'the Meal Planner result page.',
-          {autohide: false});
-      return;
+  getAccessToken() {
+    // If we already have a token and it's fresh, use it.
+    if (this.accessTokenObj && this.accessTokenObj.expires_at > Date.now()) {
+      return Promise.resolve(this.accessTokenObj.access_token);
     }
 
-    GAPI_CLIENT_READY.then(() => {
-      this.updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-      gapi.auth2.getAuthInstance().isSignedIn.listen(
-          this.updateSignInStatus.bind(this));
-    }).catch((err) => {
-      Toast.showNewErrorToast('The gapi client failed to initialize!',
-          `An error occurred initializing the gapi client: ${JSON.stringify(
-              err)}`,
-          {autohide: false});
-    });
-  }
-
-  authenticateToGoogle() {
-    GAPI_CLIENT_READY.then(() => {
-      gapi.auth2.getAuthInstance().signIn().then(() => {
-        const profile = gapi.auth2.getAuthInstance().currentUser.get()
-            .getBasicProfile();
-        Toast.showNewSuccessToast('Authentication Successful!',
-            `Successfully authenticated ${profile.getName()} using ` +
-            `account ${profile.getEmail()}.`);
-      }).catch((err) => {
-        Toast.showNewErrorToast(
-            'Failed to authenticate!',
-            `Failed to sign-in to Google: ${JSON.stringify(err)}`,
-            {delay: 10000});
+    const tokenPromise = new Promise((resolve) => {
+      // Get Google Identity Service client, with required Google Drive
+      // permissions/scope.
+      const gisClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: 'https://www.googleapis.com/auth/drive',
+        callback: (tokenResponse) => {
+          // Set an Unix epoch millisecond expiration time in the future,
+          // subtracting 10s from expires_in (in seconds) to be conservative.
+          tokenResponse.expires_at = Date.now() + ((tokenResponse.expires_in -
+              10) * 1000);
+          // Cache the token info so we can use it on the next load.
+          localStorage.setItem(TOKEN_LOCAL_STORAGE_KEY,
+              JSON.stringify(tokenResponse));
+          this.accessTokenObj = tokenResponse;
+          resolve(tokenResponse.access_token);
+        }
       });
+
+      gisClient.requestAccessToken();
     });
+
+    return tokenPromise;
   }
 
   buildGroceryList() {
@@ -138,7 +138,7 @@ export class PlannerResults extends React.Component {
     this.setState({
       isExportingDoc: true
     });
-    GAPI_CLIENT_READY.then(() => {
+    this.getAccessToken().then((token) => {
       const uploader = new GoogleDriveUploader({
         file: new Blob([this.buildSimplifiedResultHtmlForGoogleDocs()],
             {'type': 'text/html'}),
@@ -146,7 +146,7 @@ export class PlannerResults extends React.Component {
           name: `Meal Plan for ${new Date().toLocaleDateString()}`,
           mimeType: 'application/vnd.google-apps.document'
         },
-        token: gapi.client.getToken().access_token,
+        token: token,
         onComplete: (response) => {
           const docInfo = JSON.parse(response);
           Toast.showNewSuccessToast('Google Doc Successfully Created!',
@@ -169,17 +169,15 @@ export class PlannerResults extends React.Component {
         }
       });
       uploader.upload();
+    }, () => {
+      this.setState({
+        isExportingDoc: false
+      });
     });
   }
 
   buildGoogleDocUrl(docId) {
     return `https://docs.google.com/document/d/${docId}/edit`;
-  }
-
-  updateSignInStatus(isSignedIn) {
-    this.setState({
-      isSignedIn: isSignedIn
-    });
   }
 
   buildIngredientsList(ingredientLists) {
@@ -238,19 +236,13 @@ export class PlannerResults extends React.Component {
   }
 
   getExportButton() {
-    return this.state.isSignedIn ?
+    return (
         <Button variant="contained"
                 startIcon={<FileUploadIcon/>}
                 onClick={this.exportToDocs}
                 disabled={this.state.isExportingDoc}>
           Export to Google Docs
-        </Button> :
-        <Button variant="contained"
-                color="secondary"
-                startIcon={<LoginIcon/>}
-                onClick={this.authenticateToGoogle}>
-          Sign-in to Export to Google Docs
-        </Button>;
+        </Button>);
   }
 
   getResultButtons() {
