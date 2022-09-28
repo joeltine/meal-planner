@@ -67,7 +67,10 @@ public class AddRecipesIntegrationTest {
   //       if "grams" unit gets deleted, this fails. Either populate the DB here or use a new
   //       mock DB.
   @Test
-  void canSubmitFilledOutForm() {
+  void canSubmitFilledOutForm() throws InterruptedException {
+    // TODO: Remove this when https://github.com/testcontainers/testcontainers-java/issues/5833 is
+    //       released and you've upgraded testcontainers.
+    Thread.sleep(5000);
     driver = chrome.getWebDriver();
     driver.manage().window().maximize();
     driver.get(String.format("http://host.testcontainers.internal:%d/addrecipes", port));
