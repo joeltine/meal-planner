@@ -6,6 +6,7 @@ import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordi
 import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import java.io.File;
+import java.time.Duration;
 import java.util.List;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.containers.BrowserWebDriverContainer;
@@ -78,18 +79,18 @@ public class AddRecipesIntegrationTest {
     driver.findElement(By.id("inputQuantity")).sendKeys("2.5");
 
     driver.findElement(By.id("inputUnits")).click();
-    WebDriverWait wait = new WebDriverWait(driver, 10);
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     wait.until(
         ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputUnitsLabel\"]")));
     driver
-        .findElementByCssSelector("ul.MuiMenu-list[aria-labelledby=\"inputUnitsLabel\"]")
+        .findElement(By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputUnitsLabel\"]"))
         .findElement(By.xpath("//*[contains(text(),'grams')]"))
         .click();
 
     WebElement inputIngredient = driver.findElement(By.id("inputIngredient"));
     inputIngredient.sendKeys("chick");
-    wait = new WebDriverWait(driver, 10);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     wait.until(
         ExpectedConditions.textToBePresentInElementLocated(
             By.className("MuiAutocomplete-popper"), "chicken breasts"));
@@ -101,28 +102,28 @@ public class AddRecipesIntegrationTest {
     driver.findElement(By.id("inputCookTime")).sendKeys("25");
 
     driver.findElement(By.id("inputRecipeType")).click();
-    wait = new WebDriverWait(driver, 10);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     wait.until(
         ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputRecipeTypeLabel\"]")));
     driver
-        .findElementByCssSelector("ul.MuiMenu-list[aria-labelledby=\"inputRecipeTypeLabel\"]")
+        .findElement(By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputRecipeTypeLabel\"]"))
         .findElement(By.xpath("//*[contains(text(),'entree')]"))
         .click();
     driver.switchTo().activeElement().sendKeys(Keys.ESCAPE);
 
     driver.findElement(By.id("inputMealType")).click();
-    wait = new WebDriverWait(driver, 10);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     wait.until(
         ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputMealTypeLabel\"]")));
     driver
-        .findElementByCssSelector("ul.MuiMenu-list[aria-labelledby=\"inputMealTypeLabel\"]")
+        .findElement(By.cssSelector("ul.MuiMenu-list[aria-labelledby=\"inputMealTypeLabel\"]"))
         .findElement(By.xpath("//*[contains(text(),'breakfast')]"))
         .click();
     driver.switchTo().activeElement().sendKeys(Keys.ESCAPE);
 
-    wait = new WebDriverWait(driver, 10);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     wait.until(ExpectedConditions.elementToBeClickable(By.id("submit")));
     WebElement element = driver.findElement(By.id("submit"));
     // For whatever reason doing the click() in webdriver was giving me an error about element not
