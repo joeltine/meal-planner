@@ -89,7 +89,7 @@ fdescribe('AddRecipesController test suite', function() {
     expect(getByRole('textbox', {name: /quantity/i})).toBeInTheDocument();
     // Select component are controlled by buttons.
     expect(getByRole('button', {name: /units/i})).toBeInTheDocument();
-    expect(getByRole('textbox', {name: /ingredient/i})).toBeInTheDocument();
+    expect(getByRole('combobox', {name: /ingredient/i})).toBeInTheDocument();
     expect(getByRole('textbox', {name: /display name/i})).toBeInTheDocument();
     expect(getByRole('textbox', {name: /instructions/i})).toBeInTheDocument();
     expect(getByRole('textbox', {name: /prep time/i})).toBeInTheDocument();
@@ -110,7 +110,7 @@ fdescribe('AddRecipesController test suite', function() {
     });
 
     // Figure out why this isn't working!
-    const ingredientAc = getByRole('textbox', {name: /ingredient/i});
+    const ingredientAc = getByRole('combobox', {name: /ingredient/i});
     click(ingredientAc);
     await userEvent.type(ingredientAc, 'ch');
     // autocompleteClasses
