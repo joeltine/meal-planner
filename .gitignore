@@ -85,3 +85,6 @@ node/
 # Python
 __pycache__
 .virtualenv/
+
+# MacOS cruft
+*.DS_Store
