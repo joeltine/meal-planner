@@ -2,15 +2,19 @@ package family.themartinez.mealplanner.controllers.addrecipes;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testcontainers.containers.BrowserWebDriverContainer.VncRecordingMode.RECORD_FAILING;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import family.themartinez.mealplanner.data.recipes.Recipe;
 import family.themartinez.mealplanner.data.recipes.RecipeRepository;
 import java.io.File;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -46,6 +50,18 @@ public class AddRecipesIntegrationTest {
 
   private static RemoteWebDriver driver;
 
+  @BeforeEach
+  void beforeEach() {
+    driver =
+        await()
+            .atMost(1, TimeUnit.HOURS)
+            .until(
+                () -> {
+                  return chrome.getWebDriver();
+                },
+                Objects::nonNull);
+  }
+
   @BeforeAll
   static void beforeAll(@Autowired Environment environment) {
     org.testcontainers.Testcontainers.exposeHostPorts(
@@ -54,7 +70,9 @@ public class AddRecipesIntegrationTest {
 
   @AfterAll
   static void afterAll() {
-    driver.quit();
+    if (driver != null) {
+      driver.quit();
+    }
   }
 
   @AfterEach
@@ -67,11 +85,7 @@ public class AddRecipesIntegrationTest {
   //       if "grams" unit gets deleted, this fails. Either populate the DB here or use a new
   //       mock DB.
   @Test
-  void canSubmitFilledOutForm() throws InterruptedException {
-    // TODO: Remove this when https://github.com/testcontainers/testcontainers-java/issues/5833 is
-    //       released and you've upgraded testcontainers.
-    Thread.sleep(5000);
-    driver = chrome.getWebDriver();
+  void canSubmitFilledOutForm() {
     driver.manage().window().maximize();
     driver.get(String.format("http://host.testcontainers.internal:%d/addrecipes", port));
     // Make sure we're connected to dev DB.
