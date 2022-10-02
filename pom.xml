@@ -198,7 +198,7 @@
           </execution>
         </executions>
         <configuration>
-          <nodeVersion>v17.2.0</nodeVersion>
+          <nodeVersion>v18.10.0</nodeVersion>
         </configuration>
       </plugin>
       <plugin>
