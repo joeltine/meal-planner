@@ -11,7 +11,6 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,12 +51,15 @@ public class AddRecipesIntegrationTest {
 
   @BeforeEach
   void beforeEach() {
+    // TODO: Remove this when https://github.com/testcontainers/testcontainers-java/issues/5833 is
+    //       fixed and present in this project. Use chrome.getWebDriver()
+    //       instead.
     driver =
         await()
-            .atMost(1, TimeUnit.HOURS)
+            .atMost(5, TimeUnit.MINUTES)
             .until(
                 () -> {
-                  return chrome.getWebDriver();
+                  return new RemoteWebDriver(chrome.getSeleniumAddress(), new ChromeOptions());
                 },
                 Objects::nonNull);
   }
@@ -66,13 +68,6 @@ public class AddRecipesIntegrationTest {
   static void beforeAll(@Autowired Environment environment) {
     org.testcontainers.Testcontainers.exposeHostPorts(
         environment.getProperty("local.server.port", Integer.class));
-  }
-
-  @AfterAll
-  static void afterAll() {
-    if (driver != null) {
-      driver.quit();
-    }
   }
 
   @AfterEach
