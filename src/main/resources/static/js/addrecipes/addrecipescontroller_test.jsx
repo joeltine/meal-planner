@@ -11,8 +11,7 @@ import React from 'react';
 
 import {AddRecipesController} from './addrecipescontroller';
 
-// TODO: DO NOT COMMIT, make this describe
-fdescribe('AddRecipesController test suite', function() {
+describe('AddRecipesController test suite', function() {
   let toastContainer;
 
   beforeAll(function() {
